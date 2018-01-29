@@ -37,11 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'administrators',
-=======
-    'administrators'
->>>>>>> c64b8165163cf7d973f4f42494f6ff8bc44d7ca2
 ]
 
 MIDDLEWARE = [
@@ -85,7 +81,7 @@ DATABASES = {
         'NAME': 'Sots',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'HOST': '192.168.2.181',
         'PORT': '3306'
     }
 }
