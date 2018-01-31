@@ -5,3 +5,6 @@ from django.shortcuts import render
 # 进入登陆页面
 def land(request):
     return render(request, 'index.html')
+# 主页的欢迎界面
+def welcome(request):
+    return render(request, 'welcome.html')
