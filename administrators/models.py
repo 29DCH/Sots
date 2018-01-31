@@ -1,13 +1,10 @@
 from django.db import models
-
-
+from django.http import HttpResponse
+from django.shortcuts import render
 # Create your models here.
-
-class User(models.Model):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-
-
-class Administrator(models.Model):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+# 进入登陆页面
+def land(request):
+    return render(request, 'index.html')
+# 主页的欢迎界面
+def welcome(request):
+    return render(request, 'welcome.html')

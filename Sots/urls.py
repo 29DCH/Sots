@@ -13,9 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+import administrators.adminuser.adminuser as ad
+import administrators.models as admo
+import administrators.user.user as us
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # 后台
+    url(r'^$', admo.land),# 管理员登陆界面
+    url(r'checks', ad.checks),# 后台校验用户名和密码
+    url(r'main', ad.show_main),# 主界面
+    url(r'welcome', admo.welcome),# 欢迎分界面
+    url(r'userShow', us.show)# 用户展示
+
 ]
