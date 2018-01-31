@@ -47,7 +47,7 @@
 <body class="easyui-layout" id="divLayout">
 
   <div data-options="region:'north'" id="divTop">
-      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>
+{#      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>#}
       <div id="divTopMenu">
           <ul>
               <li >欢迎您！admin[超级管理员] {{ request.session.username }}</li>
@@ -99,7 +99,7 @@
 
      <div id="main" class="easyui-tabs" style="width: 100%;height: 30px;"  data-options="fit:true">
          <div title="后台管理首页" iconCls="icon-page_white_text">
-             <iframe scrolling="auto" frameborder="0" src="welcome.html"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>
+             <iframe scrolling="auto" frameborder="0" src="{% url 'welcome' %}"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>
 
              <!--<div id="tt" class="easyui-tabs" style="width: 500px;height: 250px;">-->
                  <!--<div title="Tab1" style="padding: 20px">-->

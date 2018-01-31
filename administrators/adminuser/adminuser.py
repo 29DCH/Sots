@@ -17,8 +17,13 @@ def checks( request):
         print(i.username,admins.username)
         if (i.username == admins.username) and (i.password == admins.password):
             request.session['username'] = i.username
-            return redirect('main.html')
+            print(i.username, 'xxxxx')
+            return render(request, 'main.html')
     return render(request, 'adminuser/error.html')
+
+# 展示欢迎界面
+def welcome(request):
+    return render(request, 'welcome.html')
 
 # 跳转到主界面
 def show_main(request):
