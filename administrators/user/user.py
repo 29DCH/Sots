@@ -27,13 +27,34 @@ def add(request):
 # 存储用户
 def save(request):
     username = request.POST['username']
-    usernick = request.POST['usernick']
+    nickname = request.POST['nickname']
     password = request.POST['password']
-    print('dddsdsdsdsd')
-    print(username, password, usernick)
-    us = User(username=username, usernick=usernick, password=password)
+    # print('dddsdsdsdsd')
+    # print(username, password, nickname)
+    us = User(username=username, nickname=nickname, password=password)
     us.save()
-    print(us.id)
+    # print(us.id)
+    return show(request)
+
+# 跳转到编辑用户界面
+def edit(request):
+    uid = request.GET['uid']
+    us = User.objects.get(id=uid)
+    return render(request, 'user/userEdit.html', {'us' : us})
+
+# 更新用户
+def update(request):
+    print('sssssss')
+    uid = request.POST['uid']
+    username = request.POST['username']
+    nickname = request.POST['nickname']
+    password = request.POST['password']
+    # print(uid)
+    us = User.objects.get(id=2)
+    us.username = username
+    us.nickname = nickname
+    us.password = password
+    us.save()
     return show(request)
 
 

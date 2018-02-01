@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'userShow', us.show),# 用户展示
     url(r'userDel*', us.delete),# 用户删除
     url(r'userAdd', us.add),# 跳转到添加用户界面
-    url(r'userSave', us.show),#用户存储
+    url(r'userSave', us.save),# 用户存储
+    url(r'userEdit', us.edit),# 跳转到编辑用户界面
+    url(r'userUpdate', us.update),# 用户更新
 ]
