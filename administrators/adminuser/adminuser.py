@@ -14,11 +14,11 @@ def checks( request):
     admins.password = request.POST['password']
     admin_list = administrator.objects.all()
     for i in admin_list:
-        print(i.username,admins.username)
+        # print(i.username,admins.username)
         if (i.username == admins.username) and (i.password == admins.password):
             request.session['username'] = i.username
-            print(i.username, 'xxxxx')
-            return render(request, 'main.html')
+            # print(i.username, 'xxxxx')
+            return redirect( 'main.html')
     return render(request, 'adminuser/error.html')
 
 # 展示欢迎界面

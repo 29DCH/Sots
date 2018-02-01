@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{% url 'userUpdate'%}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="uid" value="{{ us.id }} ">
+        姓名：<input type="text" name="username" value="{{ us.username }}"><br>
+        昵称：<input type="text" name="nickname" value="{{ us.nickname }}"><br>
+        密码：<input type="password" name="password" value="{{ us.password }}"><br>
+        <input type="submit" value="修改">
+    </form>
+</body>
+</html>

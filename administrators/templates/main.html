@@ -63,6 +63,7 @@
           <li><span>常用功能</span>
               <ul>
                   <li><span><a href="#" onclick="addTab('用户管理','userShow.html')">用户管理</a> </span></li>
+                 <li><span><a href="#" onclick="addTab('岗位管理','jobShow.html')">岗位管理</a> </span></li>
               </ul>
           </li>
           <li><span>系统工具</span>
@@ -99,7 +100,7 @@
 
      <div id="main" class="easyui-tabs" style="width: 100%;height: 30px;"  data-options="fit:true">
          <div title="后台管理首页" iconCls="icon-page_white_text">
-             <iframe scrolling="auto" frameborder="0" src="{% url 'welcome' %}"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>
+{#             <iframe scrolling="auto" frameborder="0" src="{% url 'welcome' %}"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>#}
 
              <!--<div id="tt" class="easyui-tabs" style="width: 500px;height: 250px;">-->
                  <!--<div title="Tab1" style="padding: 20px">-->

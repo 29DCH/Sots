@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>职位编辑</title>
+    <style>
+        form{
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<form action="{% url 'jobUpdate' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" value="{{ job.id }}" name="jid">
+    <p>职位名称 :&nbsp;&nbsp;<input  type="text"  value="{{ job.JobName}}" name="JobName"/></p>
+    <p>职位地点 :&nbsp;&nbsp;<input  type="text"  value="{{ job.JobPlace }}" name="JobPlace"/></p>
+    <p>职位薪水 :&nbsp;&nbsp;<input  type="text"  value="{{ job.JobSalary }}" name="JobSalary"/></p>
+    <p>职位优势 :&nbsp;&nbsp;<input  type="text"  value="{{ job.JobAdvantage }}" name="JobAdvantage"/></p>
+    <p>发布时间 :&nbsp;&nbsp;<input  type="text"  value="{{ job.releaseTime }}" name="releaseTime"/></p>
+    <p>工作需求 :&nbsp;&nbsp;<input  type="text"  value="{{ job.jobNeed }}" name="jobNeed"/></p>
+    <p>学历要求 :&nbsp;&nbsp;<input  type="text"  value="{{ job.educationRequire }}" name="educationRequire"/></p>
+    <p>经验要求 :&nbsp;&nbsp;<input  type="text"  value="{{ job.experienceRequire }}" name="experienceRequire"/></p>
+    <p>技能需求 :&nbsp;&nbsp;<input  type="text"  value="{{ job.skillRequire }}" name="skillRequire"/></p>
+    <p>职位链接 :&nbsp;&nbsp;<input  type="text"  value="{{ job.jobLink }}" name="jobLink"/></p>
+    <p>职位信息 :&nbsp;&nbsp;<input  type="text"  value="{{ job.jobInfo }}" name="jobInfo"/></p>
+    <p>职位性质 :&nbsp;&nbsp;<input  type="text"  value="{{ job.jobNature }}" name="jobNature"/></p>
+    <p>职位标签 :&nbsp;&nbsp;<input  type="text"  value="{{ job.jobLabels }}" name="jobLabels"/></p>
+    <p><input type="submit"value="修改" ></p>
+
+
+</form>
+</body>
+</html>
