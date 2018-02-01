@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="userSave" method="post">
+    <form action="{% url 'userSave' %}" method="post">
         {% csrf_token %}
         姓名：<input type="text" name="username"><br>
         昵称：<input type="text" name="nickname"><br>

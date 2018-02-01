@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="userUpdate" method="post">
+    <form action="{% url 'userUpdate'%}" method="post">
         {% csrf_token %}
         <input type="hidden" name="uid" value="{{ us.id }} ">
         姓名：<input type="text" name="username" value="{{ us.username }}"><br>

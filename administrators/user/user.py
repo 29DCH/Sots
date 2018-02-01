@@ -20,7 +20,7 @@ def delete(request):
     User.objects.get(id=uid).delete()
     return show(request)
 
-# 跳转到添加用户界面
+# 跳转到添加岗位界面
 def add(request):
     return  render(request, 'user/userAdd.html')
 
@@ -44,13 +44,11 @@ def edit(request):
 
 # 更新用户
 def update(request):
-    print('sssssss')
     uid = request.POST['uid']
     username = request.POST['username']
     nickname = request.POST['nickname']
     password = request.POST['password']
-    # print(uid)
-    us = User.objects.get(id=2)
+    us = User.objects.get(id=uid)
     us.username = username
     us.nickname = nickname
     us.password = password

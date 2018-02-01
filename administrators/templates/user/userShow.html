@@ -27,9 +27,9 @@
                 <td>{{ list.nickname }}</td>
                 <td>{{ list.password }}</td>
                 <td>
-                    <a href="userEdit?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
-                    <a href="userDel?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
-                    <a href="userAdd" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+                    <a href="{% url 'userEdit'%}?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+                    <a href="{% url 'userDel' %}?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+                    <a href="{% url 'userAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
                 </td>
             </tr>
         {% endfor %}
