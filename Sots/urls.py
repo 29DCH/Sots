@@ -27,7 +27,11 @@ urlpatterns = [
     url(r'^$', admo.land),# 管理员登陆界面
     url(r'checks', ad.checks),# 后台校验用户名和密码
     url(r'main', ad.show_main),# 主界面
+    url(r'welcome', ad.welcome, name='welcome'),#  欢迎界面
     url(r'welcome', admo.welcome),# 欢迎分界面
-    url(r'userShow', us.show)# 用户展示
-
+    # 用户
+    url(r'userShow', us.show),# 用户展示
+    url(r'userDel*', us.delete),# 用户删除
+    url(r'userAdd', us.add),# 跳转到添加用户界面
+    url(r'userSave', us.show),#用户存储
 ]
