@@ -2,46 +2,18 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
-# 职位类
-class Job(models.Model):
-    # 职位名称
-    JobName = models.CharField(max_length=30)
-    # 职位地点
-    JobPlace = models.CharField(max_length=10)
-    # 职位薪水
-    JobSalary = models.CharField(max_length=10)
-    # 职位优势
-    JobAdvantage = models.CharField(max_length=30)
-    # 发布时间
-    releaseTime = models.CharField(max_length=30)
-    # 工作需求
-    jobNeed = models.CharField(max_length=30)
-    # 学历要求
-    educationRequire = models.CharField(max_length=30)
-    # 经验要求
-    experienceRequire = models.CharField(max_length=30)
-    # 技能需求
-    skillRequire = models.CharField(max_length=30)
-    # 职位链接
-    jobLink = models.CharField(max_length=200)
-    # 职位信息
-    jobInfo = models.TextField()
-    # 职位性质
-    jobNature = models.CharField(max_length=20)
-    # 职位标签
-    jobLabels = models.CharField(max_length=30)
+import administrators.models as m
 
 # 展示岗位
 def show(request):
-    jobs = Job.objects.all()
+    jobs = m.Job.objects.all()
     return render(request, 'job/jobShow.html', {'jobs': jobs})
 
 # 删除岗位
 def delete(request):
     jid = request.GET['jid']
     print('jid', 'xxxxxxxx')
-    Job.objects.get(id=jid).delete()
+    m.Job.objects.get(id=jid).delete()
     return show(request)
 
 # 跳转到添加岗位界面
@@ -64,7 +36,7 @@ def save(request):
     jobNature = request.POST['jobNature']
     jobLabels = request.POST['jobLabels']
 
-    job = Job(JobName=JobName, JobPlace=JobPlace,
+    job = m.Job(JobName=JobName, JobPlace=JobPlace,
              JobSalary=JobSalary,JobAdvantage=JobAdvantage,
              releaseTime=releaseTime,jobNeed=jobNeed,
              educationRequire=educationRequire,experienceRequire=experienceRequire,
@@ -76,7 +48,7 @@ def save(request):
 # 跳转到编辑岗位界面
 def edit(request):
     jid = request.GET['jid']
-    job = Job.objects.get(id=jid)
+    job = m.Job.objects.get(id=jid)
     return render(request, 'job/jobEditor.html', {'job' : job})
 
 # 更新岗位
@@ -96,7 +68,7 @@ def update(request):
     jobNature = request.POST['jobNature']
     jobLabels = request.POST['jobLabels']
 
-    job = Job.objects.get(id=jid)
+    job = m.Job.objects.get(id=jid)
     job.JobName = JobName
     job.JobPlace = JobPlace
     # job.JobSalary = JobSalary
