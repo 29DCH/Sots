@@ -19,8 +19,8 @@ class Analysis:
         # 得出的新模型
         self.frame = pd.DataFrame()
         x = pd.read_csv('../datas/java_data.csv')
-        self.columns = x[['jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'compSize']]
-        self.columns = self.columns[:1000]
+        self.columns = x[['jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'compSize', 'jobId']]
+        # self.columns = self.columns[:1000]
 
     def handel(self):
         self._get_salary()
@@ -28,6 +28,7 @@ class Analysis:
         self._get_experience()
         self._get_skill()
         self._get_comp_size()
+        self.frame.insert(0, 'jobId', self.columns['jobId'])
         print(self.frame.head())
         self.frame.plot(figsize=(10.24, 7.68))
         plt.show()

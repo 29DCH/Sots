@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Job(models.Model):
-    jobId = models.IntegerField()
+    jobId = models.IntegerField(unique=True)
     JobName = models.CharField(max_length=200)
     JobPlace = models.CharField(max_length=200)
     JobSalary = models.CharField(max_length=100)
