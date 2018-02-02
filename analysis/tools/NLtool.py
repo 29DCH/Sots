@@ -61,7 +61,7 @@ def get_keyword(jobinfo):
 
 # 读取关键字
 def get_keywords():
-    f = open('keywords')
+    f = open('result/keywords')
     keywords = []
     for i in f.readlines():
         keywords.append(str(i).strip())
@@ -70,7 +70,7 @@ def get_keywords():
 
 # 保存关键字
 def save_keywords(keywords):
-    f = open('keywords', 'w')
+    f = open('result/keywords', 'w')
     for i in keywords:
         f.write(i)
         f.write('\n')
