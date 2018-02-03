@@ -10,7 +10,7 @@ jieba.load_userdict('tools/dict')
 """
 
 
-# 获取停用词
+# TODO 改为后台可编辑
 def get_stop_words():
     stop_words = []
     cfp = open('tools/stopwords', 'r+')  # 停用词的txt文件

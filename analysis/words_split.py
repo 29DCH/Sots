@@ -47,14 +47,15 @@ class Words:
         plt.show()
 
 
-def step1():
+# TODO 改为对外接收一个字符串
+def step1(path:str):
     # 加载用户字典
     starttime = time.time()
 
-    x = pd.read_csv('../datas/java_data.csv')
+    x = pd.read_csv(path)
     requirements = x['jobInfo']
     s = ''
-    for i in requirements[0:1000]:
+    for i in requirements:
         s += str(i)
 
     W = Words(s)
@@ -64,4 +65,4 @@ def step1():
 
 
 if __name__ == '__main__':
-    step1()
+    step1('../datas/java_data.csv')

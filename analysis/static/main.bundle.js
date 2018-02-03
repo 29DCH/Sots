@@ -175,24 +175,25 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../../_@angular_platform-browser@4.4.6@@angular/platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../../_@angular_core@4.4.6@@angular/core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../../_@angular_forms@4.4.6@@angular/forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__carousel_carousel_component__ = __webpack_require__("../../../../../src/app/carousel/carousel.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__search_search_component__ = __webpack_require__("../../../../../src/app/search/search.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__navbar_navbar_component__ = __webpack_require__("../../../../../src/app/navbar/navbar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_product_service__ = __webpack_require__("../../../../../src/app/shared/product.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pipe_filter_pipe__ = __webpack_require__("../../../../../src/app/pipe/filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__nopage_nopage_component__ = __webpack_require__("../../../../../src/app/nopage/nopage.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__register_register_component__ = __webpack_require__("../../../../../src/app/register/register.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__enroll_enroll_component__ = __webpack_require__("../../../../../src/app/enroll/enroll.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__recommend_recommend_component__ = __webpack_require__("../../../../../src/app/recommend/recommend.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__hot_jobs_hot_jobs_component__ = __webpack_require__("../../../../../src/app/hot-jobs/hot-jobs.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__personal_center_personal_center_component__ = __webpack_require__("../../../../../src/app/personal-center/personal-center.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__personal_center_personal_center_module__ = __webpack_require__("../../../../../src/app/personal-center/personal-center.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__angular_platform_browser_animations__ = __webpack_require__("../../../../_@angular_platform-browser@4.4.6@@angular/platform-browser/@angular/platform-browser/animations.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__personalized_recommendation_personalized_recommendation_component__ = __webpack_require__("../../../../../src/app/personalized-recommendation/personalized-recommendation.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__information_temple_information_temple_component__ = __webpack_require__("../../../../../src/app/information-temple/information-temple.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__("../../../../_@angular_common@4.4.6@@angular/common/@angular/common.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__carousel_carousel_component__ = __webpack_require__("../../../../../src/app/carousel/carousel.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__search_search_component__ = __webpack_require__("../../../../../src/app/search/search.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__navbar_navbar_component__ = __webpack_require__("../../../../../src/app/navbar/navbar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_product_service__ = __webpack_require__("../../../../../src/app/shared/product.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pipe_filter_pipe__ = __webpack_require__("../../../../../src/app/pipe/filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__nopage_nopage_component__ = __webpack_require__("../../../../../src/app/nopage/nopage.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__register_register_component__ = __webpack_require__("../../../../../src/app/register/register.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__enroll_enroll_component__ = __webpack_require__("../../../../../src/app/enroll/enroll.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__recommend_recommend_component__ = __webpack_require__("../../../../../src/app/recommend/recommend.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__hot_jobs_hot_jobs_component__ = __webpack_require__("../../../../../src/app/hot-jobs/hot-jobs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__personal_center_personal_center_component__ = __webpack_require__("../../../../../src/app/personal-center/personal-center.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__personal_center_personal_center_module__ = __webpack_require__("../../../../../src/app/personal-center/personal-center.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser_animations__ = __webpack_require__("../../../../_@angular_platform-browser@4.4.6@@angular/platform-browser/@angular/platform-browser/animations.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__personalized_recommendation_personalized_recommendation_component__ = __webpack_require__("../../../../../src/app/personalized-recommendation/personalized-recommendation.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__information_temple_information_temple_component__ = __webpack_require__("../../../../../src/app/information-temple/information-temple.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -200,6 +201,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -230,31 +232,31 @@ var AppModule = (function () {
 AppModule = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["b" /* NgModule */])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_4__home_home_component__["a" /* HomeComponent */],
-            __WEBPACK_IMPORTED_MODULE_5__carousel_carousel_component__["a" /* CarouselComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__search_search_component__["a" /* SearchComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__navbar_navbar_component__["a" /* NavbarComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__pipe_filter_pipe__["a" /* FilterPipe */],
-            __WEBPACK_IMPORTED_MODULE_11__nopage_nopage_component__["a" /* NopageComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__register_register_component__["a" /* RegisterComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__enroll_enroll_component__["a" /* EnrollComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__recommend_recommend_component__["a" /* RecommendComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__hot_jobs_hot_jobs_component__["a" /* HotJobsComponent */],
-            __WEBPACK_IMPORTED_MODULE_16__personal_center_personal_center_component__["a" /* PersonalCenterComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__personalized_recommendation_personalized_recommendation_component__["a" /* PersonalizedRecommendationComponent */],
-            __WEBPACK_IMPORTED_MODULE_20__information_temple_information_temple_component__["a" /* InformationTempleComponent */]
+            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_5__home_home_component__["a" /* HomeComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__carousel_carousel_component__["a" /* CarouselComponent */],
+            __WEBPACK_IMPORTED_MODULE_7__search_search_component__["a" /* SearchComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__navbar_navbar_component__["a" /* NavbarComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__pipe_filter_pipe__["a" /* FilterPipe */],
+            __WEBPACK_IMPORTED_MODULE_12__nopage_nopage_component__["a" /* NopageComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__register_register_component__["a" /* RegisterComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__enroll_enroll_component__["a" /* EnrollComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__recommend_recommend_component__["a" /* RecommendComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__hot_jobs_hot_jobs_component__["a" /* HotJobsComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__personal_center_personal_center_component__["a" /* PersonalCenterComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__personalized_recommendation_personalized_recommendation_component__["a" /* PersonalizedRecommendationComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__information_temple_information_temple_component__["a" /* InformationTempleComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
-            __WEBPACK_IMPORTED_MODULE_17__personal_center_personal_center_module__["a" /* PersonalCenterModule */],
-            __WEBPACK_IMPORTED_MODULE_10__app_routing_module__["a" /* AppRoutingModule */],
-            __WEBPACK_IMPORTED_MODULE_18__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */]
+            __WEBPACK_IMPORTED_MODULE_18__personal_center_personal_center_module__["a" /* PersonalCenterModule */],
+            __WEBPACK_IMPORTED_MODULE_11__app_routing_module__["a" /* AppRoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */]
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_8__shared_product_service__["a" /* ProductService */]],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
+        providers: [__WEBPACK_IMPORTED_MODULE_9__shared_product_service__["a" /* ProductService */], { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common__["a" /* LocationStrategy */], useClass: __WEBPACK_IMPORTED_MODULE_3__angular_common__["b" /* HashLocationStrategy */] }],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -629,7 +631,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-inverse\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">Brand</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav\">\n        <li ><a routerLink=\"/home\" routerLinkActive=\"active\" href=\"#\"><span class=\"glyphicon glyphicon-home\"></span>首页</a></li>\n        <li><a routerLink=\"/search\" routerLinkActive=\"active\" href=\"#\"><span class=\"glyphicon glyphicon-search\"></span>搜索页面</a></li>\n      </ul>\n\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li><a routerLink=\"/register\" routerLinkActive=\"active\" href=\"#\">登录</a></li>\n        <li><a routerLink=\"/enroll\" routerLinkActive=\"active\" href=\"#\">注册</a></li>\n        <li>\n          <a routerLink=\"/person\" routerLinkActive=\"active\" href=\"#\">\n            <span class=\"glyphicon glyphicon-user\"></span>个人中心\n          </a>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-inverse\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n        <span class=\"sr-only\">功能</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">SOTS</a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav\">\n        <li ><a routerLink=\"/home\" routerLinkActive=\"active\" href=\"#\"><span class=\"glyphicon glyphicon-home\"></span>首页</a></li>\n        <li><a routerLink=\"/search\" routerLinkActive=\"active\" href=\"#\"><span class=\"glyphicon glyphicon-search\"></span>搜索页面</a></li>\n      </ul>\n\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li><a routerLink=\"/register\" routerLinkActive=\"active\" href=\"#\">登录</a></li>\n        <li><a routerLink=\"/enroll\" routerLinkActive=\"active\" href=\"#\">注册</a></li>\n        <li>\n          <a routerLink=\"/person\" routerLinkActive=\"active\" href=\"#\">\n            <span class=\"glyphicon glyphicon-user\"></span>个人中心\n          </a>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n"
 
 /***/ }),
 
@@ -1094,7 +1096,7 @@ PersonalCenterModule = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* NgModule */])({
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_common__["e" /* CommonModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_common__["g" /* CommonModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_8__personal_center_routing_module__["a" /* PersonalCenterRouting */]
         ],
@@ -1272,7 +1274,7 @@ var FilterPipe = (function () {
     return FilterPipe;
 }());
 FilterPipe = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Pipe */])({
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Pipe */])({
         name: 'filter'
     })
 ], FilterPipe);
@@ -1444,7 +1446,7 @@ exports = module.exports = __webpack_require__("../../../../_css-loader@0.28.8@c
 
 
 // module
-exports.push([module.i, "/*错误信息默认占有高度，自定义高度*/\r\n.upSearchInfor .form-group {\r\n  height: 70px;\r\n  padding-right: 30px;\r\n}\r\n\r\n/*自定义提交按钮*/\r\n.btn-define {\r\n  color: #ffffff;\r\n  background-color: #05b570;\r\n  border-color: #02b56a;\r\n}\r\n.btn-define:hover,\r\n.btn-define:active,\r\n.btn-define:visited {\r\n  background-color: #059157;\r\n}\r\n.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {\r\n  background-color: #3f7985;\r\n  border-color: #4a8490;\r\n}\r\n\r\n.position {\r\n  font-size: 16px;\r\n  color: #6d7071;\r\n}\r\nspan.time {\r\n  font-size: 16px;\r\n  color: #6d7071;\r\n}\r\n", ""]);
+exports.push([module.i, "/*错误信息默认占有高度，自定义高度*/\r\n.upSearchInfor .form-group {\r\n  height: 70px;\r\n  padding-right: 30px;\r\n}\r\n\r\n/*自定义提交按钮*/\r\n.btn-define {\r\n  color: #ffffff;\r\n  background-color: #05b570;\r\n  border-color: #02b56a;\r\n}\r\n.btn-define:hover,\r\n.btn-define:active,\r\n.btn-define:visited {\r\n  background-color: #059157;\r\n}\r\n.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {\r\n  background-color: #3f7985;\r\n  border-color: #4a8490;\r\n}\r\n\r\n.position {\r\n  font-size: 16px;\r\n  color: #6d7071;\r\n}\r\nspan.time {\r\n  font-size: 16px;\r\n  color: #6d7071;\r\n}\r\n/*技能图标点击实现删除*/\r\n.checkbox-inline span {\r\n  font-size: 16px;\r\n  padding: 6px 20px;\r\n  background-color: #eeeeee;\r\n  color: #555555;\r\n  border-radius: 4px;\r\n}\r\n.skillsDiv label {\r\n  position: relative;\r\n}\r\n.skillsDiv label input {\r\n  position: absolute;\r\n  right: 0;\r\n  top: 0;\r\n}\r\n.checkbox-inline {\r\n  padding-left: 0;\r\n  margin-right: 20px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -1457,7 +1459,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/search/search.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-10 col-md-offset-1 upSearchInfor\">\n      <form [formGroup]=\"formModel\" (ngSubmit)=\"onSearch()\" novalidate name=\"searchForm\" role=\"form\"\n            class=\"form-inline\">\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('minlength','title')\">\n          <div class=\"input-group\">\n            <label class=\"input-group-addon\" for=\"position\">职位名称</label>\n            <input formControlName=\"title\" type=\"text\" id=\"position\" placeholder=\"请输入职位:\" class=\"form-control\">\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('minlength','title')\">\n            请输入至少三个字\n          </div>\n        </div>\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('minlength','title')\">\n          <div class=\"input-group\">\n            <label class=\"input-group-addon\" for=\"compName\">发布单位</label>\n            <input formControlName=\"title\" type=\"text\" id=\"compName\" placeholder=\"请输入公司名称:\" class=\"form-control\">\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('minlength','title')\">\n            请输入至少三个字\n          </div>\n        </div>\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('positiveNumber','price')\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"salary\">工资</div>\n            <input formControlName=\"price\" type=\"text\" id=\"salary\" placeholder=\"请输入工资:\" class=\"form-control\">\n            <div class=\"input-group-addon\">千为单位</div>\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('positiveNumber','price')\">\n            工资不为负数\n          </div>\n        </div>\n\n        <div class=\"form-group\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"productCategory\">发布时间</div>\n            <select formControlName=\"category\" type=\"text\" id=\"productCategory\" placeholder=\"请选择发布时间:\"\n                    class=\"form-control\">\n              <option value=\"-1\">今天</option>\n              <option value=\"0\">最近五天</option>\n              <option value=\"1\">最近一周</option>\n              <option value=\"2\">最近一月</option>\n              <option *ngFor=\"let category of catetories\" [value]=\"category\">{{category}}</option>\n            </select>\n          </div>\n        </div>\n        <div class=\"form-group\">\n          <button type=\"submit\" (click)=\"toggleState()\" class=\"btn btn-define\" [@btnState]=\"state\">{{btnValue}}</button>\n        </div>\n      </form>\n\n      <div class=\"list-group\">\n        <div href=\"#\" class=\"list-group-item active\">匹配如下<span class=\"badge\">103条记录</span></div>\n        <a class=\"list-group-item\" *ngFor=\"let infor of infors\">\n          <div class=\"clearfix\">\n            <p class=\"pull-left position \">{{infor.compPosition}}</p>\n            <span class=\"salary\">{{infor.compSalary}}</span>\n          </div>\n          <p class=\"company\">{{infor.compName}}</p>\n          <div class=\"clearfix\">\n            <p class=\"pull-left place \">{{infor.compPlace}}</p>\n            <span class=\"time\">{{infor.compPublish}}</span>\n          </div>\n        </a>\n      </div>\n\n\n    </div>\n  </div>\n</div>\n\n"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-10 col-md-offset-1 upSearchInfor\">\n      <form [formGroup]=\"formModel\" (ngSubmit)=\"onSearch()\" novalidate name=\"searchForm\" role=\"form\"\n            class=\"form-inline\">\n        <!---->\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('minlength','position')\">\n          <div class=\"input-group\">\n            <label class=\"input-group-addon\" for=\"position\">职位名称</label>\n            <input formControlName=\"position\" type=\"text\" id=\"position\" placeholder=\"请输入职位:\" class=\"form-control\">\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('minlength','position')\">\n            请输入至少两个字\n          </div>\n        </div>\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('minlength','comp')\">\n          <div class=\"input-group\">\n            <label class=\"input-group-addon\" for=\"compName\">发布单位</label>\n            <input formControlName=\"comp\" type=\"text\" id=\"compName\" placeholder=\"请输入公司名称:\" class=\"form-control\">\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('minlength','comp')\">\n            请输入至少两个字\n          </div>\n        </div>\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('minlength','place')\">\n          <div class=\"input-group\">\n            <label class=\"input-group-addon\" for=\"compPlace\">工作地点</label>\n            <input formControlName=\"place\" type=\"text\" id=\"compPlace\" placeholder=\"请输入工作地点:\" class=\"form-control\">\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('minlength','place')\">\n            请输入至少两个字\n          </div>\n        </div>\n\n        <div class=\"form-group\" [class.has-error]=\"formModel.hasError('positiveNumber','salary')\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"salary\">工资</div>\n            <input formControlName=\"salary\" type=\"text\" id=\"salary\" placeholder=\"请输入工资:\" class=\"form-control\">\n            <div class=\"input-group-addon\">千为单位</div>\n          </div>\n          <div class=\"help-block\" [class.hidden]=\"!formModel.hasError('positiveNumber','salary')\">\n            工资不为负数\n          </div>\n        </div>\n\n        <div class=\"form-group\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"publishTime\">发布时间</div>\n            <select formControlName=\"time\" type=\"text\" id=\"publishTime\" placeholder=\"请选择发布时间:\"\n                    class=\"form-control\">\n              <option value=\"-1\">今天</option>\n              <option value=\"0\">最近五天</option>\n              <option value=\"1\">最近一周</option>\n              <option value=\"2\">最近一月</option>\n              <option *ngFor=\"let category of catetories\" [value]=\"category\">{{category}}</option>\n            </select>\n          </div>\n        </div>\n\n        <div class=\"form-group\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"workExper\">工作经验</div>\n            <select formControlName=\"exper\" type=\"text\" id=\"workExper\" placeholder=\"工作经验\"\n                    class=\"form-control\">\n              <option value=\"-1\">1</option>\n              <option value=\"0\">2</option>\n              <option value=\"1\">3</option>\n            </select>\n          </div>\n        </div>\n\n        <div class=\"form-group\">\n          <div class=\"input-group\">\n            <div class=\"input-group-addon\" for=\"eduBackground\">学历</div>\n            <select formControlName=\"edu\" type=\"text\" id=\"eduBackground\" placeholder=\"工作经验\"\n                    class=\"form-control\">\n              <option value=\"-1\">研究生</option>\n              <option value=\"0\">博士</option>\n            </select>\n          </div>\n        </div>\n\n        <!--<div class=\"form-group skills\" formGroupName=\"skills\">-->\n          <!--<label class=\"checkbox-inline\" *ngFor=\"let skill of sillsInfor; let i = index;\">-->\n            <!--<input class=\"inputSkill\" type=\"checkbox\"  value={{skill}}>-->\n            <!--<span class=\"btn\">{{skill}}</span>-->\n          <!--</label>-->\n        <!--</div>-->\n\n        <div formArrayName=\"skills\">\n          <div *ngFor=\"let skill of sillsInfor; let i=index\" [formGroupName]=\"i\" class=\"form-group skillsDiv\">\n              <label class=\"checkbox-inline\" >\n                <input class=\"inputSkill\" type=\"checkbox\" formControlName=\"skillInfor\"  value={{skill.skillInfor}}>\n                <span class=\"btn\">{{skill.skillInfor}}</span>\n              </label>\n          </div>\n        </div>\n\n        <div class=\"form-group\"  >\n          <button type=\"submit\" (click)=\"onSubmit()\" class=\"btn btn-define\" [disabled]=\"formModel.pristine\" [@btnState]=\"state\">{{btnValue}}</button>\n        </div>\n\n\n        <div class=\"form-group\"  >\n          <button type=\"reset\" (click)=\"revert()\"\n                  [disabled]=\"formModel.pristine\" class=\"btn btn-danger\">清空</button>\n        </div>\n\n      </form>\n\n      <div class=\"list-group\">\n        <div href=\"#\" class=\"list-group-item active\">\n          匹配如下<span class=\"badge\">103条记录</span>\n        </div>\n        <a class=\"list-group-item\" *ngFor=\"let infor of infors\">\n          <div class=\"clearfix\">\n            <p class=\"pull-left position \">{{infor.compPosition}}</p>\n            <span class=\"salary\">{{infor.compSalary}}</span>\n          </div>\n          <p class=\"company\">{{infor.compName}}</p>\n          <div class=\"clearfix\">\n            <p class=\"pull-left place \">{{infor.compPlace}}</p>\n            <span class=\"time\">{{infor.compPublish}}</span>\n          </div>\n        </a>\n      </div>\n\n\n    </div>\n  </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -1471,6 +1473,7 @@ module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_product_service__ = __webpack_require__("../../../../../src/app/shared/product.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__recommend_information_component__ = __webpack_require__("../../../../../src/app/recommend/information.component.ts");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SearchComponent; });
+/* unused harmony export InforSkill */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1486,15 +1489,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var SearchComponent = (function () {
-    function SearchComponent(productService) {
+    function SearchComponent(fb, productService) {
+        this.fb = fb;
         this.productService = productService;
         this.state = 'inactive';
         this.btnValue = '搜索';
-        var fb = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormBuilder */]();
         this.formModel = fb.group({
-            title: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["d" /* Validators */].minLength(2)],
-            price: [null, this.positiveNumberValidator],
-            category: ['-1']
+            position: [null,
+                [
+                    __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* Validators */].minLength(2),
+                    __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* Validators */].required
+                ]
+            ],
+            comp: [null, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* Validators */].minLength(2)],
+            place: [null, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* Validators */].minLength(2)],
+            salary: [null, this.positiveNumberValidator],
+            time: ['-1'],
+            exper: ['0'],
+            edu: ['0'],
+            skills: this.fb.array([])
         });
         this.infors = [
             new __WEBPACK_IMPORTED_MODULE_4__recommend_information_component__["a" /* Information */]('同程旅游', '[苏州·独墅湖]', '15K-25K', '大数据开发', '2018-01-15'),
@@ -1505,6 +1518,14 @@ var SearchComponent = (function () {
             new __WEBPACK_IMPORTED_MODULE_4__recommend_information_component__["a" /* Information */]('点我达', '[杭州·东新路]', '30K-50K', '大数据开发', '15:16发布'),
             new __WEBPACK_IMPORTED_MODULE_4__recommend_information_component__["a" /* Information */]('有鱼金融科技', '[上海·漕河泾]', '15K-30K', '大数据开发', '1天前发布'),
         ];
+        this.sillsInfor = [
+            { skillInfor: 'Python' },
+            { skillInfor: 'Reyon' },
+            { skillInfor: 'wooiie' },
+            { skillInfor: 'Rech' },
+            { skillInfor: 'Orio' }
+        ];
+        this.setSkills(this.sillsInfor);
     }
     /*验证输入数值是否为正数*/
     SearchComponent.prototype.positiveNumberValidator = function (control) {
@@ -1519,19 +1540,35 @@ var SearchComponent = (function () {
             return { positiveNumber: true };
         }
     };
+    SearchComponent.prototype.setSkills = function (skills) {
+        var _this = this;
+        var skillsFGs = skills.map(function (tempt) { return _this.fb.group(tempt); });
+        var skillFormArray = this.fb.array(skillsFGs);
+        this.formModel.setControl('skills', skillFormArray);
+    };
     SearchComponent.prototype.toggleState = function () {
         this.state = this.state === 'active' ? 'inactive' : 'active';
         this.onSearch();
         this.btnValue = this.btnValue === '搜索' ? '暂停' : '搜索';
     };
     SearchComponent.prototype.onSearch = function () {
+    };
+    SearchComponent.prototype.onSubmit = function () {
         if (this.formModel.valid) {
             console.log(this.formModel.value);
+            console.log('OK');
+            // this.revert();
+        }
+        else {
+            console.log(this.formModel.value);
+            console.log('error');
         }
     };
     SearchComponent.prototype.ngOnInit = function () {
         this.catetories = this.productService.getAllCategories();
     };
+    /*恢复表单 - 文字*/
+    SearchComponent.prototype.revert = function () { this.formModel.reset(); };
     return SearchComponent;
 }());
 SearchComponent = __decorate([
@@ -1552,10 +1589,17 @@ SearchComponent = __decorate([
             ])
         ]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__shared_product_service__["a" /* ProductService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__shared_product_service__["a" /* ProductService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_forms__["d" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__shared_product_service__["a" /* ProductService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__shared_product_service__["a" /* ProductService */]) === "function" && _b || Object])
 ], SearchComponent);
 
-var _a;
+var InforSkill = (function () {
+    function InforSkill() {
+        this.skillInfor = '';
+    }
+    return InforSkill;
+}());
+
+var _a, _b;
 //# sourceMappingURL=search.component.js.map
 
 /***/ }),
@@ -1612,7 +1656,7 @@ var ProductService = (function () {
     return ProductService;
 }());
 ProductService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(),
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["e" /* Injectable */])(),
     __metadata("design:paramtypes", [])
 ], ProductService);
 

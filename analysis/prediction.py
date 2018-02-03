@@ -6,12 +6,10 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 
-# TODO 修改模块  添加对外接口
-# TODO 将访问过的数据放入redis  第二次访问的时候不重新计算
+# TODO 接收一个求职者的基本信息  dist结构    处理后进行匹配
 def step3():
     # 读取数据
     data = pd.read_csv('result/newModel.csv')
-    # feature_cols = ['experience', 'education', 'compSize']
     feature_cols = ['skill', 'experience', 'education', 'compSize']
     X = data[feature_cols]
     y = data['salary']

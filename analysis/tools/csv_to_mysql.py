@@ -1,13 +1,26 @@
 import csv
 
 import time
-from django.db import IntegrityError
 
+import pickle
+from django.db import IntegrityError
+import redis
 from analysis.models import Job, DigitizedJob
 import pandas as pd
 
-def write_job_to_mysql():
-    df = pd.read_csv('datas/java_data.csv')
+'''
+流程：
+    1. 爬虫爬取玩完数据之后进行step1更新关键字
+    2. 进行step2得出DigitizedJob并将所有csv更新至数据库
+    3. 当收到前端提交的预测请求时，执行step3预测,得出预测结果
+    
+'''
+
+
+# TODO 将这个改成对外接口   接受一个csv源文件路径字符串
+# TODO 改为redis去重的批量插入
+def write_job_to_mysql(path:str):
+    df = pd.read_csv(path)
     rows = df.iterrows()
     for index, row in rows:
         job = Job()
@@ -43,9 +56,11 @@ def write_diJob_to_mysql():
     5 education
     6 salary
     '''
-    # TODO 解决job重复  批量插入
+    setname = 'djobs'
+    r = redis.Redis()
     list_to_insert = list()
     start_time = time.time()
+    size = 0
     for index, row in rows:
         jobId = row[1]
         job = Job.objects.get(jobId=jobId)
@@ -56,9 +71,23 @@ def write_diJob_to_mysql():
         djob.experience = row[4]
         djob.education = row[5]
         djob.salary = row[6]
+        size = index
+        r.hset(setname, jobId, pickle.dumps(djob))
+    values = r.hvals(setname)
+
+    print('原大小：', size)
+    print('去重后大小：', len(values))
+
+    for val in values:
+        djob = pickle.loads(val)
         list_to_insert.append(djob)
     DigitizedJob.objects.bulk_create(list_to_insert)
+
     endtime = time.time()
-    print('耗时：', (endtime-start_time))
+
+    print('耗时：', (endtime - start_time))
+
+
 if __name__ == '__main__':
+    write_job_to_mysql('datas/java_data.csv')
     write_diJob_to_mysql()

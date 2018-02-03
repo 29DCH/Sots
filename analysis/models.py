@@ -44,6 +44,6 @@ class DigitizedJob(models.Model):
     experience = models.IntegerField(default=0)
     education = models.IntegerField(default=0)
     salary = models.FloatField(default=5)
-    Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True)
+    # Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, unique=True)
+    Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
 
-# TODO 删除  analysis 重新startapp  然后创建表
