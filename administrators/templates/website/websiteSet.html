@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    $(function(){
+　　$.ajax({
+　　　　type:'post',
+　　　　url:'',
+        contentType: "application/json",
+　　　　data:{name:"123",conditions:JSON.stringify(conditons)},
+　　　　dataType : 'json',
+　　　　success:function(data){
+　　　　　　console.log(data);
+　　　　},
+　　　　error: function (XMLHttpRequest, textStatus, errorThrown){
+　　　　　　alert("error");
+　　　　}
+　　});
+});
+
+</script>
+<body>
+<form action="{% url 'setWebsite' %}" method="post">
+    {% csrf_token %}
+    {% for web in  webs%}
+        <input type="checkbox" name="web" value="{{ web.name }}">{{ web.name }}<br>
+    {% endfor %}
+    <input type="submit" value="确定">
+</form>
+</body>
+</html>
