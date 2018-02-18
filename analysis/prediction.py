@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 # TODO 接收一个求职者的基本信息  dist结构    处理后进行匹配
-def step3():
+def predic():
     # 读取数据
     data = pd.read_csv('result/newModel.csv')
     feature_cols = ['skill', 'experience', 'education', 'compSize']
@@ -66,4 +66,4 @@ def step3():
 
 
 if __name__ == '__main__':
-    step3()
+    predic()

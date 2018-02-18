@@ -20,7 +20,7 @@ import administrators.adminuser.adminuser as ad
 import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
-from analysis.views import access, into_mysql, write_djob, index
+from analysis.views import access, into_mysql, write_djob, index, job_list
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -47,7 +47,7 @@ urlpatterns = [
     url(r'admin/jobUpdate', job.update, name='jobUpdate'),# 岗位更新
 
     url(r'^$', index, name='index'),
-
+    url(r'api/production', job_list),
     # 测试
     url(r'access', access, name='access'),
     url(r'into_mysql', into_mysql,name='intomysql'),

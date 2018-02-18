@@ -45,8 +45,8 @@ def write_job_to_mysql(path:str):
             print('添加了重复数据', e.__str__())
 
 
-def write_diJob_to_mysql():
-    df = pd.read_csv('analysis/result/newModel.csv')
+def write_diJob_to_mysql(path:str):
+    df = pd.read_csv(path)
     rows = df.iterrows()
     '''
     1 jobId
@@ -89,5 +89,6 @@ def write_diJob_to_mysql():
 
 
 if __name__ == '__main__':
-    write_job_to_mysql('datas/java_data.csv')
-    write_diJob_to_mysql()
+    pass
+    # write_job_to_mysql('datas/java_data.csv')
+    # write_diJob_to_mysql()
