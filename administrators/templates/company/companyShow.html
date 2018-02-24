@@ -48,9 +48,9 @@
         <td>{{ com.companyLogo }}</td>
         <td>{{ com.financeStage }}</td>
         <td>
-            <a href="companyEditorEdit?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
-            <a href="companyDel?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
-            <a href="companyAdd" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+            <a href="{% url 'companyEditorEdit' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+            <a href="{% url 'companyDel' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+            <a href="{% url 'companyAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
         </td>
     </tr>
     {% endfor %}

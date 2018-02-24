@@ -22,7 +22,7 @@ import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
-import administrators.crawler.crawler as cr
+import administrators.website.website as web
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -52,9 +52,13 @@ urlpatterns = [
     url(r'admin/jobUpdate', job.update, name='jobUpdate'),# 岗位更新
 
     # 网站
-    url(r'admin/websiteShow', cr.show, name='websiteShow'),  # 网站展示
-    url(r'admin/websiteSet', cr.setWebiste, name='websiteSet'),  # 设置需要爬取的网站
-    url(r'admin/setWebsite', cr.websiteSet, name='setWebsite'),  # 提交需要爬取的网站
+    url(r'admin/websiteShow', web.show, name='websiteShow'),  # 网站展示
+    url(r'admin/websiteSet', web.delete, name='websiteDel'),  # 网站删除
+    url(r'admin/websiteAdd', web.add, name='websiteAdd'), # 跳转到添加网站界面
+    url(r'admin/websiteSave', web.save, name='websiteSave'),  # 网站存储
+    url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面
+    url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
+
 
     url(r'^$', index, name='index'),
     url(r'api/production', job_list),
