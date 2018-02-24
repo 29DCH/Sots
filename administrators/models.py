@@ -3,20 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 # Create your models here.
 
-# 用户表
+#用户表
 class User(models.Model):
     username = models.CharField(max_length=10)# 用户名
     password = models.CharField(max_length=10)# 密码
     nickname = models.CharField(max_length=10)# 昵称
-
-# 用户求职信息表`
-class UserInfo(models.Model):
-    educationRequire = models.CharField(max_length=20)# 学历
-    major = models.CharField(max_length=20)# 专业
-    school = models.CharField(max_length=20)# 学校
-    jobPlace = models.CharField(max_length=20)# 求职地
-    experienceRequire = models.CharField(max_length=20)# 工作经验
-    skillRequire = models.CharField(max_length=20)# 技能
 
 # 职位类
 class Job(models.Model):
