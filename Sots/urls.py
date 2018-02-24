@@ -24,6 +24,8 @@ import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
 
+import administrators.test.test as te
+
 urlpatterns = [
     # path('admin/', admin.site.urls),
 
@@ -72,5 +74,8 @@ urlpatterns = [
     url(r'into_mysql', into_mysql,name='intomysql'),
     url(r'write_djob', write_djob, name='writedjob'),
 
-
+    # 随机生成求职者的测试数据，存入数据库
+    url(r'admin/testShow', te.show, name='testShow'),# 展示页面
+    url(r'admin/testRandom',te.rando, name='testRandom'),# 进入后端去生成
+    url(r'admin/infoSave',te.save,name='infoSave'),# 存储生成
 ]
