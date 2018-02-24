@@ -8,6 +8,11 @@ from analysis.tools.NLtool import get_keyword, get_keywords
 from analysis.tools.csv_to_mysql import write_diJob_to_mysql, write_job_to_mysql
 
 
+# TODO 待完成
+def get_digitaluser(salary, experience, education, skills):
+    user = ['20','4', '2', '2000']
+    return user
+
 def get_education(words):
     # TODO 可将这个变量添加到参数列表供调用者改变
     edu_point_dict = {
@@ -138,6 +143,7 @@ class Analysis:
             experience.append(get_experience(i))
         self.frame.insert(0, 'experience', experience)
 
+    # TODO 去重关键字
     # 将每一条记录的要求中的关键字与统计结果中的关键词匹配
     def _get_skill(self):
         # 读取关键字

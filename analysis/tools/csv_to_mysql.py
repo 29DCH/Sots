@@ -17,7 +17,6 @@ import pandas as pd
 '''
 
 
-# TODO 将这个改成对外接口   接受一个csv源文件路径字符串
 # TODO 改为redis去重的批量插入
 def write_job_to_mysql(path:str):
     df = pd.read_csv(path)
@@ -82,7 +81,7 @@ def write_diJob_to_mysql(path:str):
         djob = pickle.loads(val)
         list_to_insert.append(djob)
     DigitizedJob.objects.bulk_create(list_to_insert)
-
+    r.hdel(setname)
     endtime = time.time()
 
     print('耗时：', (endtime - start_time))

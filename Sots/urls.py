@@ -57,7 +57,7 @@ urlpatterns = [
     url(r'admin/setWebsite', cr.websiteSet, name='setWebsite'),  # 提交需要爬取的网站
 
     url(r'^$', index, name='index'),
-    url(r'api/production', job_list),
+    url(r'api/information', job_list),
 
     # 公司
     url(r'admin/companyShow', com.show, name='companyShow'),# 公司展示
