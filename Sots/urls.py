@@ -20,13 +20,14 @@ import administrators.adminuser.adminuser as ad
 import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
+from analysis.views import access, into_mysql, write_djob, index, job_list
 
 from analysis.views import access, into_mysql, write_djob, index, job_list
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
 
     # 后台
-    url(r'^$', admo.land),# 管理员登陆界面
+    url(r'admin', admo.land),# 管理员登陆界面
     url(r'admin/checks', ad.checks, name='checks'),# 后台校验用户名和密码
     url(r'admin/main', ad.show_main, name='main'),# 主界面
     url(r'admin/welcome', ad.welcome, name='welcome'),#  欢迎界面
@@ -46,4 +47,10 @@ urlpatterns = [
     url(r'admin/jobEdit', job.edit, name='jobEdit'),# 跳转到编辑岗位界面
     url(r'admin/jobUpdate', job.update, name='jobUpdate'),# 岗位更新
 
+    url(r'^$', index, name='index'),
+    url(r'api/production', job_list),
+    # 测试
+    url(r'access', access, name='access'),
+    url(r'into_mysql', into_mysql,name='intomysql'),
+    url(r'write_djob', write_djob, name='writedjob'),
 ]
