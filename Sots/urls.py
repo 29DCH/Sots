@@ -20,8 +20,7 @@ import administrators.adminuser.adminuser as ad
 import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
-import administrators.crawler.crawler as cr
-
+from analysis.views import access, into_mysql, write_djob, index, job_list
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -45,10 +44,5 @@ urlpatterns = [
     url(r'admin/jobSave', job.save, name='jobSave'),# 岗位存储
     url(r'admin/jobEdit', job.edit, name='jobEdit'),# 跳转到编辑岗位界面
     url(r'admin/jobUpdate', job.update, name='jobUpdate'),# 岗位更新
-    # 网站
-    url(r'admin/websiteShow', cr.show, name='websiteShow'),# 网站展示
-
-    url(r'admin/websiteSet', cr.setWebiste, name='websiteSet'),# 设置需要爬取的网站
-    url(r'admin/setWebsite', cr.websiteSet, name='setWebsite'),# 提交需要爬取的网站
 
 ]
