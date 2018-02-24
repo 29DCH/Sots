@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="{% url 'intomysql' %}">
+        {% csrf_token %}
+        <button type="submit">addjob</button>
+    </form>
+    <form method="post" action="{% url 'writedjob' %}">
+        {% csrf_token %}
+        <button type="submit">adddjob</button>
+    </form>
+</body>
+</html>
