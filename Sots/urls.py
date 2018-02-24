@@ -20,6 +20,7 @@ import administrators.adminuser.adminuser as ad
 import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
+
 from analysis.views import access, into_mysql, write_djob, index, job_list
 urlpatterns = [
     path('admin/', admin.site.urls),
