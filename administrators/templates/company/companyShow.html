@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>company</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+{#展示公司信息页面#}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>公司id</th>
+        <th>公司名称</th>
+        <th>公司规模</th>
+        <th>公司行业</th>
+        <th>公司标签</th>
+        <th>公司链接</th>
+        <th>公司介绍</th>
+        <th>联系信息</th>
+        <th>经度</th>
+        <th>纬度</th>
+        <th>商业区域</th>
+        <th>公司主页</th>
+        <th>公司LOGO</th>
+        <th>融资</th>
+        <th>操作</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for com in coms %}
+    <tr>
+        <td>{{ com.id  }}</td>
+        <td>{{ com.compName }}</td>
+        <td>{{ com.compSize  }}</td>
+        <td>{{  com.compIndustry }}</td>
+        <td>{{ com.companyLabels }}</td>
+        <td>{{ com.compLink }}</td>
+        <td>{{   com.compIntroduce }}</td>
+        <td>{{ com.contactInfo }}</td>
+        <td>{{ com.longitude }}</td>
+        <td>{{  com.latitude }}</td>
+        <td>{{ com.businessZones }}</td>
+        <td>{{ com.compHome }}</td>
+        <td>{{ com.companyLogo }}</td>
+        <td>{{ com.financeStage }}</td>
+        <td>
+            <a href="{% url 'companyEditorEdit' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+            <a href="{% url 'companyDel' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+            <a href="{% url 'companyAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -8,12 +8,13 @@
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+{#展示用户信息页面#}
 <table class="table table-bordered">
     <thead>
     <tr>
         <th>编号</th>
         <th>姓名</th>
+        <th>昵称</th>
         <th>密码</th>
         <th>编辑</th>
     </tr>
@@ -21,13 +22,15 @@
     <tbody>
         {% for list in lists %}
             <tr>
-            <td>{{ list.id }}</td>
-            <td>{{ list.username }}</td>
-            <td>{{ list.password }}</td>
-            <td>
-                <a class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
-                <a  class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
-            </td>
+                <td>{{ list.id }}</td>
+                <td>{{ list.username }}</td>
+                <td>{{ list.nickname }}</td>
+                <td>{{ list.password }}</td>
+                <td>
+                    <a href="{% url 'userEdit'%}?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+                    <a href="{% url 'userDel' %}?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+                    <a href="{% url 'userAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+                </td>
             </tr>
         {% endfor %}
     </tbody>

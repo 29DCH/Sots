@@ -47,7 +47,7 @@
 <body class="easyui-layout" id="divLayout">
 
   <div data-options="region:'north'" id="divTop">
-      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>
+{#      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>#}
       <div id="divTopMenu">
           <ul>
               <li >欢迎您！admin[超级管理员] {{ request.session.username }}</li>
@@ -62,12 +62,16 @@
       <ul class="easyui-tree">
           <li><span>常用功能</span>
               <ul>
-                  <li><span><a href="#" onclick="addTab('用户管理','userShow.html')">用户管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('用户管理','userShow')">用户管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('岗位管理','jobShow')">岗位管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('网站管理','websiteShow')">网站管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('公司管理','companyShow')">公司管理</a> </span></li>
               </ul>
           </li>
           <li><span>系统工具</span>
               <ul>
-                  <li><span><a href="#">网站设置</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('测试','testShow.html')">测试</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('网站设置','websiteSet.html')">网站设置</a> </span></li>
                   <li><span><a href="#">查看日志</a> </span></li>
                   <li><span><a href="#">数据备份</a> </span></li>
               </ul>
@@ -99,7 +103,7 @@
 
      <div id="main" class="easyui-tabs" style="width: 100%;height: 30px;"  data-options="fit:true">
          <div title="后台管理首页" iconCls="icon-page_white_text">
-             <iframe scrolling="auto" frameborder="0" src="welcome.html"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>
+{#             <iframe scrolling="auto" frameborder="0" src="{% url 'welcome' %}"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>#}
 
              <!--<div id="tt" class="easyui-tabs" style="width: 500px;height: 250px;">-->
                  <!--<div title="Tab1" style="padding: 20px">-->
