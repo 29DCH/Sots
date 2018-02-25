@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    $(function(){
+　　$.ajax({
+　　　　type:'post',
+　　　　url:'',
+        contentType: "application/json",
+　　　　data:{name:"123",conditions:JSON.stringify(conditons)},
+　　　　dataType : 'json',
+　　　　success:function(data){
+　　　　　　console.log(data);
+　　　　},
+　　　　error: function (XMLHttpRequest, textStatus, errorThrown){
+　　　　　　alert("error");
+　　　　}
+　　});
+});
+
+</script>
+<body>
+<form action="{% url 'websiteSave' %}" method="post">
+    {% csrf_token %}
+    网站名称：<input type="text" name="name"><br>
+    网址：<input type="text" name="url">
+    <input type="submit" value="确定">
+</form>
+</body>
+</html>
