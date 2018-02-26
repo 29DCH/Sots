@@ -23,11 +23,11 @@
 
 </script>
 <body>
-<form action="{% url 'setWebsite' %}" method="post">
+<form action="{% url 'websiteUpdate' %}" method="post">
     {% csrf_token %}
-    {% for web in  webs%}
-        <input type="checkbox" name="web" value="{{ web.name }}">{{ web.name }}<br>
-    {% endfor %}
+    <input type="hidden" name = "id" value="{{ web.id }}">
+    网站名称：<input type="text" name="name" value="{{ web.name }}"><br>
+    网址：<input type="text" name="url" value="{{ web.url }}">
     <input type="submit" value="确定">
 </form>
 </body>
