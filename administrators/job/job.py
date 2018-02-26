@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 import administrators.models as m
+import pandas
 
 # 展示岗位
 def show(request):
@@ -86,3 +87,10 @@ def update(request):
     job.save()
     return show(request)
 
+def readDate():
+    pa = pandas.read_csv(r'D:/java_data.csv',encoding='gbk', header=None,names=['JobName',
+        'JobPlace', 'JobSalary', 'JobAdvantage', 'releaseTime', 'jobNeed',
+        'educationRequire', 'experienceRequire', 'skillRequire', 'jobLink',
+        'jobInfo', 'jobNature', 'jobLabels'])
+    # pa = pandas.read_csv(r'D:/data.txt', header=None, names=['a', 'b', 'c'])
+    print(pa.head(5))

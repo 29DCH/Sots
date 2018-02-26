@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公司添加</title>
+    <style>
+        form{
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<form action="{% url 'jobSave' %}" method="post">
+    {% csrf_token %}
+    <p>职位名称 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="JobName"/></p>
+    <p>职位地点 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="JobPlace"/></p>
+    <p>职位薪水 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="JobSalary"/></p>
+    <p>职位优势 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="JobAdvantage"/></p>
+    <p>发布时间 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="releaseTime"/></p>
+    <p>工作需求 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="jobNeed"/></p>
+    <p>学历要求 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="educationRequire"/></p>
+    <p>经验要求 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="experienceRequire"/></p>
+    <p>技能需求 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="skillRequire"/></p>
+    <p>职位链接 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="jobLink"/></p>
+    <p>职位信息 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="jobInfo"/></p>
+    <p>职位性质 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="jobNature"/></p>
+    <p>职位标签 :&nbsp;&nbsp;<input  type="text"  placeholder="" name="jobLabels"/></p>
+    <p><input type="submit" value="添加"></p>
+
+
+</form>
+</body>
+</html>

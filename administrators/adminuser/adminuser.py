@@ -18,7 +18,7 @@ def checks( request):
         if (i.username == admins.username) and (i.password == admins.password):
             request.session['username'] = i.username
             # print(i.username, 'xxxxx')
-            return redirect( 'main.html')
+            return redirect( 'main')
     return render(request, 'adminuser/error.html')
 
 # 展示欢迎界面

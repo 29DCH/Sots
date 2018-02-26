@@ -2,8 +2,16 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import time
 
 from analysis.tools.NLtool import get_keyword, get_keywords
+from analysis.tools.csv_to_mysql import write_diJob_to_mysql, write_job_to_mysql
+
+
+# TODO 待完成
+def get_digitaluser(salary, experience, education, skills):
+    user = ['20','4', '2', '2000']
+    return user
 
 def get_education(words):
     # TODO 可将这个变量添加到参数列表供调用者改变
@@ -18,6 +26,7 @@ def get_education(words):
         return edu_point_dict[words]
     else:  # 非法数据
         return 0
+
 
 def get_experience(words):
     reg = r'[0-9]*'
@@ -38,7 +47,8 @@ def get_experience(words):
         else:
             return sums
 
-def get_skill(words:str):
+
+def get_skill(words: str):
     keywords = get_keywords()
     words = get_keyword(words)
     point = 0
@@ -48,7 +58,7 @@ def get_skill(words:str):
     return point
 
 
-def get_salary(words:str):
+def get_salary(words: str):
     reg = r'[0-9]*'
     x = re.findall(reg, words)
     sums = 0.0
@@ -63,7 +73,8 @@ def get_salary(words:str):
         sa = 0
     return sa
 
-def get_compSize(words:str):
+
+def get_compSize(words: str):
     reg = r'[0-9]*'
     if words is not np.nan:
         nums = re.findall(reg, words)
@@ -81,7 +92,7 @@ def get_compSize(words:str):
     else:
         return 100
 
-# TODO 提取digitization 和 prediction的公共功能部分为一个单独的函数
+
 class Analysis:
 
     def __init__(self, path: str):
@@ -101,7 +112,10 @@ class Analysis:
         print(self.frame.head())
         self.frame.plot(figsize=(10.24, 7.68))
         plt.show()
-        self.frame.to_csv("result/newModel.csv", encoding="utf-8")
+        now = time.time()
+        path = 'result/newModel'+now+'.csv'
+        self.frame.to_csv(path, encoding="utf-8")
+        return path
 
     def _get_salary(self):
         t = self.columns['jobSalary']
@@ -129,6 +143,7 @@ class Analysis:
             experience.append(get_experience(i))
         self.frame.insert(0, 'experience', experience)
 
+    # TODO 去重关键字
     # 将每一条记录的要求中的关键字与统计结果中的关键词匹配
     def _get_skill(self):
         # 读取关键字
@@ -144,7 +159,6 @@ class Analysis:
         for i in t:
             compSize.append(get_compSize(i))
         self.frame.insert(0, 'compSize', compSize)
-
 
 if __name__ == '__main__':
     step2 = Analysis('../datas/java_data.csv')

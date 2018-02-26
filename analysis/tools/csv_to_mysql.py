@@ -17,7 +17,6 @@ import pandas as pd
 '''
 
 
-# TODO 将这个改成对外接口   接受一个csv源文件路径字符串
 # TODO 改为redis去重的批量插入
 def write_job_to_mysql(path:str):
     df = pd.read_csv(path)
@@ -45,8 +44,8 @@ def write_job_to_mysql(path:str):
             print('添加了重复数据', e.__str__())
 
 
-def write_diJob_to_mysql():
-    df = pd.read_csv('analysis/result/newModel.csv')
+def write_diJob_to_mysql(path:str):
+    df = pd.read_csv(path)
     rows = df.iterrows()
     '''
     1 jobId
@@ -82,12 +81,13 @@ def write_diJob_to_mysql():
         djob = pickle.loads(val)
         list_to_insert.append(djob)
     DigitizedJob.objects.bulk_create(list_to_insert)
-
+    r.hdel(setname)
     endtime = time.time()
 
     print('耗时：', (endtime - start_time))
 
 
 if __name__ == '__main__':
-    write_job_to_mysql('datas/java_data.csv')
-    write_diJob_to_mysql()
+    pass
+    # write_job_to_mysql('datas/java_data.csv')
+    # write_diJob_to_mysql()

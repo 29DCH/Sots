@@ -38,6 +38,10 @@ class Job(models.Model):
     # 职位标签
     jobLabels = models.CharField(max_length=30)
 
+# 网站表
+class website(models.Model):
+    url = models.CharField(max_length=50)
+    name = models.CharField(max_length=20)
 
 # 进入登陆页面
 def land(request):

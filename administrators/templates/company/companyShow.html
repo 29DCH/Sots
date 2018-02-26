@@ -31,26 +31,26 @@
     </tr>
     </thead>
     <tbody>
-    {% for list in lists %}
+    {% for com in coms %}
     <tr>
-        <td>{{ companyId  }}</td>
-        <td>{{ compName }}</td>
-        <td>{{ compSize  }}</td>
-        <td>{{  compIndustry }}</td>
-        <td>{{ companyLabels }}</td>
-        <td>{{ compLink }}</td>
-        <td>{{   compIntroduce }}</td>
-        <td>{{ contactInfo }}</td>
-        <td>{{  longitude }}</td>
-        <td>{{  latitude }}</td>
-        <td>{{ businessZones }}</td>
-        <td>{{ compHome }}</td>
-        <td>{{ companyLogo }}</td>
-        <td>{{ financeStage }}</td>
+        <td>{{ com.id  }}</td>
+        <td>{{ com.compName }}</td>
+        <td>{{ com.compSize  }}</td>
+        <td>{{  com.compIndustry }}</td>
+        <td>{{ com.companyLabels }}</td>
+        <td>{{ com.compLink }}</td>
+        <td>{{   com.compIntroduce }}</td>
+        <td>{{ com.contactInfo }}</td>
+        <td>{{ com.longitude }}</td>
+        <td>{{  com.latitude }}</td>
+        <td>{{ com.businessZones }}</td>
+        <td>{{ com.compHome }}</td>
+        <td>{{ com.companyLogo }}</td>
+        <td>{{ com.financeStage }}</td>
         <td>
-            <a href="userEdit?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
-            <a href="userDel?uid={{ list.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
-            <a href="userAdd" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+            <a href="{% url 'companyEditorEdit' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+            <a href="{% url 'companyDel' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+            <a href="{% url 'companyAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
         </td>
     </tr>
     {% endfor %}

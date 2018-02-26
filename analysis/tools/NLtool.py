@@ -3,7 +3,7 @@ import re
 import jieba
 import jieba.posseg as pseg
 
-jieba.load_userdict('tools/dict')
+jieba.load_userdict('analysis/tools/dict')
 
 """
 分词处理公用模块
@@ -13,7 +13,7 @@ jieba.load_userdict('tools/dict')
 # TODO 改为后台可编辑
 def get_stop_words():
     stop_words = []
-    cfp = open('tools/stopwords', 'r+')  # 停用词的txt文件
+    cfp = open('analysis/tools/stopwords', 'r+')  # 停用词的txt文件
     for line in cfp:
         for word in line.split():
             stop_words.append(word)
@@ -24,7 +24,7 @@ def get_stop_words():
 
 # 获取用户词典
 def get_dict():
-    f = open('tools/dict', 'r')
+    f = open('analysis/tools/dict', 'r')
     dic = []
     for i in f.readlines():
         dic.append(i)
@@ -61,7 +61,7 @@ def get_keyword(jobinfo):
 
 # 读取关键字
 def get_keywords():
-    f = open('result/keywords')
+    f = open('analysis/result/keywords')
     keywords = []
     for i in f.readlines():
         keywords.append(str(i).strip())
@@ -70,7 +70,7 @@ def get_keywords():
 
 # 保存关键字
 def save_keywords(keywords):
-    f = open('result/keywords', 'w')
+    f = open('analysis/result/keywords', 'w')
     for i in keywords:
         f.write(i)
         f.write('\n')

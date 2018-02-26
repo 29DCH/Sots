@@ -47,8 +47,7 @@ class Words:
         plt.show()
 
 
-# TODO 改为对外接收一个字符串
-def step1(path:str):
+def words_split(path:str):
     # 加载用户字典
     starttime = time.time()
 
@@ -65,4 +64,4 @@ def step1(path:str):
 
 
 if __name__ == '__main__':
-    step1('../datas/java_data.csv')
+    words_split('../datas/java_data.csv')

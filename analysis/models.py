@@ -47,3 +47,10 @@ class DigitizedJob(models.Model):
     # Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, unique=True)
     Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
 
+class UserInfo(models.Model):
+    educationRequire = models.CharField(max_length=300)
+    major = models.CharField(max_length=200)
+    school = models.CharField(max_length=200)
+    jobWantedPlace = models.CharField(max_length=300)
+    experienceRequire = models.CharField(max_length=300)
+    skill = models.CharField(max_length=300)
