@@ -21,7 +21,7 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.views import access, into_mysql, write_djob, index, job_list
+from analysis.views import access, into_mysql, write_djob, index, job_list, persistence
 import administrators.crawler.crawler as cr
 
 urlpatterns = [
@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'access', access, name='access'),
     url(r'into_mysql', into_mysql,name='intomysql'),
     url(r'write_djob', write_djob, name='writedjob'),
+    url(r'persistence', persistence, name='persistence'),
 
 
 ]

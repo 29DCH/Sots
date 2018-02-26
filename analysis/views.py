@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from analysis.digitization import get_digitaluser
 from analysis.models import Job, DigitizedJob
 from analysis.prediction import predic
-from analysis.tools.csv_to_mysql import write_job_to_mysql, write_diJob_to_mysql
+from analysis.tools.csv_to_database import persistence_job, persistence_djob, persistence_company
 
 
 def index(request):
@@ -23,12 +23,17 @@ def access(request):
 
 
 def into_mysql(request):
-    write_job_to_mysql()
+    persistence_job('datas/java_data.csv')
     return HttpResponse(request, 'hfhfhfh')
 
 
 def write_djob(request):
-    write_diJob_to_mysql()
+    persistence_djob('analysis/result/newModel.csv')
+    return HttpResponse(request)
+
+
+def persistence(request):
+    persistence_company('datas/java_data.csv')
     return HttpResponse(request)
 
 
@@ -39,14 +44,19 @@ def job_list(request):
         # 获取求职者信息  预测   返回结果
         b = request.body.decode()
         body = eval(b)
-
-        salary = body['salary']
+        # try:
+        #     compSize = body['compSize']
+        #     experience = body['exper']
+        #     education = body['edu']
+        #     skills = body['skills']
+        # except KeyError as e:
+        #     return JsonResponse([], safe=False)
+        # compSize = body['compSize']
         experience = body['exper']
         education = body['edu']
         skills = body['skills']
-
         # 将提交表单的字段转化为数字
-        user = get_digitaluser(salary, experience, education, skills)
+        user = get_digitaluser(skills, experience, education, '')
         result = predic(user)
 
         # 查询条件相近的职位

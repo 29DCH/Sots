@@ -5,11 +5,11 @@ import pandas as pd
 import time
 
 from analysis.tools.NLtool import get_keyword, get_keywords
-from analysis.tools.csv_to_mysql import write_diJob_to_mysql, write_job_to_mysql
+from analysis.tools.csv_to_database import persistence_djob, persistence_job
 
 
 # TODO 待完成
-def get_digitaluser(salary, experience, education, skills):
+def get_digitaluser(skills, experience, education, compSize):
     user = ['20','4', '2', '2000']
     return user
 
@@ -143,7 +143,6 @@ class Analysis:
             experience.append(get_experience(i))
         self.frame.insert(0, 'experience', experience)
 
-    # TODO 去重关键字
     # 将每一条记录的要求中的关键字与统计结果中的关键词匹配
     def _get_skill(self):
         # 读取关键字
