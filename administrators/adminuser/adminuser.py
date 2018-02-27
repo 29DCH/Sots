@@ -3,9 +3,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+
 class administrator(models.Model):
     username = models.CharField(max_length=10)
     password = models.CharField(max_length=10)
+
+# 进入登陆页面
+def land(request):
+    return render(request, 'index.html')
 
 # 检查账号密码
 def checks( request):
@@ -16,7 +21,8 @@ def checks( request):
     for i in admin_list:
         # print(i.username,admins.username)
         if (i.username == admins.username) and (i.password == admins.password):
-            request.session['username'] = i.username
+
+            request.session['adminUser'] = i.username
             # print(i.username, 'xxxxx')
             return redirect( 'main')
     return render(request, 'adminuser/error.html')
@@ -29,4 +35,26 @@ def welcome(request):
 def show_main(request):
     return render(request, 'main.html')
 
+# 修改密码
+def repassword(request):
+    return render(request, 'adminuser/repassword.html')
+
+def update(request):
+    username = request.session['adminUser']
+    password = request.POST['password']
+    newpassword = request.POST['newpassword']
+    renewpassword = request.POST['renewpassword']
+    admins = administrator.objects.all()
+    for admin in admins:
+        if admin.username == username:
+            if password == admin.password:
+                admin.password = newpassword
+                admin.save()
+                return render(request, 'index.html')
+            break
+    return render(request, 'adminuser/error.html')
+
+# 退出登录
+def exit(request):
+    return render(request, 'index.html')
 

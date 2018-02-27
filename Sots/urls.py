@@ -30,11 +30,14 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
 
     # 后台
-    url(r'admin/$', admo.land),  # 管理员登陆界面，
-    url(r'admin/checks', ad.checks, name='checks'),# 后台校验用户名和密码
-    url(r'admin/main', ad.show_main, name='main'),# 主界面
-    url(r'admin/welcome', ad.welcome, name='welcome'),#  欢迎界面
-    url(r'admin/welcome', admo.welcome, name='welcome'),# 欢迎分界面
+    url(r'admin/login$', ad.land, name='login'),  # 管理员登陆界面，
+    url(r'admin/checks$', ad.checks, name='checks'),# 后台校验用户名和密码
+    url(r'admin/main$', ad.show_main, name='main'),# 主界面
+    url(r'admin/welcome$', ad.welcome, name='welcome'),#  欢迎分界面
+    url(r'admin/repassword$', ad.repassword, name='repassword'),# 修改管理员密码
+    url(r'admin/adminUpdate$', ad.update, name='adminUpdate'),# 完成修改
+    url(r'admin/exit$', ad.exit, name='exit'),
+
 
 
     # 用户
@@ -78,4 +81,6 @@ urlpatterns = [
     url(r'admin/testShow', te.show, name='testShow'),# 展示页面
     url(r'admin/testRandom',te.rando, name='testRandom'),# 进入后端去生成
     url(r'admin/infoSave',te.save,name='infoSave'),# 存储生成
+
+
 ]
