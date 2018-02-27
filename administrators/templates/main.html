@@ -52,8 +52,8 @@
           <ul>
               <li >欢迎您！admin[超级管理员] {{ request.session.adminUser }}</li>
               <li><a href="#">前台首页</a></li>
-              <li><a href="repassword">修改密码</a></li>
-              <li><a href="exit">退出管理</a></li>
+              <li><a href="{% url 'repassword' %}">修改密码</a></li>
+              <li><a href="{% url 'exit' %} ">退出管理</a></li>
           </ul>
       </div>
   </div>
@@ -71,7 +71,7 @@
           <li><span>系统工具</span>
               <ul>
                   <li><span><a href="#" onclick="addTab('测试','testShow.html')">测试</a> </span></li>
-                  <li><span><a href="#" onclick="addTab('网站设置','websiteSet.html')">网站设置</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('网站设置','#')">网站设置</a> </span></li>
                   <li><span><a href="#">查看日志</a> </span></li>
                   <li><span><a href="#">数据备份</a> </span></li>
               </ul>

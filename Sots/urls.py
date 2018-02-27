@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'admin/welcome$', ad.welcome, name='welcome'),#  欢迎分界面
     url(r'admin/repassword$', ad.repassword, name='repassword'),# 修改管理员密码
     url(r'admin/adminUpdate$', ad.update, name='adminUpdate'),# 完成修改
-    url(r'admin/exit$', ad.exit, name='exit'),
+    url(r'admin/login$', ad.exit, name='exit'),
 
 
 
@@ -58,7 +58,7 @@ urlpatterns = [
 
     # 网站
     url(r'admin/websiteShow', web.show, name='websiteShow'),  # 网站展示
-    url(r'admin/websiteSet', web.delete, name='websiteDel'),  # 网站删除
+    url(r'admin/websiteDel', web.delete, name='websiteDel'),  # 网站删除
     url(r'admin/websiteAdd', web.add, name='websiteAdd'), # 跳转到添加网站界面
     url(r'admin/websiteSave', web.save, name='websiteSave'),  # 网站存储
     url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面

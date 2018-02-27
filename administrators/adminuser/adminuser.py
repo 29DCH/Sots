@@ -39,6 +39,7 @@ def show_main(request):
 def repassword(request):
     return render(request, 'adminuser/repassword.html')
 
+# 更新新密码
 def update(request):
     username = request.session['adminUser']
     password = request.POST['password']
