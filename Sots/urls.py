@@ -61,15 +61,13 @@ urlpatterns = [
     url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
+
+    url(r'^$', index, name='index'),
+    url(r'api/information', job_list),
+
     # 公司
-    url(r'admin/companyShow', com.show, name='companyShow'),  # 公司展示
-    url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
-
-    # 前台
-    url(r'^$', index, name='index'), # 前台首页
-    url(r'api/information', job_list),# 搜索跳转显示结果
-
-
+    url(r'admin/companyShow', com.show, name='companyShow'),# 公司展示
+    url(r'admin/companyDel', com.delete, name='companyDel'),# 公司删除
 
     # 测试
     url(r'access', access, name='access'),
