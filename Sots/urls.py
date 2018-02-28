@@ -23,6 +23,7 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
+import analysis.personalCenter as pc
 
 import administrators.test.test as te
 
@@ -68,6 +69,14 @@ urlpatterns = [
     # 前台
     url(r'^$', index, name='index'), # 前台首页
     url(r'api/information', job_list),# 搜索跳转显示结果
+
+    # 前台首页
+    #url(r'sots/carouselData', ),# 轮播数据
+    # 前台个人中心
+    url(r'sots/registered', pc.registered),# 前台注册
+    url(r'sots/logIn', pc.login),# 前台登录
+    url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
+    url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
 
 
 
