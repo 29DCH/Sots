@@ -35,6 +35,7 @@ class Job(models.Model):
     jobNature = models.CharField(max_length=200)
     jobLabels = models.CharField(max_length=300)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    clicktimes = models.IntegerField(default=0)
 
 
 class DigitizedJob(models.Model):

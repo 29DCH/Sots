@@ -10,11 +10,17 @@ from analysis.tools.csv_to_database import persistence_djob, persistence_job
 
 # TODO 待完成
 def get_digitaluser(skills, experience, education, compSize):
-    user = ['20','4', '2', '2000']
+    skillstr = ''
+    for str in skills:
+        skillstr += str['skillInfor']+' , '
+    skillpoint = get_skill(skillstr)
+    experiencepiont = get_experience(experience)
+    educationpoint = get_education(education)
+    user = [skillpoint, experiencepiont, educationpoint, 1250]
     return user
 
 def get_education(words):
-    # TODO 可将这个变量添加到参数列表供调用者改变
+    # TODO 可将这个变量放入数据库
     edu_point_dict = {
         '不限': 0,
         '大专': 1,

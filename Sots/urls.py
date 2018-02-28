@@ -21,7 +21,8 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.views import access, into_mysql, write_djob, index, job_list, persistence
+from analysis.views import access, into_mysql, write_djob, index, job_list, persistence, get_searchKeyword, \
+    get_recommendInformation, get_hotJob, get_personRecommend
 import administrators.website.website as web
 import administrators.test.test as te
 
@@ -61,8 +62,12 @@ urlpatterns = [
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
 
-    url(r'^$', index, name='index'),
-    url(r'api/information', job_list),
+    url(r'^$', index, name='index'),        #前台首页
+    url(r'sots/searchResult', job_list),    #搜索匹配结果
+    url(r'sots/searchKeyword', get_searchKeyword),  #搜索关键字获取
+    url(r'sots/recommendInformation', get_recommendInformation),    #推荐职位
+    url(r'sots/hotJob', get_hotJob),            #热门职位
+    url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
 
     # 公司
     url(r'admin/companyShow', com.show, name='companyShow'),# 公司展示
