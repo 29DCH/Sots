@@ -23,6 +23,7 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
+import analysis.personalCenter as pc
 
 import administrators.test.test as te
 
@@ -64,13 +65,23 @@ urlpatterns = [
     url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
-
-    url(r'^$', index, name='index'),
-    url(r'api/production', job_list),
-
     # 公司
-    url(r'admin/companyShow', com.show, name='companyShow'),# 公司展示
-    url(r'admin/companyDel', com.delete, name='companyDel'),# 公司删除
+    url(r'admin/companyShow', com.show, name='companyShow'),  # 公司展示
+    url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
+
+    # 前台
+    url(r'^$', index, name='index'), # 前台首页
+    url(r'api/information', job_list),# 搜索跳转显示结果
+
+    # 前台首页
+    #url(r'sots/carouselData', ),# 轮播数据
+    # 前台个人中心
+    url(r'sots/registered', pc.registered),# 前台注册
+    url(r'sots/logIn', pc.login),# 前台登录
+    url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
+    url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
+
+
 
     # 测试
     url(r'access', access, name='access'),
