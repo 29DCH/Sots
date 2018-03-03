@@ -2,11 +2,9 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from administrators.models import administrator
 
 
-class administrator(models.Model):
-    username = models.CharField(max_length=10)
-    password = models.CharField(max_length=10)
 
 # 进入登陆页面
 def land(request):
