@@ -24,7 +24,7 @@ import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
 import analysis.personalCenter as pc
-
+import analysis.index as i
 import administrators.test.test as te
 
 urlpatterns = [
@@ -78,7 +78,8 @@ urlpatterns = [
     url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
     url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
 
-
+    # 轮播
+    url(r'sots/carouselData', i.carouselData),
 
     # 测试
     url(r'access', access, name='access'),
