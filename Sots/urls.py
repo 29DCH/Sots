@@ -25,7 +25,7 @@ from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
 import analysis.personalCenter as pc
 import administrators.carousel.carousel as carousel
-
+import analysis.index as i
 import administrators.test.test as te
 
 urlpatterns = [
