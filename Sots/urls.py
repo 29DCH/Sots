@@ -32,11 +32,14 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
 
     # 后台
-    url(r'admin/$', admo.land),  # 管理员登陆界面，
-    url(r'admin/checks', ad.checks, name='checks'),# 后台校验用户名和密码
-    url(r'admin/main', ad.show_main, name='main'),# 主界面
-    url(r'admin/welcome', ad.welcome, name='welcome'),#  欢迎界面
-    url(r'admin/welcome', admo.welcome, name='welcome'),# 欢迎分界面
+    url(r'admin/login$', ad.land, name='login'),  # 管理员登陆界面，
+    url(r'admin/checks$', ad.checks, name='checks'),# 后台校验用户名和密码
+    url(r'admin/main$', ad.show_main, name='main'),# 主界面
+    url(r'admin/welcome$', ad.welcome, name='welcome'),#  欢迎分界面
+    url(r'admin/repassword$', ad.repassword, name='repassword'),# 修改管理员密码
+    url(r'admin/adminUpdate$', ad.update, name='adminUpdate'),# 完成修改
+    url(r'admin/login$', ad.exit, name='exit'),
+
 
 
     # 用户
@@ -57,7 +60,7 @@ urlpatterns = [
 
     # 网站
     url(r'admin/websiteShow', web.show, name='websiteShow'),  # 网站展示
-    url(r'admin/websiteSet', web.delete, name='websiteDel'),  # 网站删除
+    url(r'admin/websiteDel', web.delete, name='websiteDel'),  # 网站删除
     url(r'admin/websiteAdd', web.add, name='websiteAdd'), # 跳转到添加网站界面
     url(r'admin/websiteSave', web.save, name='websiteSave'),  # 网站存储
     url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面
@@ -66,6 +69,14 @@ urlpatterns = [
     # 公司
     url(r'admin/companyShow', com.show, name='companyShow'),  # 公司展示
     url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
+
+    # 轮播图片
+    url(r'admin/carouselShow',carousel.show, name='carouselShow'), # 轮播展示
+    url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
+    url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
+    url(r'admin/carouselSave', carousel.save, name='carouselSave'),
+    url(r'admin/carouselEdit', carousel.edit, name='carouselEdit'),
+    url(r'admin/carouselUpdate', carousel.update, name='carouselUpdate'),
 
     # 前台
     url(r'^$', index, name='index'), # 前台首页
@@ -88,7 +99,11 @@ urlpatterns = [
     url(r'write_djob', write_djob, name='writedjob'),
 
     # 随机生成求职者的测试数据，存入数据库
+    # url(r'admin/img', te.imgs, name='img'),# 图片测试
+    # url(r'admin/testShow', te.img, name='testShow'),# 图片测试
     url(r'admin/testShow', te.show, name='testShow'),# 展示页面
     url(r'admin/testRandom',te.rando, name='testRandom'),# 进入后端去生成
     url(r'admin/infoSave',te.save,name='infoSave'),# 存储生成
+
+
 ]

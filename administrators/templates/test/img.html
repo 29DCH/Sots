@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for co in cos  %}
+    <form action="{% url 'testShow' %}" method="post">
+        {% csrf_token %}
+        <input type="file" name ='img' value="{{ co.photo }}">
+        <input type="submit">
+    </form>
+
+{#            <td>{{ co.photo }}</td>#}
+        {% endfor %}
+
+</body>
+</html>
