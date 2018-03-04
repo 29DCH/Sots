@@ -90,7 +90,7 @@ urlpatterns = [
     url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
     url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
 
-    # 轮播
+    # 前台轮播
     url(r'sots/carouselData', i.carouselData),
 
     # 测试

@@ -7,9 +7,13 @@ from PIL import Image
 
 # 首页轮播后台管理
 
-def show(request):
+def show(request, dict={'' : ''}):
     carousels = m.Carousel.objects.all()
-    return render(request, 'carousel/carouselShow.html', {'carousels': carousels})
+    if(dict is not None and 'error' in dict.keys()):
+        d = {'carousels': carousels, 'error':dict['error']}
+    else:
+        d = {'carousels': carousels}
+    return render(request, 'carousel/carouselShow.html', d)
 
 def delete(request):
     cid = request.GET['cid']
@@ -17,6 +21,10 @@ def delete(request):
     return show(request)
 
 def add(request):
+    num = m.Carousel.objects.filter(state=1).count()
+    print(num)
+    if(num >= 4):
+        return show(request, {'error':'首页只能显示四个'})
     return render(request, 'carousel/carouselAdd.html')
 
 def save(request):
@@ -25,7 +33,7 @@ def save(request):
     # print(photo.name)
     # 校验是否重名
     if m.Carousel.objects.filter(photo_url=photo.name).count() != 0:
-        return HttpResponse("错误")
+        return show(request, {"error":"错误"})
 
     path_dst_file = os.path.join('administrators/static/image/carousel', photo.name)
     destination = open(path_dst_file, 'wb+')  # 打开特定的文件进行二进制的写操作
