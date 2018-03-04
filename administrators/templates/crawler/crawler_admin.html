@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>SOTS后台管理</title>
+		{% load static %}
+		<script src="{% static 'bootstrap-3.3.7-dist/js/jquery-3.2.1.js' %}" type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap-select.js' %}" type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap-select.css' %}" />
+		<script type="text/javascript">
+
+
+            $(window).on('load', function () {
+
+
+                $('.selectpicker').selectpicker({
+                    'selectedText': 'cat'
+                });
+
+
+                // $('.selectpicker').selectpicker('hide');
+            });
+
+		</script>
+		<style type="text/css">
+			.tab-content {
+				padding: 3rem 1rem;
+				border: 1px solid #ddd;
+				border-top: none;
+			}
+			
+			.glyphicon {
+				color: #dcd7d7;
+				padding: 0 9px;
+			}
+			
+			a {
+				color: #333;
+			}
+			
+			.well {
+				margin-top: 4rem;
+			}
+			
+			.panel-group .panel+.panel {
+				margin-top: 0;
+			}
+			
+			.panel-noPM {
+				/* border-color: #ddd; */
+				border: none;
+				margin-top: 0px;
+			}
+			
+			em {
+				padding-left: 8px;
+			}
+			
+			#positionNum {
+				font-style: italic;
+				padding: 0 10px;
+				color: #ccc;
+				font-size: 28px;
+				font-weight: bolder;
+			}
+			.p1{
+				padding-left: 100px;
+				font-size: 18px;
+				font-family: 微软雅黑;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<!--导航条 start-->
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<nav class="navbar navbar-default navbar-inverse" role="navigation">
+						<div class="container-fluid">
+							<div class="navbar-header">
+								<a class="navbar-brand" href="#">SOTS后台管理</a>
+							</div>
+							<div>
+								<ul class="nav navbar-nav">
+									<li class="active">
+										<a href="#"><span class="glyphicon glyphicon-home"></span>首页</a>
+									</li>
+									<li class="">
+										<a href="#"><span class="glyphicon glyphicon-move"></span>其他</a>
+									</li>
+								</ul>
+								<ul class="nav navbar-nav navbar-right">
+									<li>
+										<a href="#"><span class="glyphicon glyphicon-pencil"></span>修改密码</a>
+									</li>
+									<li>
+										<a href="#"><span class="glyphicon glyphicon-backward"></span>退出管理</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+			<!--导航条 end-->
+			<!--主题内容部分 start-->
+			<div class="row clearfix">
+				<!--功能菜单栏目 start-->
+				<div class="col-md-2 column">
+					<div class="panel-group" id="panel-159770">
+						<div class="panel panel-default panel-noPM">
+							<div class="panel-heading">
+								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-159770" href="#panel-element-26926">
+									<span class="caret"></span>常用工具
+								</a>
+
+							</div>
+							<div id="panel-element-26926" class="panel-collapse collapse">
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item">搜索</li>
+										<li class="list-group-item">爬取设置</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default panel-noPM">
+							<div class="panel-heading">
+								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-159770" href="#panel-element-306048">
+									<span class="caret"></span>其他
+								</a>
+							</div>
+							<div id="panel-element-306048" class="panel-collapse collapse">
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item">网站基本信息</li>
+										<li class="list-group-item">查看日志</li>
+										<li class="list-group-item">数据备份</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--功能菜单栏目 end-->
+				<!--主体内容 start-->
+				<div class="col-md-10 column">
+					<!--爬取信息 start-->
+					<div class="tabbable" id="tabs-130431">
+						<!--选项卡 start-->
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a href="#panel-738579" data-toggle="tab">搜索表单</a>
+							</li>
+							<li>
+								<a href="#panel-906744" data-toggle="tab">其他</a>
+							</li>
+						</ul>
+						<!--选项卡 end-->
+						<!--选型卡内容主体 start-->
+						<div class="tab-content">
+							<div class="tab-pane active" id="panel-738579">
+								<!--<p>
+									I'm in Section 1.
+								</p>-->
+								<!--搜索表单 start-->
+								<form role="form" class="form-horizontal" method="post" action="{% url 'start_spider' %}">
+									{% csrf_token %}
+									<div class="form-group">
+										<p class="p1">关键字爬取:</p>
+										<label for="id_select" class="col-sm-2 control-label">爬取目标网站</label>
+										<div class="col-sm-8">
+											<!--<select class=" form-control webSelect">
+												<option>默认全部</option>
+												<option>拉勾</option>
+												<option>智联招聘</option>
+												<option>中国人才</option>
+											</select>-->
+											<!--<label for="id_select"></label>-->
+											<select id="id_select" name="spider" class="selectpicker bla bla bli" multiple data-live-search="true">
+												<option value="lagou_new">拉勾</option>
+												<option value="zhilian">智联招聘</option>
+												<option value="rencai">中国人才</option>
+											</select>
+
+										</div>
+									</div>
+<br>
+									<div class="form-group">
+										<label for="keyword" class="col-sm-2 control-label">职位</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="keyword" id="keyword" >
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="start" class="col-sm-2 control-label">start page</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="start_page" value="1" id="start" >
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="biggest" class="col-sm-2 control-label">允许爬取页数</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="max_allow_page" placeholder="默认爬至尾页" id="biggest" >
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="delayTime" class="col-sm-2 control-label">延迟时间</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" name="delay" id="delayTime" placeholder="默认0.1(单位:秒)">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="timeSelect" class="col-sm-2 control-label">频率</label>
+										<div class="col-sm-8">
+											<select class=" form-control timeSelect" name="interval_time">
+												<option value="1">默认1小时</option>
+												<option value="5">5小时</option>
+												<option value="24">1天</option>
+												<option value="48">2天</option>
+											</select>
+										</div>
+									</div>
+<br>
+									<!--<div class="form-group">-->
+										<!--<p class="p1">url链接爬取:</p>-->
+										<!--<label for="url" class="col-sm-2 control-label">url</label>-->
+										<!--<div class="col-sm-8">-->
+											<!--<input type="text" class="form-control" id="url" >-->
+										<!--</div>-->
+									<!--</div>-->
+
+									<!--<div class="form-group positionDiv">-->
+										<!--<label for="position" class="col-sm-2 control-label">职位</label>-->
+										<!--<div class="col-sm-8">-->
+											<!--<input type="text" class="form-control" id="position" placeholder="职位">-->
+										<!--</div>-->
+									<!--</div>-->
+
+									<!--<div class="form-group">-->
+										<!--<div class="col-sm-offset-2 col-sm-8">-->
+											<!--&lt;!&ndash;<div class="checkbox">-->
+												<!--<label>-->
+								                    <!--<input type="checkbox">请记住我-->
+								                <!--</label>-->
+											<!--</div>&ndash;&gt;-->
+											<!--<button type="button" class="addItem" onclick="onaddItem()"><span class="glyphicon glyphicon-plus"></span></button>-->
+										<!--</div>-->
+									<!--</div>-->
+
+									<div class="form-group">
+										<div class="col-sm-offset-2 col-sm-8">
+											<button type="submit" class="btn btn-default" onclick="turnWords(this)">搜索</button>
+										</div>
+									</div>
+								</form>
+								<!--搜索表单 end-->
+								<!--搜索结果 start-->
+								<div class="well text-center">
+									<h3>已经爬取<span id="positionNum">10</span>个职位</h3>
+								</div>
+								<!--搜索结果 end-->
+							</div>
+							<div class="tab-pane" id="panel-906744" style="width: 60%;">
+								<p>
+									kkkkkkk
+								</p>
+							</div>
+						</div>
+						<!--选型卡内容主体 end-->
+					</div>
+					<!--爬取信息 end-->
+				</div>
+				<!--主体内容 end-->
+			</div>
+			<!--主题内容部分 end-->
+		</div>
+		<script>
+			function onaddItem() {
+				var temp = '\
+							<div class="form-group">\
+								<label for="position" class="col-sm-2 control-label">职位</label>\
+								<div class="col-sm-8">\
+									<input type="text" class="form-control" class="position" placeholder="职位">\
+								</div>\
+							</div>\
+							';
+				$(".positionDiv").after(temp);
+			}
+			/*处理提交按钮*/
+			function turnWords(obj) {
+				var s = obj.innerText;
+				console.log(s);
+				$(obj).toggleClass("btn-danger");
+				if(s == "搜索") {
+					obj.innerHTML = "暂停";
+					console.log("暂停按钮");
+				} else {
+					obj.innerHTML = "搜索";
+					console.log("搜索按钮");
+				}
+			}
+			 
+		</script>
+	</body>
+
+</html>
