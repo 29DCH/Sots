@@ -2,6 +2,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from administrators.models import User as us
+from analysis.models import BrowseRecords as br
+from analysis.models import Job as job
 
 #注册
 @csrf_exempt
@@ -38,6 +40,7 @@ def login(request):
         if user.password == password:
             result = {'isOK': "Yes"}
             request.session['username'] = user.username
+            request.session['uid'] = user.id
 
     print(result['isOK'])
     return JsonResponse(result, safe=False)
@@ -91,4 +94,22 @@ def getPersonalInformation(request):
         result = {'status':user.status}
     return JsonResponse(result, safe=False)
 
+# 获取用户的浏览记录
+def getBrowseRecords(request):
+    uid = request.session['uid']
+    brs = br.objects.filter(userId=uid, state=1)
+    records = []
+    for b in brs:
+        jobs = job.objects.filter(id = b.id).get()
+        records.append({'jobName':jobs.JobName, 'jobId':b.id})
+    return JsonResponse(result={'records':records})
 
+# 获取用户的收藏夹
+def getCollention(request):
+    uid = request.session['uid']
+    brs = br.objects.filter(userId=uid, state=2)
+    collentions = []
+    for b in brs:
+        jobs = job.objects.filter(id = b.id).get()
+        collentions.append({'jobName':jobs.JobName, 'jobId':b.id})
+    return JsonResponse(result={'records':collentions})

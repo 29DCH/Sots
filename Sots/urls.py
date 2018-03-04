@@ -89,7 +89,8 @@ urlpatterns = [
     url(r'sots/logIn', pc.login),# 前台登录
     url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
     url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
-
+    url(r'sots/getBrowseRecords', pc.getBrowseRecords),# 获取浏览记录
+    url(r'sots/getCollention', pc.getCollention),# 获取收藏夹
     # 前台轮播
     url(r'sots/carouselData', i.carouselData),
 

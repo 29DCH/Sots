@@ -57,3 +57,9 @@ class Carousel(models.Model):
     content_url = models.CharField(max_length=50) # 内容链接
     photo_url = models.CharField(max_length=50) # 图片链接
     state = models.IntegerField() # 是否在首页显示
+
+# 浏览记录和收藏夹表
+class BrowseRecords(models.Model):
+    jobId = models.IntegerField() # 岗位Id
+    userId = models.IntegerField() # 用户Id
+    state = models.IntegerField() # 标识  1为浏览记录 2为收藏夹
