@@ -23,9 +23,7 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
-import analysis.personalCenter as pc
-import administrators.carousel.carousel as carousel
-import analysis.index as i
+from administrators.crawler import crawler_admin
 import administrators.test.test as te
 
 urlpatterns = [
@@ -104,5 +102,9 @@ urlpatterns = [
     url(r'admin/testRandom',te.rando, name='testRandom'),# 进入后端去生成
     url(r'admin/infoSave',te.save,name='infoSave'),# 存储生成
 
-
+    # 爬虫管理页面
+    url(r'admin/crawler/start', crawler_admin.start_spider, name='start_spider'),
+    url(r'admin/crawler/end', crawler_admin.end_job, name='end_job'),
+    url(r'admin/crawler/list', crawler_admin.list_job, name='list_crawler_job'),
+    url(r'^admin/crawler$', crawler_admin.crawler_index, name='crawler_admin'),
 ]
