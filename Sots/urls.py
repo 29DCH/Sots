@@ -24,6 +24,9 @@ import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
 from administrators.crawler import crawler_admin
+import analysis.personalCenter as pc
+import administrators.carousel.carousel as carousel
+import analysis.index as i
 
 import administrators.test.test as te
 
@@ -31,6 +34,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
 
     # 后台
+    url(r'admin/$', ad.main),
     url(r'admin/login$', ad.land, name='login'),  # 管理员登陆界面，
     url(r'admin/checks$', ad.checks, name='checks'),# 后台校验用户名和密码
     url(r'admin/main$', ad.show_main, name='main'),# 主界面
@@ -42,7 +46,7 @@ urlpatterns = [
 
 
     # 用户
-    url(r'admin/userShow', us.show, name='userShow'),# 用户展示
+    url(r'^admin/userShow$', us.show, name='userShow'),# 用户展示
     url(r'admin/userDel*', us.delete, name='userDel'),# 用户删除
     url(r'admin/userAdd', us.add, name='userAdd'),# 跳转到添加用户界面
     url(r'admin/userSave', us.save, name='userSave'),# 用户存储
@@ -50,7 +54,8 @@ urlpatterns = [
     url(r'admin/userUpdate', us.update, name='userUpdate'),# 用户更新
 
     # 岗位
-    url(r'admin/jobShow', job.show, name='jobShow'),# 岗位展示
+    url(r'admin/jobShow$', job.show, name='jobShow'),# 岗位展示
+    url(r'admin/jobShowNext', job.showNext, name='jobShowNext'),
     url(r'admin/jobDel', job.delete, name='jobDel'),# 岗位删除
     url(r'admin/jobAdd', job.add, name='jobAdd'),# 跳转到添加岗位界面
     url(r'admin/jobSave', job.save, name='jobSave'),# 岗位存储
@@ -66,11 +71,14 @@ urlpatterns = [
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
     # 公司
-    url(r'admin/companyShow', com.show, name='companyShow'),  # 公司展示
+    url(r'admin/companyShow$', com.show, name='companyShow'),  # 公司展示
+    url(r'admin/companyShowNext', com.showNext,name='companyShowNext'),
     url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
+    url(r'admin/companyEdit', com.edit, name='companyEdit'),
 
     # 轮播图片
-    url(r'admin/carouselShow',carousel.show, name='carouselShow'), # 轮播展示
+    url(r'admin/carouselShow$',carousel.show, name='carouselShow'), # 轮播展示
+    url(r'admin/carouselShowNext', carousel.showNext, name='carouselShowNext'),
     url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
     url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
     url(r'admin/carouselSave', carousel.save, name='carouselSave'),

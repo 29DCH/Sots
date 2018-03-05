@@ -4,12 +4,49 @@ import analysis.models as m
 import os
 import pandas
 from PIL import Image
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # 首页轮播后台管理
 
 def show(request):
+    return showNext(request)
+
+def showNext(request):
+    if 'flag' not in request.GET.keys():
+        flag = '1'
+    else:
+        flag = request.GET['flag']
+    # print('flag='+str(flag))
+    if flag == '1':# 下一页
+        # print('xxxxx')
+        if 'page' not in request.GET.keys():
+             page = 1
+        else:
+            page = request.GET['page']
+            # print('page='+str(page))
+            page = int(page)+1
+            # print(page)
+    elif flag == '0':# 上一页
+        page = request.GET['page']
+        page = int(page) - 1
+        # print(page)
+    # print(page)
     carousels = m.Carousel.objects.all()
-    return render(request, 'carousel/carouselShow.html', {'carousels': carousels})
+    if carousels.count()%10 == 0:
+        pageAll = carousels.count()/10
+    else:
+        pageAll = int(carousels.count()/10)+1
+    paginator = Paginator(carousels, 10)  # Show 25 contacts per page
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        contacts = paginator.page(page)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contacts = paginator.page(paginator.num_pages)
+    result ={'carousels': contacts, 'page':page, 'pageAll':pageAll}
+    return render(request, 'carousel/carouselShow.html', result)
 
 def delete(request):
     cid = request.GET['cid']

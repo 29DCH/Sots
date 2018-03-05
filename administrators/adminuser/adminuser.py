@@ -5,6 +5,8 @@ from django.urls import reverse
 from administrators.models import administrator
 
 
+def main(request):
+    return redirect('login')
 
 # 进入登陆页面
 def land(request):

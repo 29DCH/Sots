@@ -35,6 +35,16 @@
     {% endfor %}
     </tbody>
 </table>
-
+        第{{ page }} 页/总{{ pageAll }}页<br>
+        {% if page == 1 and pageAll == page%}
+            上一页/下一页
+        {% elif page == 1%}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% elif pageAll == page%}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=0 ">上一页</a>
+        {% else %}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=0 ">上一页</a>/
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% endif %}
 </body>
 </html>
