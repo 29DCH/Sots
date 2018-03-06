@@ -36,6 +36,7 @@ class Job(models.Model):
     jobLabels = models.CharField(max_length=300)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     clicktimes = models.IntegerField(default=0)
+    keyword = models.CharField(max_length=100)
 
 
 class DigitizedJob(models.Model):
@@ -54,3 +55,21 @@ class UserInfo(models.Model):
     jobWantedPlace = models.CharField(max_length=300)
     experienceRequire = models.CharField(max_length=300)
     skill = models.CharField(max_length=300)
+
+
+class DigitizedCity(models.Model):
+    compSize = models.FloatField(default=50.0)
+    skill = models.FloatField(default=5.0)
+    experience = models.FloatField(default=0.0)
+    education = models.FloatField(default=0.0)
+    salary = models.FloatField(default=5.0)
+    cityname = models.CharField(max_length=100)
+    sum = models.IntegerField()
+
+
+class SpiderConf(models.Model):
+    spiderName = models.CharField(max_length=100)
+    starttime = models.DateTimeField()
+    keyword = models.CharField(max_length=100)
+    startPage = models.IntegerField(default=1)
+    maxAllowPage = models.IntegerField(default=100)

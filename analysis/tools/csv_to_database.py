@@ -28,8 +28,6 @@ import pandas as pd
     14
 
 '''
-
-
 def persistence_company(path: str):
     df = pd.read_csv(path)
     rows = df.iterrows()
