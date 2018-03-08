@@ -8,6 +8,7 @@ from administrators.models import administrator
 
 # 进入登陆页面
 def land(request):
+    # return render(request, 'main.html')
     return render(request, 'index.html')
 
 # 检查账号密码
@@ -32,6 +33,7 @@ def welcome(request):
 # 跳转到主界面
 def show_main(request):
     return render(request, 'main.html')
+    # return render(request, 'index_test.html')
 
 # 修改密码
 def repassword(request):

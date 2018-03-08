@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ch">
+
+    <head>
+        <meta charset="utf-8">
+        {% load static %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="左右结构项目，属于大人员的社交工具">
+        <meta name="keywords" content="左右结构项目 社交 占座 ">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>Bootstrap左右结构响应式后台管理模板</title>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js'%}"></script>
+        <script>
+            $(function() {
+                $(".meun-item").click(function() {
+                    $(".meun-item").removeClass("meun-item-active");
+                    $(this).addClass("meun-item-active");
+                    var itmeObj = $(".meun-item").find("img");
+                    itmeObj.each(function() {
+                        var items = $(this).attr("src");
+                        items = items.replace("_grey.png", ".png");
+                        items = items.replace(".png", "_grey.png")
+                        $(this).attr("src", items);
+                    });
+                    var attrObj = $(this).find("img").attr("src");
+                    ;
+                    attrObj = attrObj.replace("_grey.png", ".png");
+                    $(this).find("img").attr("src", attrObj);
+                });
+                $("#topAD").click(function() {
+                    $("#topA").toggleClass(" glyphicon-triangle-right");
+                    $("#topA").toggleClass(" glyphicon-triangle-bottom");
+                });
+                $("#topBD").click(function() {
+                    $("#topB").toggleClass(" glyphicon-triangle-right");
+                    $("#topB").toggleClass(" glyphicon-triangle-bottom");
+                });
+                $("#topCD").click(function() {
+                    $("#topC").toggleClass(" glyphicon-triangle-right");
+                    $("#topC").toggleClass(" glyphicon-triangle-bottom");
+                });
+                $(".toggle-btn").click(function() {
+                    $("#leftMeun").toggleClass("show");
+                    $("#rightContent").toggleClass("pd0px");
+                })
+            })
+        </script>
+        <!--[if lt IE 9]>
+  <script src="js/html5shiv.min.js"></script>
+  <script src="js/respond.min.js"></script>
+<![endif]-->
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/easyui.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/icon.css' %}">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/jquery.easyui.min.js' %}"></script>
+        <script src="{% static 'js/easyui-lang-zh_CN.js' %}"></script>
+        <script src="{% static 'js/Thebackgroundpage.js' %}"></script>
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/slide.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/flat-ui.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.nouislider.cs' %}s">
+    </head>
+
+    <body class="easyui-layout" id="divLayout">
+    <div data-options="region:'north'" id="divTop">
+{#      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>#}
+      <div id="divTopMenu">
+          <ul>
+              <li >欢迎您！admin[超级管理员] {{ request.session.adminUser }}</li>
+              <li><a href="#">前台首页</a></li>
+              <li><a href="{% url 'repassword' %}">修改密码</a></li>
+              <li><a href="{% url 'exit' %} ">退出管理</a></li>
+          </ul>
+      </div>
+  </div>
+
+    <div data-options="region:'west'"  style="width: 270px;" class="leftMeun" id="leftMeun">
+{#      <ul class="easyui-tree">#}
+{#        <div id="wrap">#}
+{#            <!-- 左侧菜单栏目块 -->#}
+{#            <div class="leftMeun" id="leftMeun">#}
+                <div id="logoDiv">
+                    <p id="logoP"><img id="logo" alt="左右结构项目" src="{% static 'images/logo.png' %}"><span>左右结构项目</span></p>
+                </div>
+                <div id="personInfor">
+                    <p id="userName">杨鹏</p>
+                    <p><span>yangxp@qq.com</span> <a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
+                    <p>
+                        <a>退出登录</a>
+                    </p>
+                </div>
+                <div class="meun-title">账号管理</div>
+                <div class="meun-item meun-item-active" href="#sour" aria-controls="sour" role="tab" data-toggle="tab"><img src="{% static 'images/icon_source.png' %}">资源管理</div>
+                <div class="meun-item" href="#char" aria-controls="char" role="tab" data-toggle="tab"><img src="{% static 'images/icon_chara_grey.png' %}">权限管理</div>
+                <div class="meun-item" href="#user" aria-controls="user" role="tab" data-toggle="tab"><img src="{% static 'images/icon_user_grey.png' %}">用户管理</div>
+                <div class="meun-item" href="#chan" aria-controls="chan" role="tab" data-toggle="tab"><img src="{% static 'images/icon_change_grey.png' %}">修改密码</div>
+                <div class="meun-title">地区管理</div>
+                <div class="meun-item" href="#scho" aria-controls="scho" role="tab" data-toggle="tab"><img src="{% static 'images/icon_house_grey.png' %}">地区管理</div>
+                <div class="meun-item" href="#regu" aria-controls="regu" role="tab" data-toggle="tab"><img src="{% static 'images/icon_rule_grey.png' %}">规则管理</div>
+                <div class="meun-item" href="#stud" aria-controls="stud" role="tab" data-toggle="tab"><img src="{% static 'images/icon_card_grey.png' %}">人员信息</div>
+                <div class="meun-item" href="#sitt" aria-controls="sitt" role="tab" data-toggle="tab"><img src="{% static 'images/icon_char_grey.png' %}">座位管理</div>
+{#            </div>#}
+{#        </div>#}
+{#      </ul>#}
+    </div>
+        <div data-options="region:'center',border:false">
+			<div id="main" class="easyui-tabs" style="width: 100%;height: 30px;"  data-options="fit:true">
+                <div title="后台管理首页" iconCls="icon-page_white_text"></div>
+            </div>
+        </div>
+
+
+</body>
+<script src="js/jquery.nouislider.js"></script>
+</html>
