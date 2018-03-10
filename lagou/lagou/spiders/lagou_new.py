@@ -2,12 +2,9 @@
 import scrapy
 from lagou.items import LagouItem
 from scrapy_redis.spiders import RedisSpider
-from scrapy.settings import Settings
-from scrapy.conf import settings
 import json
 from lxml import etree
-import requests
-import csv
+from scrapy.conf import settings
 
 
 # 整理list，将一些无用字符去除
@@ -53,31 +50,26 @@ def parse_comp_introduce(html):
             comp_introduce = format_list(format_3)  # 去除无用字符
     return comp_introduce
 
-
-class LagouNewSpider(scrapy.Spider):
+# 分布式爬虫
+# 主服务器运行lagou_start爬虫，根据输入的条件生成初始url存入redis
+# 从服务器运行lagou_new爬虫，从redis取出url爬取该页并解析,无需去判断输入的条件等
+# class LagouNewSpider(scrapy.Spider):
+class LagouNewSpider(RedisSpider):
     name = 'lagou_new'
-    allowed_domains = ['lagou.com']
-    # redis_key = 'lagou:start_urls'
+    # allowed_domains = ['lagou.com']
+    redis_key = settings['LAGOU_REDIS_KEY']
     url = 'http://www.lagou.com/jobs/positionAjax.json?first=true&pn={}&kd={}'
 
-    # custom_settings = {
-    #     'DOWNLOAD_DELAY': 0.5,
-    #     'REDIS_ITEMS_KEY': 'python',
-    # }
     headers = {
-        'Cookie': 'user_trace_token=20180116103634-1c765330-7e57-4c47-a1ae-2baec502c969; __guid=237742470.6771356014501'
-                  '33900.1516070194824.0908; LGUID=20180116103647-1980592f-fa66-11e7-a36a-5254005c3644; '
-                  'JSESSIONID=ABAAABAACEBACDGC29B7A459BB81A4EA63539E8DD950A84; '
+        'Cookie': 'user_trace_token=20180116103634-1c765330-7e57-4c47-a1ae-2baec502c969; __guid=237742470.677135601450133900.1516070194824.0908; '
+                  'LGUID=20180116103647-1980592f-fa66-11e7-a36a-5254005c3644; JSESSIONID=ABAAABAACEBACDGC29B7A459BB81A4EA63539E8DD950A84; '
                   'X_HTTP_TOKEN=a4e093ddf1682f80c73918df395c4a6b; ab_test_random_num=0; _gat=1; '
                   '_putrc=94187ED27D997DCA; login=true; unick=%E6%8B%89%E5%8B%BE%E7%94%A8%E6%88%B78898; '
                   'hasDeliver=0; gate_login_token=1b6f6bd52f6393cf59f144c14ac49d1cdc39abc088eddb4b; '
                   'TG-TRACK-CODE=index_search; _gid=GA1.2.481347888.1516188304; _ga=GA1.2.478494520.1516070208; '
-                  'Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1516070208; '
-                  'Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1516278388; '
-                  'LGSID=20180118190228-129b1f20-fc3f-11e7-a98c-525400f775ce; '
-                  'LGRID=20180118202625-cd3b2aaf-fc4a-11e7-a9fe-525400f775ce; '
-                  'SEARCH_ID=0fd1b206c1b4473eb652dd56e5429d35; index_location_city=%E5%85%A8%E5%9B%BD; '
-                  'monitor_count=24',
+                  'Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1516070208; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1516278388; '
+                  'LGSID=20180118190228-129b1f20-fc3f-11e7-a98c-525400f775ce; LGRID=20180118202625-cd3b2aaf-fc4a-11e7-a9fe-525400f775ce; '
+                  'SEARCH_ID=0fd1b206c1b4473eb652dd56e5429d35; index_location_city=%E5%85%A8%E5%9B%BD; monitor_count=24',
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.8",
@@ -89,36 +81,24 @@ class LagouNewSpider(scrapy.Spider):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
     }
 
-    def __init__(self, *args, **kwargs):
-        super(LagouNewSpider, self).__init__(**kwargs)
-        print(args)
-        print(kwargs)
-
-        self.kw = kwargs['keyword']
-        self.page_offset = 0
-        self.start_page = int(kwargs['start_page']) + self.page_offset  # 初始开始页面 + 已爬取过的页面
-        self.max_allow_page = int(kwargs['max_allow_page'])  # 最大允许爬取的页数，默认值为0，表示爬取所有页
-        self.start_urls = [self.url.format(str(self.start_page), self.kw)]
-
-    def start_requests(self):
-        # print('keyword:', getattr(self, 'keyword', ''))
-        for start_url in self.start_urls:
-            print('start_url:' + start_url)
-            yield scrapy.Request(url=start_url, headers=self.headers, callback=self.parse)
-
     def parse(self, response):
-        print('\n start 第%s页' % (self.start_page + self.page_offset))
+        keyword = response.url.split('kd=')[1]  # 从url中获取keyword
+        pageNo = 0
         try:
             json_data = json.loads(response.body.decode('utf-8'))
+            # print('json_data:', json_data)
 
             pageNo = json_data['content']['pageNo']  # 当前页数
+            if pageNo > 0:
+                print('\n start 第%s页' % str(pageNo))
             results = json_data['content']['positionResult']['result']
             # print('results: ', results)
             # 将json数据解析放入item中
             for result in results:
                 # print('result: ', result)
                 item = LagouItem()
-                item['keyword'] = self.kw
+                item['spider'] = self.name
+                item['keyword'] = keyword
                 item['jobId'] = str(result['positionId'])
                 item['jobName'] = result['positionName']
                 item['jobPlace'] = result['city']
@@ -129,7 +109,7 @@ class LagouNewSpider(scrapy.Spider):
                 item['experienceRequire'] = result['workYear']  # 工作经验要求
                 item['jobNature'] = result['jobNature']  # 工作性质('全职'、‘兼职’or’实习‘等)
                 lt = result['positionLables']
-                lt.append(self.kw)
+                lt.append(keyword)
                 item['jobLabels'] = lt  # 岗位标签，如：部门主管、数据分析等
 
                 item['compId'] = str(result['companyId'])
@@ -149,62 +129,23 @@ class LagouNewSpider(scrapy.Spider):
                 item['jobLink'] = job_desc_url
                 item['compLink'] = comp_desc_url
                 yield scrapy.Request(url=job_desc_url, headers=self.headers, callback=self.job_desc_parse, meta={'item': item})
-                # item_res = self.job_desc_parse(item, job_desc_url, comp_desc_url)
-                # yield item_res
         except Exception as e:
-            print(e)
-            self.page_offset -= 1
-            pageNo = self.start_page + self.page_offset
-
-        self.page_offset += 1
-        # 判断当前页是否是最大允许页数或是否已全部爬取完毕
-        print(self.page_offset, '   ', self.max_allow_page)
-        if self.page_offset == self.max_allow_page or pageNo == 0:
-            print('totalPage:', self.page_offset)
-            pageNo = self.start_page - 1  # 爬虫遇到爬取过的页面不会爬取，所以相当于是退出条件
-        # 爬取下一页
-        link = self.url.format(str(pageNo + 1), self.kw)
-        yield scrapy.Request(url=link, headers=self.headers, callback=self.parse)
-
-    # 解析岗位信息
-    # 未使用生成器yield
-    # def job_desc_parse(self, item, job_url, comp_url):
-    #     print('job_url:', job_url)
-    #     response = requests.get(job_url, headers=self.headers)
-    #     job_info = parse_job_info(response.text)
-    #     job_etree = etree.HTML(response.text)
-    #     comp_home = job_etree.xpath('//ul[@class="c_feature"]/li/a/@href')  # 公司首页
-    #     item['jobInfo'] = job_info
-    #     item['compHome'] = comp_home
-    #     return self.comp_desc_parse(item, comp_url)
+            if pageNo == 0:
+                print('超出页面范围')
+            else:
+                print('error_page:', pageNo)
+                print('error_info:', e)
 
     # 解析岗位信息
     # 使用生成器yield
     def job_desc_parse(self, response):
         res = response.body.decode('utf-8')
         item = response.meta['item']
+        print(item['jobLink'])
         # print(res)
-        job_info = parse_job_info(response.text)
-        job_etree = etree.HTML(response.text)
+        job_info = parse_job_info(res)
+        job_etree = etree.HTML(res)
         comp_home = job_etree.xpath('//ul[@class="c_feature"]/li/a/@href')  # 公司首页
         item['jobInfo'] = job_info
         item['compHome'] = comp_home
         yield item
-        # yield scrapy.Request(url=item['compLink'], headers=self.headers, callback=self.comp_desc_parse, meta={'item': item})
-
-    # 解析公司信息
-    # 未使用生成器yield
-    # def comp_desc_parse(self, item, comp_url):
-    #     print('comp_url:', comp_url)
-    #     response = requests.get(comp_url, headers=self.headers)
-    #     item['compIntroduce'] = parse_comp_introduce(response.text)
-    #     return item
-
-    # 由于不同岗位的发布公司可能相同，所以会被scrapy的去重过滤，导致数据缺失
-    # 且该页面仅公司介绍，未用到，所以放弃爬取
-    # 使用生成器yield
-    # def comp_desc_parse(self, response):
-    #     res = response.body.decode('utf-8')
-    #     item = response.meta['item']
-    #     item['compIntroduce'] = parse_comp_introduce(res)
-    #     yield item

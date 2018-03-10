@@ -1,8 +1,7 @@
 import random
 from json import dumps
-
+import json
 from django.core import serializers
-from django.core.serializers import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
@@ -13,6 +12,7 @@ from analysis.digitization import get_digitaluser, Analysis, jobmatch, getmaxpoi
 from analysis.models import Job, DigitizedJob, SpiderConf
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
+from analysis.scrapyd_api import ScrapydApi
 from analysis.spider_scheduler import operations, ontime_spider, scheduler
 from analysis.tools.csv_to_database import persistence_job, persistence_djob, persistence_company
 
@@ -26,11 +26,11 @@ def access(request):
 
 
 def into_mysql(request):
-    persistence_job('datas/java_data.csv')
+    persistence_job('datas/data.csv')
     return HttpResponse(request, 'hfhfhfh')
 
 def handle(request):
-    Analysis('datas/java_data.csv').handel()
+    Analysis('datas/data.csv').handel()
     return HttpResponse(request)
 
 def write_djob(request):
@@ -39,7 +39,7 @@ def write_djob(request):
 
 
 def persistence(request):
-    persistence_company('datas/java_data.csv')
+    persistence_company('datas/data.csv')
     return HttpResponse(request)
 
 
@@ -103,15 +103,24 @@ def test_url(request):
     scheduler()
 
 
+# TODO 只会被调用一次的爬虫启动接口
+def start_spider(request):
+    project_name = 'sots'
+    kword = 'php'
+    scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
+    run_stat = scrapyd_master.run_slave_spider(project_name, 'lagou_new')
+    print(json.loads(run_stat))
+
 
 @csrf_exempt
 def job_list(request):
     if request.method == 'POST':
         print(request.body)
         # 获取求职者信息  预测   返回结果
-        b = request.body.decode()
-        body = eval(b)
         try:
+            b = request.body.decode()
+            body = eval(b)
+
             # compSize = body['compSize']
             place = body['place']
             experience = body['exper']
@@ -120,7 +129,8 @@ def job_list(request):
         except KeyError as e:
             return pack_job_result([])
         # 将提交表单的字段转化为数字
-        user = get_digitaluser(skills, experience, education, '')
+        # TODO 关键字获取
+        user = get_digitaluser(skills, experience, education, '', 'java')
         result = predic(user)
 
         djobs = DigitizedJob.objects.order_by('salary').filter(salary__gt=result)[0:50]
@@ -205,6 +215,6 @@ def get_requirementsDiagrams(request):
 
 
 def get_allrequirementsDiagrams(request):
-    graph = getallgraph('analysis/result/newModel2018-03-01 09_32_41.csv')
+    graph = getallgraph('analysis/result/newModel.csv')
 
     return JsonResponse(graph)

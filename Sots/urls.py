@@ -81,8 +81,6 @@ urlpatterns = [
     url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
     url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
 
-<<<<<<< HEAD
-=======
     url(r'^$', index, name='index'),        #前台首页
     url(r'sots/searchResult', job_list),    #搜索匹配结果
     url(r'sots/searchKeyword', get_searchKeyword),  #搜索关键字获取
@@ -91,7 +89,6 @@ urlpatterns = [
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
     url(r'sots/handle', handle),    #
->>>>>>> refs/remotes/origin/analysis
 
 
     # 测试

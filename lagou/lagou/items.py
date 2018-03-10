@@ -11,6 +11,7 @@ import scrapy
 class LagouItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    spider = scrapy.Field()     # 爬虫名
     keyword = scrapy.Field()    # 搜索关键字
     jobId = scrapy.Field()
     jobName = scrapy.Field()  # 职位名
