@@ -1,0 +1,11 @@
+部署
+scrapyd-deploy local -p lagou
+
+调用lagou_new爬虫（带参数）
+curl http://localhost:6800/schedule.json -d project=lagou -d spider=lagou_new -d keyword=php
+
+停止爬虫
+curl http://localhost:6800/cancel.json -d project=lagou -d job=运行的JOBID
+
+删除部署的项目
+curl http://localhost:6800/delproject.json -d project=lagou

@@ -1,6 +1,10 @@
+import pickle
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+
+import redis
 from jieba import analyse
 
 from analysis.tools.NLtool import get_dict, get_stop_words, clean_words, save_keywords, word_pseg
@@ -10,7 +14,8 @@ textrank = analyse.textrank
 
 
 class Words:
-    def __init__(self, word_str):
+    def __init__(self, word_str, keyword):
+        self.keyword = keyword
         self.word_str = word_str
         self.stop = get_stop_words()  # 停用词
         self.usewords = ''
@@ -37,31 +42,47 @@ class Words:
             keys.append(i[0])
             vals.append(i[1])
 
-        save_keywords(keys)
-        df = pd.DataFrame(list(vals))
-        print(df)
-        df.index = list(keys)
-        df.plot(figsize=(10.24, 7.68), kind='bar')
+        save_keywords(keys, self.keyword)
+        # df = pd.DataFrame(list(vals))
+        # print(df)
+        # df.index = list(keys)
+        # df.plot(figsize=(10.24, 7.68), kind='bar')
+        #
+        # plt.title(u'result:')
+        # plt.show()
 
-        plt.title(u'result:')
-        plt.show()
 
-
-def words_split(path:str):
+# TODO 修改:  文件和缓存中的合起来
+# 完成不同关键字的关键字提取
+def words_split(path:str, keyword):
     # 加载用户字典
     starttime = time.time()
 
+    # 从文件中获取
     x = pd.read_csv(path)
+    x = x[(x['keyword']==keyword)]
     requirements = x['jobInfo']
     s = ''
-    for i in requirements:
-        s += str(i)
 
-    W = Words(s)
+
+
+    # 改为从缓存中获取
+    r = redis.Redis()
+    keyname = keyword+'_new'
+    len = r.llen(keyname)
+    jobs = r.lrange(keyname, 0, len)
+    for job in jobs:
+        job = pickle.loads(job)
+        s += str(job['jobInfo'])
+
+    # for i in requirements:
+    #     s += str(i)
+
+    W = Words(s, keyword)
     W.word_handle()
     endtime = time.time()
     print('time:', endtime - starttime)
 
 
 if __name__ == '__main__':
-    words_split('../datas/java_data.csv')
+    words_split('../datas/data.csv')

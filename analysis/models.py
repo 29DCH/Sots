@@ -39,6 +39,7 @@ class Job(models.Model):
     keyword = models.CharField(max_length=100)
 
 
+# TODO DJob添加keyword字段  用于区分不同的关键字
 class DigitizedJob(models.Model):
     compSize = models.IntegerField(default=50)
     skill = models.IntegerField(default=5)
@@ -73,3 +74,7 @@ class SpiderConf(models.Model):
     keyword = models.CharField(max_length=100)
     startPage = models.IntegerField(default=1)
     maxAllowPage = models.IntegerField(default=100)
+
+
+class AnalysisConf(models.Model):
+    starttime = models.DateTimeField()

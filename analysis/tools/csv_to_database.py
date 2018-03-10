@@ -28,6 +28,7 @@ import pandas as pd
     14
 
 '''
+
 def persistence_company(path: str):
     df = pd.read_csv(path)
     rows = df.iterrows()
@@ -145,6 +146,7 @@ def persistence_djob(path: str):
         djob.experience = row[4]
         djob.education = row[5]
         djob.salary = row[6]
+
         size = index
         r.hset(setname, jobId, pickle.dumps(djob))
     values = r.hvals(setname)
@@ -164,5 +166,5 @@ def persistence_djob(path: str):
 
 if __name__ == '__main__':
     pass
-    # write_job_to_mysql('datas/java_data.csv')
+    # write_job_to_mysql('datas/data.csv')
     # write_diJob_to_mysql()
