@@ -46,7 +46,7 @@ def get_keyword(jobinfo):
     jobinfo = clean_words(jobinfo)
     user_dict = get_dict()
     words = pseg.cut(jobinfo)
-    word_set = set()
+    word_list = []
     for wds in words:
         if wds.flag == 'eng' or wds.word in user_dict:
             match = re.match(r'[\u4e00-\u9fa5]+', wds.word)
@@ -55,8 +55,7 @@ def get_keyword(jobinfo):
                 wo = str(wds.word).lower()
             else:
                 wo = wds.word
-            word_set.add(wo)
-    word_list = list(word_set)
+            word_list.append(wo)
     return word_list
 
 

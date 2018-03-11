@@ -21,13 +21,10 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.portrait.job_portrait import jobcity
-from analysis.views import access, into_mysql, write_djob, index, job_list, persistence, get_searchKeyword, \
-    get_recommendInformation, get_hotJob, get_personRecommend, handle, \
-    get_allrequirementsDiagrams, test_url
+from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
 import analysis.personalCenter as pc
-from administrators.crawler import crawler_admin
+
 import administrators.test.test as te
 
 urlpatterns = [
@@ -81,35 +78,15 @@ urlpatterns = [
     url(r'sots/postPersonalInformation', pc.postPersonalInformation),# 将用户个人信息提交到后台
     url(r'sots/getPersonalInformation', pc.getPersonalInformation),# 前台获得个人信息
 
-<<<<<<< HEAD
-=======
-    url(r'^$', index, name='index'),        #前台首页
-    url(r'sots/searchResult', job_list),    #搜索匹配结果
-    url(r'sots/searchKeyword', get_searchKeyword),  #搜索关键字获取
-    url(r'sots/recommendInformation', get_recommendInformation),    #推荐职位
-    url(r'sots/hotJob', get_hotJob),            #热门职位
-    url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
-    url(r'sots/glyphicon', get_allrequirementsDiagrams),
-    url(r'sots/handle', handle),    #
->>>>>>> refs/remotes/origin/analysis
 
 
     # 测试
     url(r'access', access, name='access'),
     url(r'into_mysql', into_mysql,name='intomysql'),
     url(r'write_djob', write_djob, name='writedjob'),
-    url(r'persistence', persistence, name='persistence'),
-    url(r'jobcity', jobcity),
-    url(r'operation', test_url),
 
     # 随机生成求职者的测试数据，存入数据库
     url(r'admin/testShow', te.show, name='testShow'),# 展示页面
     url(r'admin/testRandom',te.rando, name='testRandom'),# 进入后端去生成
     url(r'admin/infoSave',te.save,name='infoSave'),# 存储生成
-
-    # 爬虫管理页面
-    url(r'admin/crawler/start', crawler_admin.start_spider, name='start_spider'),
-    url(r'admin/crawler/end', crawler_admin.end_job, name='end_job'),
-    url(r'admin/crawler/list', crawler_admin.list_job, name='list_crawler_job'),
-    url(r'^admin/crawler$', crawler_admin.crawler_index, name='crawler_admin'),
 ]

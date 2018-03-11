@@ -1,6 +1,5 @@
 webpackJsonp(["styles"],{
 
-<<<<<<< HEAD
 /***/ "./node_modules/_bootstrap@3.3.7@bootstrap/dist/css/bootstrap.min.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44,12 +43,6 @@ module.exports = "/*!\n * Bootstrap v3.3.7 (http://getbootstrap.com)\n * Copyrig
 /***/ (function(module, exports) {
 
 module.exports = "/* You can add global styles to this file, and also import other style files */\nbody{\n  font-family: \"Hiragino Sans GB\",\"Microsoft Yahei\",SimSun,Arial,\"Helvetica Neue\",Helvetica;\n}\n/*中间内容部分 最小高度超出屏幕的长度*/\n#main-Body {\n  min-height: 600px;\n}\n/*搜索框中的颜色变化*/\na.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, button.list-group-item:hover {\n  color: #555;\n  text-decoration: none;\n  background-color: #f8f7fb;\n}\n.container-fluid {\n  padding: 0;\n}\n.carousel-container{\n  margin-bottom: 20px;\n}\nfooter {\n    background: #383838;\n    color: #888888;\n    padding: 35px 0;\n    line-height: 30px;\n}\n.half {\n  width: 30%;\n  height: 2px;\n  background-color: #fff;\n}\n.division { \n  text-align: center;\n  width: 100%;\n}\n/* 搜索匹配信息 start*/\n.salary {\n  color: #fd6445;\n  font-size: 16px;\n  font-weight: bold;\n  padding-left: 5px;\n  font-style: italic;\n}\n.company {\n  font-size: 16px;\n  color: #000;\n  font-weight: bold;\n  letter-spacing: 0px;\n}\n.position {\n  font-size: 16px;\n  color: #999;\n}\n.place {\n  font-style: italic;\n  color: #999;\n}\n.carousel img {\n  width: 100%;\n}\nspan.time {\n  font-style: normal;\n  color: #222;\n  padding-left: 15px;\n}\nsmall {\n  padding: 8px;\n}\n.panel {\n  border: none;\n}\n.panel-body {\n  border: 1px solid transparent;\n  border-radius: 4px;\n  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n/* 搜索匹配信息 end*/\n"
-=======
-/***/ "./node_modules/_raw-loader@0.5.1@raw-loader/index.js!./node_modules/_postcss-loader@2.1.1@postcss-loader/lib/index.js??embedded!./src/styles.css":
-/***/ (function(module, exports) {
-
-module.exports = "/* @charset 'UTF-8';\n@import 'assets/css/bootstrap.min.css'; */\n\n/* You can add global styles to this file, and also import other style files */\n\nbody{\n  font-family: \"Hiragino Sans GB\",\"Microsoft Yahei\",SimSun,Arial,\"Helvetica Neue\",Helvetica;\n}\n\n/*中间内容部分 最小高度超出屏幕的长度*/\n\n#main-Body {\n  min-height: 600px;\n}\n\n/*搜索框中的颜色变化*/\n\na.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, button.list-group-item:hover {\n  color: #555;\n  text-decoration: none;\n  background-color: #f8f7fb;\n}\n\n.container-fluid {\n  padding: 0;\n}\n\n.carousel-container{\n  margin-bottom: 20px;\n}\n\nfooter {\n    background: #383838;\n    color: #888888;\n    padding: 35px 0;\n    line-height: 30px;\n}\n\n.half {\n  width: 30%;\n  height: 2px;\n  background-color: #fff;\n}\n\n.division { \n  text-align: center;\n  width: 100%;\n}\n\n/* 搜索匹配信息 start*/\n\n.salary {\n  color: #fd6445;\n  font-size: 16px;\n  font-weight: bold;\n  padding-left: 5px;\n  font-style: italic;\n}\n\n.company {\n  font-size: 16px;\n  color: #000;\n  font-weight: bold;\n  letter-spacing: 0px;\n}\n\n.position {\n  font-size: 16px;\n  color: #999;\n}\n\n.place {\n  font-style: italic;\n  color: #999;\n}\n\n.carousel img {\n  width: 100%;\n}\n\nspan.time {\n  font-style: normal;\n  color: #222;\n  padding-left: 15px;\n}\n\nsmall {\n  padding: 8px;\n}\n\n.panel {\n  border: none;\n}\n\n.panel-body {\n  border: 1px solid transparent;\n  border-radius: 4px;\n  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n\n/* 搜索匹配信息 end*/\n\n/* 弹出框 警告 */\n\n.modal-content-warning {\n    border-color: #cecc67;\n    background-color: #f7ec7d;\n    color: #151212;\n    font-weight: bolder;\n    letter-spacing: 2px;\n    font-size: 18px;\n}\n\n.modal-content-success {\n    font-weight: bolder;\n    background-color: #009688;\n    border-color: #00695C;\n    color: #fff;\n    letter-spacing: 2px;\n    font-size: 18px;\n}\n\n/* navbar 点击或覆盖 */\n\n/* nav li.active a{\n  color: #fff;\n}\nnav li {\n  color: rgba(255, 255, 255, 0.6);\n} */\n\n/* nav li.navActive, nav li:hover {\n    background-color: #8c8c8c;\n} */\n\n/* 弹出框颜色 */\n\n.modal-header {\n    color: #fff;\n}\n\n/* 提示框 - 头部颜色 */\n\n.modal-header {\n    background-color: rgba(0,0,0,.6);\n    color: #fff;\n}\n\n.head-success {\n    background-color: #009688;\n}\n\n.head-warning {\n    background-color: #f7ec7d;\n    color: #000;\n}\n\n.head-normal {\n    background-color: rgba(0,0,0,.6);\n}\n\n.head-danger {\n    background-color: #d9534f;\n}"
->>>>>>> refs/remotes/origin/analysis
 
 /***/ }),
 
@@ -104,19 +97,11 @@ var getElement = (function (fn) {
 })(function (target) {
 	return document.querySelector(target)
 });
-<<<<<<< HEAD
 
 var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-=======
-
-var singleton = null;
-var	singletonCounter = 0;
-var	stylesInsertedAtTop = [];
-
->>>>>>> refs/remotes/origin/analysis
 var	fixUrls = __webpack_require__("./node_modules/_style-loader@0.19.1@style-loader/lib/urls.js");
 
 module.exports = function(list, options) {
@@ -131,17 +116,10 @@ module.exports = function(list, options) {
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
 	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
-<<<<<<< HEAD
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
 
-=======
-
-	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
-
->>>>>>> refs/remotes/origin/analysis
 	// By default, add <style> tags to the bottom of the target
 	if (!options.insertAt) options.insertAt = "bottom";
 
@@ -572,12 +550,8 @@ if(false) {
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
 __webpack_require__("./src/styles.css");
 module.exports = __webpack_require__("./node_modules/_bootstrap@3.3.7@bootstrap/dist/css/bootstrap.min.css");
-=======
-module.exports = __webpack_require__("./src/styles.css");
->>>>>>> refs/remotes/origin/analysis
 
 
 /***/ })

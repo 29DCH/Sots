@@ -104,12 +104,3 @@ ENV/
 .idea/misc.xml
 
 datas/
-administrators/static/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.svg
-administrators/static/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf
-administrators/static/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.woff
-administrators/static/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.woff2
-analysis/static/assets/fonts/glyphicons-halflings-regular.svg
-analysis/static/assets/fonts/glyphicons-halflings-regular.ttf
-analysis/static/assets/fonts/glyphicons-halflings-regular.woff
-analysis/static/assets/fonts/glyphicons-halflings-regular.woff2
-analysis/static/vendor.bundle.js.map

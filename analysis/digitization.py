@@ -1,94 +1,20 @@
 import re
-from operator import itemgetter
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
-from analysis.models import Job
 from analysis.tools.NLtool import get_keyword, get_keywords
-from analysis.tools.csv_to_database import persistence_djob, persistence_job
-
-
-def get_skills(str):
-    skills = []
-    for s in str:
-        skills.append(s['skillInfor'])
-    return skills
-
-skillmaxpoint = 20
-placepoiont = 10
-educationpoint = 5
-experiencepoint = 5
-
-def getmaxpoint():
-    return skillmaxpoint+placepoiont+educationpoint+experiencepoint
-
-# 根据地点经验学历技能选出最佳匹配
-def jobmatch(jobs, skills, experience, education, place):
-
-    experience = float(experience)          # TODO 有效值检测
-    education = get_education(education)
-
-    matches = {}
-    for job in jobs:
-        jobinfo = job.jobInfo
-        jobplace = job.JobPlace
-        jobkeyword = get_keyword(jobinfo)
-        jobexperience = job.experienceRequire
-        jobeducation = job.educationRequire
-        point = 0
-        for skill in get_skills(skills):        # 技能匹配
-            if skill in jobkeyword:
-                point += 1
-        if jobplace.__eq__(place):              # 地点匹配
-            point+=placepoiont
-
-        if experience>=get_experience(jobexperience):                     # 经验匹配
-            point+=experiencepoint
-        else:
-            continue
-        if education>=get_education(jobeducation):   # 学历匹配
-            point+=educationpoint
-        else:
-            continue
-        if matches.get(point) is None:
-            matches[point] = []
-        matches[point].append(job)
-    print(matches)
-    keys = sorted(matches.keys(), reverse=True)
-    print(keys)
-    # 获取五个最佳匹配
-    results = []
-    for key in keys:
-        l = matches.get(key)
-        for i in l:
-            result = {
-                'point': key,
-                'job': i
-            }
-            results.append(result)
-        if len(results) > 5:
-            break
-    print(results)
-    return results
+from analysis.tools.csv_to_mysql import write_diJob_to_mysql, write_job_to_mysql
 
 
 # TODO 待完成
-def get_digitaluser(skills, experience, education, compSize):
-    skillstr = ''
-    for skill in get_skills(skills):
-        skillstr += skill + ' , '
-    skillpoint = get_skill(skillstr)
-    experiencepiont = get_experience(experience)
-    educationpoint = get_education(education)
-    user = [skillpoint, experiencepiont, educationpoint, 1250]
+def get_digitaluser(salary, experience, education, skills):
+    user = ['20','4', '2', '2000']
     return user
 
-
 def get_education(words):
-    # TODO 可将这个变量放入数据库
+    # TODO 可将这个变量添加到参数列表供调用者改变
     edu_point_dict = {
         '不限': 0,
         '大专': 1,
@@ -186,8 +112,8 @@ class Analysis:
         print(self.frame.head())
         self.frame.plot(figsize=(10.24, 7.68))
         plt.show()
-        now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        path = 'analysis/result/newModel' + str(now) + '.csv'
+        now = time.time()
+        path = 'result/newModel'+now+'.csv'
         self.frame.to_csv(path, encoding="utf-8")
         return path
 
@@ -217,6 +143,7 @@ class Analysis:
             experience.append(get_experience(i))
         self.frame.insert(0, 'experience', experience)
 
+    # TODO 去重关键字
     # 将每一条记录的要求中的关键字与统计结果中的关键词匹配
     def _get_skill(self):
         # 读取关键字
@@ -232,7 +159,6 @@ class Analysis:
         for i in t:
             compSize.append(get_compSize(i))
         self.frame.insert(0, 'compSize', compSize)
-
 
 if __name__ == '__main__':
     step2 = Analysis('../datas/java_data.csv')
