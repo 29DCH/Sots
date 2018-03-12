@@ -46,3 +46,13 @@ class DigitizedJob(models.Model):
     salary = models.FloatField(default=5)
     # Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, unique=True)
     Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
+
+# 网站表
+class Website(models.Model):
+    url = models.CharField(max_length=50)
+    name = models.CharField(max_length=20)
+
+# 轮播表
+class Carousel(models.Model):
+    content_url = models.CharField(max_length=50) # 内容链接
+    photo_url = models.CharField(max_length=50) # 图片链接

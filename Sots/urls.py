@@ -23,7 +23,10 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, into_mysql, write_djob, index, job_list
 import administrators.website.website as web
+from administrators.crawler import crawler_admin
 import analysis.personalCenter as pc
+import administrators.carousel.carousel as carousel
+import analysis.index as i
 
 import administrators.test.test as te
 
@@ -63,8 +66,19 @@ urlpatterns = [
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
     # 公司
-    url(r'admin/companyShow', com.show, name='companyShow'),  # 公司展示
+    url(r'admin/companyShow$', com.show, name='companyShow'),  # 公司展示
+    url(r'admin/companyShowNext', com.showNext, name='companyShowNext'),
     url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
+    url(r'admin/companyEdit', com.edit, name='companyEdit'),
+
+    # 轮播图片
+    url(r'admin/carouselShow$', carousel.show, name='carouselShow'),  # 轮播展示
+    url(r'admin/carouselShowNext', carousel.showNext, name='carouselShowNext'),
+    url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
+    url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
+    url(r'admin/carouselSave', carousel.save, name='carouselSave'),
+    url(r'admin/carouselEdit', carousel.edit, name='carouselEdit'),
+    url(r'admin/carouselUpdate', carousel.update, name='carouselUpdate'),
 
     # 前台
     url(r'^$', index, name='index'), # 前台首页

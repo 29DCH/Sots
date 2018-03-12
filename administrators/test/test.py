@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from administrators.models import User as ui
+from analysis.models import Carousel as c
 import random
 
 def show(request):
