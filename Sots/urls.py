@@ -72,7 +72,7 @@ urlpatterns = [
     url(r'admin/companyEdit', com.edit, name='companyEdit'),
 
     # 轮播图片
-    url(r'admin/carouselShow$',carousel.show, name='carouselShow'),  # 轮播展示
+    url(r'admin/carouselShow$', carousel.show, name='carouselShow'),  # 轮播展示
     url(r'admin/carouselShowNext', carousel.showNext, name='carouselShowNext'),
     url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
     url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
