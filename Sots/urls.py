@@ -67,12 +67,12 @@ urlpatterns = [
 
     # 公司
     url(r'admin/companyShow$', com.show, name='companyShow'),  # 公司展示
-    url(r'admin/companyShowNext', com.showNext, name='companyShowNext'),
+    url(r'admin/companyShowNext', com.showNext,name='companyShowNext'),
     url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
     url(r'admin/companyEdit', com.edit, name='companyEdit'),
 
     # 轮播图片
-    url(r'admin/carouselShow$', carousel.show, name='carouselShow'),  # 轮播展示
+    url(r'admin/carouselShow$',carousel.show, name='carouselShow'),  # 轮播展示
     url(r'admin/carouselShowNext', carousel.showNext, name='carouselShowNext'),
     url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
     url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
