@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播添加</title>
+    <style>
+        form{
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<form action="{% url 'carouselSave' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>轮播图片 :&nbsp;&nbsp;<input  type="file" name="photo_url"/></p>
+    <p>内容链接 :&nbsp;&nbsp;<input  type="text" name="content_url"/></p>
+    <p><input type="submit" value="添加"></p>
+
+
+</form>
+</body>
+</html>

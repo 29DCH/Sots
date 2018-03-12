@@ -2,7 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-
+# 岗位表
 class Job(models.Model):
     jobId = models.IntegerField(unique=True)
     JobName = models.CharField(max_length=200)
@@ -20,7 +20,7 @@ class Job(models.Model):
     jobLabels = models.CharField(max_length=300)
     pass
 
-
+# 招聘公司表
 class Company(models.Model):
     companyId = models.IntegerField()
     compName = models.CharField(max_length=500)
@@ -37,7 +37,7 @@ class Company(models.Model):
     companyLogo = models.CharField(max_length=500)
     financeStage = models.CharField(max_length=200)
 
-
+# 岗位分析表
 class DigitizedJob(models.Model):
     compSize = models.IntegerField(default=50)
     skill = models.IntegerField(default=5)

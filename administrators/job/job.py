@@ -1,14 +1,47 @@
-from django.db import models
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
-import administrators.models as m
+import analysis.models as m
 import pandas
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # 展示岗位
 def show(request):
+    return showNext(request )
+
+def showNext(request):
+    if 'flag' not in request.GET.keys():
+        flag = '1'
+    else:
+        flag = request.GET['flag']
+    # print('flag='+str(flag))
+    if flag == '1':# 下一页
+        # print('xxxxx')
+        if 'page' not in request.GET.keys():
+             page = 1
+        else:
+            page = request.GET['page']
+            # print('page='+str(page))
+            page = int(page)+1
+            # print(page)
+    elif flag == '0':# 上一页
+        page = request.GET['page']
+        page = int(page) - 1
+        # print(page)
+    # print(page)
     jobs = m.Job.objects.all()
-    return render(request, 'job/jobShow.html', {'jobs': jobs})
+    if jobs.count()%10 == 0:
+        pageAll = jobs.count()/10
+    else:
+        pageAll = int(jobs.count()/10)+1
+    paginator = Paginator(jobs, 10)  # Show 25 contacts per page
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        contacts = paginator.page(page)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contacts = paginator.page(paginator.num_pages)
+    result ={'jobs': contacts, 'page':page, 'pageAll':pageAll}
+    return render(request, 'job/jobShow.html', result)
 
 # 删除岗位
 def delete(request):

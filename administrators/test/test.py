@@ -40,3 +40,12 @@ def save(request):
                   skill=skill)
     userInfo.save()
     return show(request)
+
+def imgs(request):
+    cos = c.objects.all()
+    return render(request, 'test/img.html', {'cos' : cos})
+def img(request):
+    img = request.POST['img']
+    i = c(photo = img)
+    i.save()
+    return render(request, 'index.html')

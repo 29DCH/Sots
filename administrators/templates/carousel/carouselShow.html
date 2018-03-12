@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta charset="utf-8">
+    <title>position</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+{#展示职位信息页面#}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>职位id</th>
+        <th>轮播图片</th>
+        <th>内容链接</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for carousel in carousels %}
+    <tr>
+        <td>{{  carousel.id }}</td>
+        <td><img src="{% static 'image/carousel/' %}{{ carousel.photo_url }}"></td>
+        <td>{{  carousel.content_url  }}</td>
+        <td>
+            <a href="{% url 'carouselEdit'%}?cid={{ carousel.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+            <a href="{% url 'carouselDel' %}?cid={{ carousel.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+            <a href="{% url 'carouselAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+        第{{ page }} 页/总{{ pageAll }}页<br>
+        {% if page == 1 and pageAll == page%}
+            上一页/下一页
+        {% elif page == 1%}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% elif pageAll == page%}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=0 ">上一页</a>
+        {% else %}
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=0 ">上一页</a>/
+            <a href="{% url 'carouselShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% endif %}
+</body>
+</html>

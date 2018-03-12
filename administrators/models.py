@@ -3,6 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 # Create your models here.
 
+# 超级管理员
+class administrator(models.Model):
+    username = models.CharField(max_length=10)
+    password = models.CharField(max_length=10)
+
 #用户表
 class User(models.Model):
     username = models.CharField(max_length=30)# 用户名
@@ -21,14 +26,4 @@ class User(models.Model):
     workingTime = models.CharField(max_length=300)
     status = models.CharField(max_length=20)
 
-# 网站表
-class website(models.Model):
-    url = models.CharField(max_length=50)
-    name = models.CharField(max_length=20)
 
-# 进入登陆页面
-def land(request):
-    return render(request, 'index.html')
-# 主页的欢迎界面
-def welcome(request):
-    return render(request, 'welcome.html')
