@@ -52,7 +52,6 @@ class Words:
         # plt.show()
 
 
-# TODO 修改:  文件和缓存中的合起来
 # 完成不同关键字的关键字提取
 def words_split(path:str, keyword):
     # 加载用户字典
@@ -63,21 +62,22 @@ def words_split(path:str, keyword):
     x = x[(x['keyword']==keyword)]
     requirements = x['jobInfo']
     s = ''
-
+    for req in requirements:
+        s += str(req)
 
 
     # 改为从缓存中获取
     r = redis.Redis()
+    print('')
     keyname = keyword+'_new'
-    len = r.llen(keyname)
-    jobs = r.lrange(keyname, 0, len)
+    jobs = r.hvals(keyname)
+    # len = r.llen(keyname)
+    # jobs = r.lrange(keyname, 0, len)
     for job in jobs:
         job = pickle.loads(job)
         s += str(job['jobInfo'])
 
-    # for i in requirements:
-    #     s += str(i)
-
+    # 分析更新之后的关键字
     W = Words(s, keyword)
     W.word_handle()
     endtime = time.time()

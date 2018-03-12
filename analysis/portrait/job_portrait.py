@@ -50,8 +50,8 @@ def getgraph(djob:DigitizedJob):
     return graph
 
 
-# TODO 如果文件存在则分析文件 不存在则读取数据库
 def getallgraph(path: str):
+    # TODO
     frame = pd.read_csv(path)
 
     mean = frame.mean()

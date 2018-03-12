@@ -39,7 +39,6 @@ class Job(models.Model):
     keyword = models.CharField(max_length=100)
 
 
-# TODO DJob添加keyword字段  用于区分不同的关键字
 class DigitizedJob(models.Model):
     compSize = models.IntegerField(default=50)
     skill = models.IntegerField(default=5)
@@ -48,6 +47,7 @@ class DigitizedJob(models.Model):
     salary = models.FloatField(default=5)
     # Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, unique=True)
     Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
+    keyword = models.CharField(max_length=300)
 
 class UserInfo(models.Model):
     educationRequire = models.CharField(max_length=300)

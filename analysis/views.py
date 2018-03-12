@@ -13,7 +13,7 @@ from analysis.models import Job, DigitizedJob, SpiderConf
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
-from analysis.spider_scheduler import operations, ontime_spider, scheduler
+from analysis.spider_scheduler import scheduler
 from analysis.tools.csv_to_database import persistence_job, persistence_djob, persistence_company
 
 
@@ -129,7 +129,6 @@ def job_list(request):
         except KeyError as e:
             return pack_job_result([])
         # 将提交表单的字段转化为数字
-        # TODO 关键字获取
         user = get_digitaluser(skills, experience, education, '', 'java')
         result = predic(user)
 
@@ -141,6 +140,9 @@ def job_list(request):
         for djob in djobs:
             job = Job.objects.get(id=djob.Job.id)
             jobs.append(job)
+
+
+        # TODO 有效值检测(一个独立模块)
         result = jobmatch(jobs, skills, experience, education, place)
         # 拼接返回JSON
         list = pack_job_result(result)

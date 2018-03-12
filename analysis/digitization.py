@@ -9,6 +9,7 @@ import time
 
 import redis
 
+from analysis import csv_conf
 from analysis.models import Job
 from analysis.tools.NLtool import get_keyword, get_keywords
 from analysis.tools.csv_to_database import persistence_djob, persistence_job
@@ -31,7 +32,7 @@ def getmaxpoint():
 # 根据地点经验学历技能选出最佳匹配
 def jobmatch(jobs, skills, experience, education, place):
 
-    experience = float(experience)          # TODO 有效值检测
+    experience = float(experience)
     education = get_education(education)
 
     matches = {}
@@ -78,7 +79,6 @@ def jobmatch(jobs, skills, experience, education, place):
     return results
 
 
-# TODO 待完成
 def get_digitaluser(skills, experience, education, compSize, keyword):
     skillstr = ''
     for skill in get_skills(skills):
@@ -126,7 +126,7 @@ def get_experience(words):
 
 
 def get_skill(words: str, keyword):
-    keywords = get_keywords()
+    keywords = get_keywords(keyword)
     words = get_keyword(words)
     point = 0
     for j in words:
@@ -170,25 +170,25 @@ def get_compSize(words: str):
         return 100
 
 
-# TODO 将以列为单位进行操作修改为以行为单位进行插入
 class Analysis:
 
     def __init__(self, keyword):
         # 判断文件存在
-        columns = ['jobId', 'compSize', 'skill', 'experience', 'education','salary', 'keyword']
+        columns = csv_conf.digital_columnsname
         mdpath = 'analysis/result/newModel.csv'
         ifexists = os.path.exists(mdpath)
         if ifexists:
             self.frame = pd.read_csv(mdpath)
         else:
             self.frame = pd.DataFrame()
-            self.frame = self.frame[columns]
 
+        self.frame = self.frame[columns]
 
         r = redis.Redis()
         keyname = keyword + '_new'
-        len = r.llen(keyname)
-        self.jobs = r.lrange(keyname, 0, len)
+        self.jobs = r.hvals(keyname)
+        # len = r.llen(keyname)
+        # self.jobs = r.lrange(keyname, 0, len)
 
         self.keyword = keyword
         # self.columns = x[['jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'compSize', 'jobId', 'keyword']]
@@ -199,16 +199,20 @@ class Analysis:
         # 遍历关键字相同的job
         for job in self.jobs:
             job =  pickle.loads(job)
+            print('digitization : ',job)
             jobId = job['jobId']
-            salary = get_salary(job['JobSalary'])
+            salary = get_salary(job['jobSalary'])
             education = get_education(job['educationRequire'])
             experience = get_experience(job['experienceRequire'])
-            skill = get_skill(job['jobInfo'], self.keyword)
+            skill = get_skill(str(job['jobInfo']), self.keyword)
             compsize = get_compSize(job['compSize'])
             keyword = job['keyword']
-            self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compsize': compsize, 'skill': skill, 'experience':
+            self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compSize': compsize, 'skill': skill, 'experience':
                 experience, 'education': education,'salary': salary, 'keyword': keyword}
-        self.frame.to_csv(path, encoding="utf-8")
+        print(self.frame)
+        print(self.frame.shape)
+
+        self.frame.to_csv(path)
 
         return path
 

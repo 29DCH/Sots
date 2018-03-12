@@ -61,9 +61,8 @@ def get_keyword(jobinfo):
 
 
 # 读取关键字
-# TODO 区分不同类别job的关键字
-def get_keywords():
-    f = open('analysis/result/keywords')
+def get_keywords(keyword='java'):
+    f = open('analysis/result/'+keyword+'_keywords')
     keywords = []
     for i in f.readlines():
         keywords.append(str(i).strip())
@@ -72,7 +71,7 @@ def get_keywords():
 
 # 保存关键字
 def save_keywords(keywords, keyword):
-    f = open('analysis/result/'+keyword+'keywords', 'w')
+    f = open('analysis/result/'+keyword+'_keywords', 'w')
     for i in keywords:
         f.write(i)
         f.write('\n')
