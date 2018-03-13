@@ -21,7 +21,10 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.views import access, into_mysql, write_djob, index, job_list
+from analysis.portrait.job_portrait import jobcity
+from analysis.views import access, into_mysql, write_djob, index, job_list, persistence, get_searchKeyword, \
+    get_recommendInformation, get_hotJob, get_personRecommend, handle, \
+    get_allrequirementsDiagrams, test_url
 import administrators.website.website as web
 from administrators.crawler import crawler_admin
 import analysis.personalCenter as pc
@@ -70,6 +73,16 @@ urlpatterns = [
     url(r'admin/websiteEdit', web.edit, name='websiteEdit'),# 跳转到编辑岗位界面
     url(r'admin/websiteUpdate', web.update, name='websiteUpdate'),# 岗位更新
 
+
+    url(r'^$', index, name='index'),        #前台首页
+    url(r'sots/searchResult', job_list),    #搜索匹配结果
+    url(r'sots/searchKeyword', get_searchKeyword),  #搜索关键字获取
+    url(r'sots/recommendInformation', get_recommendInformation),    #推荐职位
+    url(r'sots/hotJob', get_hotJob),            #热门职位
+    url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
+    url(r'sots/glyphicon', get_allrequirementsDiagrams),
+    url(r'sots/handle', handle),    #
+
     # 公司
     url(r'admin/companyShow$', com.show, name='companyShow'),  # 公司展示
     url(r'admin/companyShowNext', com.showNext,name='companyShowNext'),
@@ -103,6 +116,9 @@ urlpatterns = [
     url(r'access', access, name='access'),
     url(r'into_mysql', into_mysql,name='intomysql'),
     url(r'write_djob', write_djob, name='writedjob'),
+    url(r'persistence', persistence, name='persistence'),
+    url(r'jobcity', jobcity),
+    url(r'operation', test_url),
 
     # 随机生成求职者的测试数据，存入数据库
     # url(r'admin/img', te.imgs, name='img'),# 图片测试

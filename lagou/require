@@ -1,0 +1,24 @@
+scrapy == 1.3.3
+scrapyd == 1.2.0
+scrapyd-client == 1.1.0
+redis == 2.10.6
+scrapy-redis == 0.6.8
+
+# 分布式爬虫启动：
+# 一、主服务器
+# ①redis修改配置文件redis.conf
+#   bind 127.0.0.1注释该行
+# ②scrapyd修改配置文件default_scrapyd.conf
+#   bind_address = 127.0.0.1改为bind_address = 0.0.0.0
+# ③开启redis服务和scrapyd服务
+# ④修改scrapy.cfg文件
+   添加从服务器的部署地址，如：
+     [deploy:slave01] # 起个名字，scrapyd根据名字部署
+     url = http://192.168.71.143:6800/
+     project = sots   # 这是项目名
+  ⑤将所有部署名添加到一个list,并传入scrapyd_api的deploy方法进行部署
+
+#  二、从服务器(redis使用主服务器的)
+#  ①scrapyd修改配置文件default_scrapyd.conf
+#   bind_address = 127.0.0.1改为bind_address = 0.0.0.0
+#  ②开启redis服务和scrapyd服务
