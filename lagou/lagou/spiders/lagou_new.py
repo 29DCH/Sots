@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import scrapy
 from lagou.items import LagouItem
 from scrapy_redis.spiders import RedisSpider

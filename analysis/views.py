@@ -13,7 +13,7 @@ from analysis.models import Job, DigitizedJob, SpiderConf
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
-from analysis.spider_scheduler import scheduler
+from analysis.spider_scheduler import scheduler, test
 from analysis.tools.csv_to_database import persistence_job, persistence_djob, persistence_company
 
 
@@ -101,6 +101,7 @@ def pack_job_list(jobs:list):
 
 def test_url(request):
     scheduler()
+    # test()
 
 
 # TODO 只会被调用一次的爬虫启动接口

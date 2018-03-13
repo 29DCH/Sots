@@ -5,6 +5,8 @@ import json
 from pickle import loads, dumps
 
 import os
+from urllib.parse import unquote
+
 import pandas as pd
 import redis
 
@@ -56,27 +58,14 @@ def getrow(jandc):
                jandc['compSize'], 'compIndustry': jandc['compIndustry'], 'companyLabels': jandc['compLabels'],
            'compLink': jandc['compLink'], 'compIntroduce': '', 'contactInfo': '', 'longitude': jandc['longitude'],
            'latitude': jandc['latitude'], 'businessZones': jandc['businessZones'], 'compHome': jandc['compHome'],
-           'companyLogo': jandc['compLogo'], 'financeStage': jandc['financeStage'], 'keyword': jandc['keyword'], }
+           'companyLogo': jandc['compLogo'], 'financeStage': jandc['financeStage'], 'keyword': unquote(jandc['keyword']), }
+
     return row
 
 
 def operations():
     # 判断文件是否存在
-    path = 'datas/data.csv'
-    ifexists = os.path.exists(path)
-    if ifexists:
-        frame = pd.read_csv(path)
-        frame = frame[csv_conf.data_columnsname]
-    else:
-        frame = pd.DataFrame(getcolumnsname())
-    print(frame.shape)
-    print('old job set size = ', frame.shape[0])
-
-    starttime = time()
     r = redis.Redis()
-    keys = r.keys()
-    for key in keys:
-        print(key)
 
     name = 'lagou_new:items'
     len = r.llen(name)
@@ -87,8 +76,6 @@ def operations():
         r.lrem(name, job)  # 从缓存中移除已经获取的jobODO
         jsjob = json.loads(job)
         rows.append(getrow(jsjob))
-
-    endtime = time()
 
     oldjobidset = set()
 
@@ -103,16 +90,34 @@ def operations():
             print('old job', newId)
         else:
             print('new job', newId)
-            frame.loc[frame.shape[0] + 1] = newrow
             # 加入以关键字为键的redis list
             keyname = newrow['keyword'] + '_new'
             r.hset(keyname, newId, dumps(newrow))
             # r.lpush(keyname, dumps(newrow))
+    test()
+
+
+def test():
+    path = 'datas/data.csv'
+    ifexists = os.path.exists(path)
+    if ifexists:
+        frame = pd.read_csv(path)
+        frame = frame[csv_conf.data_columnsname]
+    else:
+        frame = pd.DataFrame(getcolumnsname())
+    print(frame.shape)
+    print('old job set size = ', frame.shape[0])
+
+    r = redis.Redis()
+    names  = r.keys(r'*_new')
+    for name in names:
+        print(name)
+        vals = r.hvals(name)
+        for val in vals:
+            newrow = loads(val)
+            frame.loc[frame.shape[0] + 1] = newrow
 
     print('new job size : ', frame.shape[0])
-
-    frame = frame.drop_duplicates(['jobId'])
-    print('job size after duplicates', frame.shape[0])
 
     # 获取关键字集合
     allkey = frame['keyword']
@@ -121,7 +126,6 @@ def operations():
     print(allkey)
 
     frame.to_csv(path)
-    print('cost : ', endtime - starttime)
 
     analysis.handle(path, allkey)
 

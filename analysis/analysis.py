@@ -15,7 +15,7 @@ def handle(path:str, keywords):
         diPath = Analysis(keyword).handel()
         print(diPath)
         # 每一个关键字分析完之后删除缓存中的对应list
-        r = r.delete(keyword+"_new")
+        # r.delete(keyword+"_new")
     persistence_company(path)
     persistence_job(path)
     persistence_djob(diPath)

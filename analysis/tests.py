@@ -3,12 +3,13 @@ import json
 import pickle
 import os
 from math import nan
+from urllib.parse import unquote
 
 import pandas as pd
 # Create your tests here.
 import re
 import redis
-
+import urllib
 
 def get_compSize(words: str):
     reg = r'[0-9]*'
@@ -38,12 +39,12 @@ def del_all_key():
 
 
 if __name__ == "__main__":
-    del_all_key()
+    # del_all_key()
 
-    # r = redis.Redis()
-    # keys = r.keys()
-    # for key in keys:
-    #     print(key)
+    r = redis.Redis()
+    keys = r.keys()
+    print(unquote('%E5%A4%A7%E6%95%B0%E6%8D%AE_new'))
+    print(unquote('java'))
     # name = 'java_new'
     # jobs = r.hvals(name)
     # keys = r.hkeys(name)

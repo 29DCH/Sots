@@ -107,11 +107,18 @@ def get_education(words):
 
 def get_experience(words):
     reg = r'[0-9]*'
-    match = re.match(reg, words)
+    try:
+        match = re.match(reg, words)
+    except TypeError as e:
+        print('error occurred.', e);
+        return 0
     if not match.group():  # 全为中文,即不限
         return 0
     else:  # 含数字,取平均数
-        nums = re.findall(reg, words)
+        try:
+            nums = re.findall(reg, words)
+        except TypeError:
+            return 0
         sums = 0
         num = 0
         for j in nums:
@@ -137,7 +144,10 @@ def get_skill(words: str, keyword):
 
 def get_salary(words: str):
     reg = r'[0-9]*'
-    x = re.findall(reg, words)
+    try:
+        x = re.findall(reg, words)
+    except TypeError:
+        return 0
     sums = 0.0
     tmp = 0
     for j in x:
@@ -154,7 +164,11 @@ def get_salary(words: str):
 def get_compSize(words: str):
     reg = r'[0-9]*'
     if words is not np.nan:
-        nums = re.findall(reg, words)
+        try:
+            nums = re.findall(reg, words)
+        except TypeError as e:
+            print("error occurred.",e)
+            return 100
         sums = 0
         num = 0
         for j in nums:
