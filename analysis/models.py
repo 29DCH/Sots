@@ -59,6 +59,7 @@ class Website(models.Model):
 class Carousel(models.Model):
     content_url = models.CharField(max_length=50) # 内容链接
     photo_url = models.CharField(max_length=50) # 图片链接
+
 class UserInfo(models.Model):
     educationRequire = models.CharField(max_length=300)
     major = models.CharField(max_length=200)
