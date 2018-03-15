@@ -1,19 +1,20 @@
-from datetime import datetime
-from threading import Thread
-from time import sleep, time
 import json
-from pickle import loads, dumps
-
 import os
+from datetime import datetime
+from pickle import loads, dumps
+from threading import Thread
+from time import sleep
 from urllib.parse import unquote
 
 import pandas as pd
 import redis
 
-from analysis import analysis, csv_conf
+from analysis import analysis
+from analysis.tools import csv_conf
+from analysis.tools.csv_conf import datapath
 from analysis.models import Job, Company, SpiderConf, AnalysisConf
-
 from analysis.scrapyd_api import ScrapydApi
+from analysis.tools.persistence_data_handel import persistence_all
 
 
 def getjsjob(jsjob):
@@ -124,10 +125,24 @@ def test():
     allkey = allkey.drop_duplicates()
 
     print(allkey)
-
     frame.to_csv(path)
 
     analysis.handle(path, allkey)
+
+
+# TODO 和数据处理分离
+def ontime_persistencer():
+    # 当本地的数据条数超过数据库固定数量时进行操作
+    while True:
+        df = pd.read_csv(datapath)
+        csv_size = df.shape[0]
+        db_size = Job.objects.count()
+        if db_size+100 < csv_size:
+            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+            # 阻塞阻塞阻塞
+            persistence_all()
+        sleep(60)
+
 
 
 def spader_runner(spidername:str, keyword:str, start_page:str, maxpage:str):
@@ -190,11 +205,12 @@ def ontime_spider():
 
 
 def scheduler():
-    thread = Thread(target=ontime_spider, name='ontime_spider')
-    thread.start()
-    thread2 = Thread(target=ontime_analysis, name='ontime_analysis')
-    thread2.start()
-
+    # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
+    # spider_thread.start()
+    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    # analysis_thread.start()
+    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    persistence_thread.start()
 
 if __name__ == '__main__':
     # ontime_spider(16, 9)

@@ -1,6 +1,8 @@
 import random
 from json import dumps
 import json
+
+import pandas as pd
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -14,7 +16,7 @@ from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
 from analysis.spider_scheduler import scheduler, test
-from analysis.tools.csv_to_database import persistence_job, persistence_djob, persistence_company
+from analysis.tools.persistence_data_handel import persistence_job, persistence_djob, persistence_company
 
 
 def index(request):
@@ -23,19 +25,6 @@ def index(request):
 
 def access(request):
     return render(request, 'analysis/access.html')
-
-
-def into_mysql(request):
-    persistence_job('datas/data.csv')
-    return HttpResponse(request, 'hfhfhfh')
-
-def handle(request):
-    Analysis('datas/data.csv').handel()
-    return HttpResponse(request)
-
-def write_djob(request):
-    persistence_djob('analysis/result/newModel2018-03-01 09:32:41.csv')
-    return HttpResponse(request)
 
 
 def persistence(request):
@@ -55,7 +44,7 @@ def pack_job_result(matchjobs:list):
         list = []
         for i in matchjobs:
             job = i['job']
-            updateclicktimes(job)       # 更新点击量
+            # updateclicktimes(job)       # 更新点击量
             j = {
                 "id": job.id,
                 "compName": job.JobName,

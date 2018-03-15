@@ -21,9 +21,8 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.portrait.job_portrait import jobcity
-from analysis.views import access, into_mysql, write_djob, index, job_list, persistence, get_searchKeyword, \
-    get_recommendInformation, get_hotJob, get_personRecommend, handle, \
+from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
+    get_recommendInformation, get_hotJob, get_personRecommend, \
     get_allrequirementsDiagrams, test_url
 import administrators.website.website as web
 import administrators.test.test as te
@@ -71,7 +70,6 @@ urlpatterns = [
     url(r'sots/hotJob', get_hotJob),            #热门职位
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
-    url(r'sots/handle', handle),    #
 
     # 公司
     url(r'admin/companyShow', com.show, name='companyShow'),# 公司展示
@@ -79,10 +77,7 @@ urlpatterns = [
 
     # 测试
     url(r'access', access, name='access'),
-    url(r'into_mysql', into_mysql,name='intomysql'),
-    url(r'write_djob', write_djob, name='writedjob'),
     url(r'persistence', persistence, name='persistence'),
-    url(r'jobcity', jobcity),
     url(r'operation', test_url),
 
     # 随机生成求职者的测试数据，存入数据库

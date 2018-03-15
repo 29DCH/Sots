@@ -42,6 +42,7 @@ class Words:
             keys.append(i[0])
             vals.append(i[1])
 
+        # TODO 添加到数据库
         save_keywords(keys, self.keyword)
         # df = pd.DataFrame(list(vals))
         # print(df)
@@ -68,7 +69,6 @@ def words_split(path:str, keyword):
 
     # 改为从缓存中获取
     r = redis.Redis()
-    print('')
     keyname = keyword+'_new'
     jobs = r.hvals(keyname)
     # len = r.llen(keyname)
@@ -85,4 +85,5 @@ def words_split(path:str, keyword):
 
 
 if __name__ == '__main__':
-    words_split('../datas/data.csv')
+    pass
+    # words_split('../datas/data.csv')

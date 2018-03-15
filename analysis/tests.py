@@ -1,15 +1,14 @@
-from datetime import datetime
-import json
-import pickle
-import os
-from math import nan
-from urllib.parse import unquote
-
-import pandas as pd
 # Create your tests here.
 import re
+from math import nan
+
+import pandas as pd
 import redis
-import urllib
+
+
+# from analysis import csv_conf
+# from analysis.csv_conf import datapath
+
 
 def get_compSize(words: str):
     reg = r'[0-9]*'
@@ -40,11 +39,18 @@ def del_all_key():
 
 if __name__ == "__main__":
     # del_all_key()
+    # df = pd.read_csv('../datas/data.csv')
+    df = pd.read_csv('result/newModel.csv')
 
-    r = redis.Redis()
-    keys = r.keys()
-    print(unquote('%E5%A4%A7%E6%95%B0%E6%8D%AE_new'))
-    print(unquote('java'))
+    data_columnsname = ['jobId', 'jobName', 'jobPlace', 'jobSalary', 'jobAdvantage', 'releaseTime', 'jobNeed',
+                        'educationRequire', 'experienceRequire', 'skillRequire', 'jobLink', 'jobInfo', 'jobNature',
+                        'jobLabels', 'companyId', 'compName', 'compSize', 'compIndustry', 'companyLabels', 'compLink',
+                        'compIntroduce', 'contactInfo', 'longitude', 'latitude', 'businessZones', 'compHome',
+                        'companyLogo', 'financeStage', 'keyword']
+
+    print(df.shape)
+    df = df.drop_duplicates('jobId')
+    print(df.shape)
     # name = 'java_new'
     # jobs = r.hvals(name)
     # keys = r.hkeys(name)

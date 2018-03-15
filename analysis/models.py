@@ -78,3 +78,14 @@ class SpiderConf(models.Model):
 
 class AnalysisConf(models.Model):
     starttime = models.DateTimeField()
+
+
+# TODO 添加关键字表及对应的热词表
+class Keyword(models.Model):
+    keyword = models.CharField(max_length=100, unique=True)
+
+
+class Hotword(models.Model):
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, null=True)
+    hotword = models.CharField(max_length=100)
+    heat = models.IntegerField(default=0)
