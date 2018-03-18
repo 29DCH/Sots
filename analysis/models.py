@@ -3,6 +3,22 @@ from django.db import models
 
 from django.db import models
 
+# 招聘公司表
+class Company(models.Model):
+    companyId = models.IntegerField()
+    compName = models.CharField(max_length=500)
+    compSize = models.CharField(max_length=200)
+    compIndustry = models.CharField(max_length=500)
+    companyLabels = models.CharField(max_length=500)
+    compLink = models.CharField(max_length=500)
+    compIntroduce = models.TextField()
+    contactInfo = models.CharField(max_length=500)
+    longitude = models.FloatField()
+    latitude = models.FloatField()
+    businessZones = models.CharField(max_length=500)
+    compHome = models.CharField(max_length=2000)
+    companyLogo = models.CharField(max_length=500)
+    financeStage = models.CharField(max_length=200)
 
 # Create your models here.
 # 岗位表
@@ -21,24 +37,11 @@ class Job(models.Model):
     jobInfo = models.TextField()
     jobNature = models.CharField(max_length=200)
     jobLabels = models.CharField(max_length=300)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    clicktimes = models.IntegerField(default=0)
+    keyword = models.CharField(max_length=100)
     pass
 
-# 招聘公司表
-class Company(models.Model):
-    companyId = models.IntegerField()
-    compName = models.CharField(max_length=500)
-    compSize = models.CharField(max_length=200)
-    compIndustry = models.CharField(max_length=500)
-    companyLabels = models.CharField(max_length=500)
-    compLink = models.CharField(max_length=500)
-    compIntroduce = models.TextField()
-    contactInfo = models.CharField(max_length=500)
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-    businessZones = models.CharField(max_length=500)
-    compHome = models.CharField(max_length=2000)
-    companyLogo = models.CharField(max_length=500)
-    financeStage = models.CharField(max_length=200)
 
 # 岗位分析表
 class DigitizedJob(models.Model):
@@ -69,6 +72,7 @@ class BrowseRecords(models.Model):
     state = models.IntegerField() # 标识  1为浏览记录 2为收藏夹
 
 # 分析城市
+# TODO http://api.map.baidu.com/geocoder?address=城市&output=json&src=test 添加经纬度属性 不存在时调用api获取
 class DigitizedCity(models.Model):
     compSize = models.FloatField(default=50.0)
     skill = models.FloatField(default=5.0)

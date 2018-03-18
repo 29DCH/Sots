@@ -1,10 +1,10 @@
 # Create your tests here.
 import re
 from math import nan
-
+import matplotlib.pyplot as plt
 import pandas as pd
 import redis
-
+import numpy as np
 
 # from analysis import csv_conf
 # from analysis.csv_conf import datapath
@@ -38,18 +38,22 @@ def del_all_key():
 
 
 if __name__ == "__main__":
+    df = pd.DataFrame([['skill', 'point']])
+    fi = open('result/java_keywords')
+    skills =[]
+    point = []
+    for line in fi.readlines()[:10]:
+        ss = line.split(' ')
+        skills.insert(0,ss[0])
+        point.append(int(ss[1].strip()))
+        df.loc[df.shape[0]] = [ss[0].strip(), ss[1].strip()]
+    fi.close()
+    point.reverse()
+    print(df)
+    y_pos = np.arange(len(skills))
+    print(point, skills)
 
-
-    r = redis.Redis()
-    joblist = []
-    names  = r.keys(r'*_new')
-    for key in names:
-        print(key)
-    # print(df.shape)
-    # df = df.drop_duplicates('jobId')
-    # print(df.shape)
-
-    # a = [1,2]
-    # b = [3,4]
-    # for i, j in a, b:
-    #     print(i, j)
+    plt.bar(skills, point)
+    plt.title('java')
+    plt.xticks(rotation=50)
+    plt.show()
