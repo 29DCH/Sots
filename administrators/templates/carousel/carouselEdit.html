@@ -21,7 +21,7 @@
 <form action="{% url 'carouselUpdate' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="id" value="{{ carousel.id }}">
-    <p>轮播图片 :&nbsp;&nbsp;<input  type="file" name="photo_url"/></p>
+    <p>轮播图片 :&nbsp;&nbsp;<input  type="file" name="photo_url" /></p>
     <p>内容链接 :&nbsp;&nbsp;<input  type="text" name="content_url" value="{{ carousel.content_url }}"/></p>
     <p><input type="submit" value="修改"></p>
 

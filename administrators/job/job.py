@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import analysis.models as m
 import pandas
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # 展示岗位
 def show(request):
     return showNext(request )

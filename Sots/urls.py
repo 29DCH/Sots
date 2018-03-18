@@ -44,6 +44,7 @@ urlpatterns = [
 
     # 用户
     url(r'^admin/userShow$', us.show, name='userShow'),  # 用户展示
+    url(r'admin/userShowNext', us.showNext, name='userShowNext'),
     url(r'admin/userDel*', us.delete, name='userDel'),  # 用户删除
     url(r'admin/userAdd', us.add, name='userAdd'),  # 跳转到添加用户界面
     url(r'admin/userSave', us.save, name='userSave'),  # 用户存储
@@ -61,6 +62,7 @@ urlpatterns = [
 
     # 网站
     url(r'admin/websiteShow', web.show, name='websiteShow'),  # 网站展示
+    url(r'admin/websiteNext', web.showNext, name='webShowNext'),
     url(r'admin/websiteDel', web.delete, name='websiteDel'),  # 网站删除
     url(r'admin/websiteAdd', web.add, name='websiteAdd'),  # 跳转到添加网站界面
     url(r'admin/websiteSave', web.save, name='websiteSave'),  # 网站存储
