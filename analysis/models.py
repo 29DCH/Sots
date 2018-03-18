@@ -75,6 +75,11 @@ class SpiderConf(models.Model):
     startPage = models.IntegerField(default=1)
     maxAllowPage = models.IntegerField(default=100)
 
+#首页轮播
+class Carousel(models.Model):
+    photo_url = models.CharField(max_length=100)
+    content_url = models.CharField(max_length=100)
+    state = models.IntegerField()
 
 class AnalysisConf(models.Model):
     starttime = models.DateTimeField()
