@@ -6,6 +6,15 @@
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+
+        .a1{
+            padding-left: 620px;
+        }
+        .p1{
+            padding-left: 620px;
+        }
+    </style>
 </head>
 <body>
 {#展示用户信息页面#}
@@ -35,6 +44,17 @@
         {% endfor %}
     </tbody>
 </table>
-
+        <p class="p1">第{{ page }} 页/总{{ pageAll }}页</p>
+        <p class="p1">{% if page == 1 and pageAll == page%}
+            上一页/下一页
+        {% elif page == 1 %}</p><br>
+            <a class="a1" href="{% url 'userShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% elif pageAll == page%}
+            <a class="a1" href="{% url 'userShowNext' %}?page={{ page }}&flag=0 ">上一页</a>
+        {% else%}
+        <br>
+            <a href="{% url 'userShowNext' %}?page={{ page }}&flag=0 ">上一页</a>/
+            <a href="{% url 'userShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% endif %}
 </body>
 </html>

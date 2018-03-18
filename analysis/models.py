@@ -1,24 +1,11 @@
 from django.db import models
 
 
+from django.db import models
+
+
 # Create your models here.
-class Company(models.Model):
-    companyId = models.IntegerField(unique=True)
-    compName = models.CharField(max_length=500)
-    compSize = models.CharField(max_length=200)
-    compIndustry = models.CharField(max_length=500)
-    companyLabels = models.CharField(max_length=500)
-    compLink = models.CharField(max_length=500)
-    compIntroduce = models.TextField()
-    contactInfo = models.CharField(max_length=500)
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-    businessZones = models.CharField(max_length=500)
-    compHome = models.CharField(max_length=2000)
-    companyLogo = models.CharField(max_length=500)
-    financeStage = models.CharField(max_length=200)
-
-
+# 岗位表
 class Job(models.Model):
     jobId = models.IntegerField(unique=True)
     JobName = models.CharField(max_length=200)
@@ -34,11 +21,26 @@ class Job(models.Model):
     jobInfo = models.TextField()
     jobNature = models.CharField(max_length=200)
     jobLabels = models.CharField(max_length=300)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-    clicktimes = models.IntegerField(default=0)
-    keyword = models.CharField(max_length=100)
+    pass
 
+# 招聘公司表
+class Company(models.Model):
+    companyId = models.IntegerField()
+    compName = models.CharField(max_length=500)
+    compSize = models.CharField(max_length=200)
+    compIndustry = models.CharField(max_length=500)
+    companyLabels = models.CharField(max_length=500)
+    compLink = models.CharField(max_length=500)
+    compIntroduce = models.TextField()
+    contactInfo = models.CharField(max_length=500)
+    longitude = models.FloatField()
+    latitude = models.FloatField()
+    businessZones = models.CharField(max_length=500)
+    compHome = models.CharField(max_length=2000)
+    companyLogo = models.CharField(max_length=500)
+    financeStage = models.CharField(max_length=200)
 
+# 岗位分析表
 class DigitizedJob(models.Model):
     compSize = models.IntegerField(default=50)
     skill = models.IntegerField(default=5)
@@ -49,15 +51,24 @@ class DigitizedJob(models.Model):
     Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
     keyword = models.CharField(max_length=300)
 
-class UserInfo(models.Model):
-    educationRequire = models.CharField(max_length=300)
-    major = models.CharField(max_length=200)
-    school = models.CharField(max_length=200)
-    jobWantedPlace = models.CharField(max_length=300)
-    experienceRequire = models.CharField(max_length=300)
-    skill = models.CharField(max_length=300)
+# 网站表
+class Website(models.Model):
+    url = models.CharField(max_length=50)
+    name = models.CharField(max_length=20)
 
+# 轮播表
+class Carousel(models.Model):
+    content_url = models.CharField(max_length=100) # 内容链接
+    photo_url = models.CharField(max_length=100) # 图片链接
+    state = models.IntegerField() # 是否在首页显示
 
+# 浏览记录和收藏夹表
+class BrowseRecords(models.Model):
+    jobId = models.IntegerField() # 岗位Id
+    userId = models.IntegerField() # 用户Id
+    state = models.IntegerField() # 标识  1为浏览记录 2为收藏夹
+
+# 分析城市
 class DigitizedCity(models.Model):
     compSize = models.FloatField(default=50.0)
     skill = models.FloatField(default=5.0)
@@ -67,7 +78,7 @@ class DigitizedCity(models.Model):
     cityname = models.CharField(max_length=100)
     sum = models.IntegerField()
 
-
+# 爬虫配置表
 class SpiderConf(models.Model):
     spiderName = models.CharField(max_length=100)
     starttime = models.DateTimeField()

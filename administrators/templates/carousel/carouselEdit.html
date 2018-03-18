@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>轮播添加</title>
+    <style>
+        form{
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<img src="{% static 'image/carousel/' %}{{ carousel.photo_url }}">
+<form action="{% url 'carouselUpdate' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ carousel.id }}">
+    <p>轮播图片 :&nbsp;&nbsp;<input  type="file" name="photo_url" /></p>
+    <p>内容链接 :&nbsp;&nbsp;<input  type="text" name="content_url" value="{{ carousel.content_url }}"/></p>
+    <p><input type="submit" value="修改"></p>
+
+
+</form>
+</body>
+</html>

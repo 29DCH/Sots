@@ -50,59 +50,45 @@
 {#      <img src="../img/LOGO.png"  style="width: 70px;height: 70px;margin-left: 230px" alt="..."/>#}
       <div id="divTopMenu">
           <ul>
-              <li >欢迎您！admin[超级管理员] {{ request.session.username }}</li>
-              <li><a href="#">前台首页</a></li>
-              <li><a href="#">修改密码</a></li>
-              <li><a href="#">退出管理</a></li>
+              <li >欢迎您！admin[超级管理员] {{ request.session.adminUser }}</li>
+              <li><a href="/">前台首页</a></li>
+              <li><a href="{% url 'repassword' %}">修改密码</a></li>
+              <li><a href="{% url 'exit' %} ">退出管理</a></li>
           </ul>
       </div>
   </div>
 
   <div data-options="region:'west',split:true" title="导航菜单" style="width: 270px;">
-      <ul class="easyui-tree">
+      <ul class="easyui-tree">       
           <li><span>常用功能</span>
               <ul>
-                  <li><span><a href="#" onclick="addTab('用户管理','userShow')">用户管理</a> </span></li>
-                  <li><span><a href="#" onclick="addTab('岗位管理','jobShow')">岗位管理</a> </span></li>
-                  <li><span><a href="#" onclick="addTab('网站管理','websiteShow')">网站管理</a> </span></li>
-                  <li><span><a href="#" onclick="addTab('公司管理','companyShow')">公司管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('用户管理','{% url 'userShow' %}')">用户管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('求职岗位管理','{% url 'jobShow' %}')">求职岗位管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('招聘网站管理','{% url 'websiteShow' %}')">招聘网站管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('招聘公司管理','{% url 'companyShow' %}')">招聘公司管理</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('图片轮播管理','{% url 'carouselShow' %}')">图片轮播管理</a> </span></li>
+                   <li><span><a href="#" onclick="addTab('爬虫管理','{% url 'crawler_admin' %}')">爬虫管理</a> </span></li>
+
               </ul>
           </li>
           <li><span>系统工具</span>
               <ul>
                   <li><span><a href="#" onclick="addTab('测试','testShow.html')">测试</a> </span></li>
-                  <li><span><a href="#" onclick="addTab('网站设置','websiteSet.html')">网站设置</a> </span></li>
-                  <li><span><a href="#">查看日志</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('网站设置','#')">前台网站设置</a> </span></li>
+                  <li><span><a href="#" onclick="addTab('图片测试','img')">图片测试</a> </span></li>
                   <li><span><a href="#">数据备份</a> </span></li>
               </ul>
           </li>
       </ul>
-
-      <!--折叠面板-->
-      <div class="easyui-panel" title="常用功能"  style="width:240px;height: auto;padding: 0px">
-          <ul>
-              <li><span><a href="#">栏目管理</a> </span></li>
-              <li><span><a href="#">文章管理</a> </span></li>
-              <li><span><a href="#">文件管理</a> </span></li>
-              <li><span><a href="#">用户管理</a> </span></li>
-              <li><span><a href="#">评论管理</a> </span></li>
-              <li><span><a href="#">模板管理</a> </span></li>
-          </ul>
-      </div>
-      <div class="easyui-panel" title="系统工具"  style="width:240px;height: auto;padding: 0px">
-          <ul>
-              <li><span><a href="#">网站设置</a> </span></li>
-              <li><span><a href="#">查看日志</a> </span></li>
-              <li><span><a href="#">数据备份</a> </span></li>
-          </ul>
-      </div>
-
   </div>
 
   <div data-options="region:'center',border:false">
 
      <div id="main" class="easyui-tabs" style="width: 100%;height: 30px;"  data-options="fit:true">
          <div title="后台管理首页" iconCls="icon-page_white_text">
+{#             <h1>欢迎</h1>#}
+         </div>
+{#         <div title="后台管理首页" iconCls="icon-page_white_text">#}
 {#             <iframe scrolling="auto" frameborder="0" src="{% url 'welcome' %}"style="width: 100%;"onload="adaptiveHeight(this)"></iframe>#}
 
              <!--<div id="tt" class="easyui-tabs" style="width: 500px;height: 250px;">-->

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    目标网站,职位名称,开始时间,结束时间,数据量,速度(条/s),状态<br>
+    {% for job in job_list.running %}
+        {{ job.spider }}, {{ job.keyword }}, {{ job.start_time }}, ----, {{ job.count }}, {{ job.speed }}, running,
+        <a href="{% url 'end_job' %}?job_id={{ job.id }}">
+            <input type="button" value="结束" width="50px" height="50px"/>
+        </a>
+        <br>
+    {% endfor %}
+    {% for job in job_list.finished %}
+        {{ job.spider }}, {{ job.keyword }}, {{ job.start_time }}, {{ job.end_time }}, {{ job.count }}, {{ job.speed }}, finished<br>
+    {% endfor %}
+
+</body>
+</html>
