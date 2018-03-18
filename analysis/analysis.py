@@ -6,7 +6,6 @@ from analysis.words_split import words_split
 
 def handle(path:str, keywords):
     r = redis.Redis()
-    # TODO 采用公司职位持久化相同的方法
     for keyword in keywords:
         if(not isinstance(keyword, str)):
             continue

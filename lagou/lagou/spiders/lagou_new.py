@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import scrapy
 from lagou.items import LagouItem
 from scrapy_redis.spiders import RedisSpider
@@ -51,16 +50,16 @@ def parse_comp_introduce(html):
             comp_introduce = format_list(format_3)  # 去除无用字符
     return comp_introduce
 
+
 # 分布式爬虫
 # 主服务器运行lagou_start爬虫，根据输入的条件生成初始url存入redis
 # 从服务器运行lagou_new爬虫，从redis取出url爬取该页并解析,无需去判断输入的条件等
 # class LagouNewSpider(scrapy.Spider):
 class LagouNewSpider(RedisSpider):
     name = 'lagou_new'
-    # allowed_domains = ['lagou.com']
     redis_key = settings['LAGOU_REDIS_KEY']
-    url = 'http://www.lagou.com/jobs/positionAjax.json?first=true&pn={}&kd={}'
-
+    # allowed_domains = ['lagou.com']
+    # url = 'http://www.lagou.com/jobs/positionAjax.json?first=true&pn={}&kd={}'
     headers = {
         'Cookie': 'user_trace_token=20180116103634-1c765330-7e57-4c47-a1ae-2baec502c969; __guid=237742470.677135601450133900.1516070194824.0908; '
                   'LGUID=20180116103647-1980592f-fa66-11e7-a36a-5254005c3644; JSESSIONID=ABAAABAACEBACDGC29B7A459BB81A4EA63539E8DD950A84; '
@@ -80,6 +79,9 @@ class LagouNewSpider(RedisSpider):
         "Referer": "https://www.lagou.com/jobs/list_Python%E7%88%AC%E8%99%AB?labelWords=&fromSearch=true&suginput=",
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+    }
+    custom_settings = {
+        'DEFAULT_REQUEST_HEADERS': headers,  # 单独设置headers,避免与其他爬虫冲突
     }
 
     def parse(self, response):

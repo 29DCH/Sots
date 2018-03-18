@@ -62,19 +62,23 @@ def get_keyword(jobinfo):
 
 # 读取关键字
 def get_keywords(keyword='java'):
-    f = open('analysis/result/'+keyword+'_keywords')
+    f = open('analysis/result/'+keyword+'_keywords', 'r')
     keywords = []
     for i in f.readlines():
-        keywords.append(str(i).strip())
+        line = str(i).strip()
+        keyandheat = line.split(' ')
+        keywords.append(keyandheat[0])
     return keywords
 
 
 # 保存关键字
-def save_keywords(keywords, keyword):
+def save_keywords(keywords, heat, keyword):
     f = open('analysis/result/'+keyword+'_keywords', 'w')
+    index = 0
     for i in keywords:
-        f.write(i)
+        f.write(i+' '+str(heat[index]))
         f.write('\n')
+        index+=1
     f.close()
 
 

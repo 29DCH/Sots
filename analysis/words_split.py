@@ -7,6 +7,7 @@ import time
 import redis
 from jieba import analyse
 
+from analysis.models import Keyword, Hotword
 from analysis.tools.NLtool import get_dict, get_stop_words, clean_words, save_keywords, word_pseg
 
 tfidf = analyse.extract_tags
@@ -22,7 +23,7 @@ class Words:
         self.word_dict = {}
 
     # 文本处理入口函数  将文本去空白符和标点替换为空格
-    def word_handle(self):
+    def word_handle(self, keyword):
         word_str = clean_words(self.word_str)
         self.usewords, self.word_dict = word_pseg(word_str, get_dict())
 
@@ -41,9 +42,16 @@ class Words:
         for i in tmp[:20]:
             keys.append(i[0])
             vals.append(i[1])
+            hotword = Hotword()
+            hotword.hotword = i[0]
+            hotword.heat = i[1]
+            hotword.keyword = keyword
+            hotword.save()
 
-        # TODO 添加到数据库
-        save_keywords(keys, self.keyword)
+        save_keywords(keys, vals,self.keyword)
+
+
+
         # df = pd.DataFrame(list(vals))
         # print(df)
         # df.index = list(keys)
@@ -53,7 +61,6 @@ class Words:
         # plt.show()
 
 
-# 完成不同关键字的关键字提取
 def words_split(path:str, keyword):
     # 加载用户字典
     starttime = time.time()
@@ -64,22 +71,21 @@ def words_split(path:str, keyword):
     requirements = x['jobInfo']
     s = ''
     for req in requirements:
-        s += str(req)
+        s += str(req).strip()
 
+    # 如果keyword不存在于数据库则创建
+    try:
+        Keyword.objects.get(keyword__contains=keyword)
+    except BaseException as e:
+        print(e)
+        newkeyword = Keyword()
+        newkeyword.keyword = keyword
+        newkeyword.save()
 
-    # 改为从缓存中获取
-    r = redis.Redis()
-    keyname = keyword+'_new'
-    jobs = r.hvals(keyname)
-    # len = r.llen(keyname)
-    # jobs = r.lrange(keyname, 0, len)
-    for job in jobs:
-        job = pickle.loads(job)
-        s += str(job['jobInfo'])
-
+    kw = Keyword.objects.get(keyword__contains=keyword)
     # 分析更新之后的关键字
     W = Words(s, keyword)
-    W.word_handle()
+    W.word_handle(kw)
     endtime = time.time()
     print('time:', endtime - starttime)
 

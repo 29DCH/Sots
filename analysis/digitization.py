@@ -6,15 +6,17 @@ import pandas as pd
 
 import redis
 
+from analysis.models import Job
 from analysis.tools import csv_conf
-from analysis.tools.csv_conf import didatapath
+from analysis.tools.csv_conf import didatapath, datapath
 from analysis.tools.NLtool import get_keyword, get_keywords
 
 
 def get_skills(str):
+    str = str.split(',')
     skills = []
     for s in str:
-        skills.append(s['skillInfor'])
+        skills.append(s)
     return skills
 
 skillmaxpoint = 20
@@ -138,6 +140,7 @@ def get_skill(words: str, keyword):
     return point
 
 
+# TODO 识别万元
 def get_salary(words: str):
     reg = r'[0-9]*'
     try:
@@ -194,30 +197,42 @@ class Analysis:
 
         self.frame = self.frame[columns]
         self.jobs = []
-        r = redis.Redis()
 
-        names = r.keys(r'*_new')
-        for name in names:
-            self.jobs+=r.hvals(name)
-        # len = r.llen(keyname)
-        # self.jobs = r.lrange(keyname, 0, len)
+        # TODO 修改完后删除
+        # r = redis.Redis()
+        #
+        # names = r.keys(r'*_new')
+        # for name in names:
+        #     self.jobs+=r.hvals(name)
 
-        # self.columns = x[['jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'compSize', 'jobId', 'keyword']]
+        start_index = Job.objects.count()
+        df = pd.read_csv(datapath)
+        df = df[csv_conf.todigital_columnsname]
+        start_index += 1
+        df = df[start_index:]
+        # 以防万一
+        df = df.drop_duplicates('jobId')
+        rows = df.iterrows()
+        for index, row in rows:
+            self.jobs.append(row)
+            # TODO 修改handle为从rows里面获取字段
+            pass
+
 
     def handel(self):
         path = didatapath
 
         # 遍历关键字相同的job
         for job in self.jobs:
-            job =  pickle.loads(job)
+            # job =  pickle.loads(job)
             print('digitization : ',job)
-            jobId = job['jobId']
-            salary = get_salary(job['jobSalary'])
-            education = get_education(job['educationRequire'])
-            experience = get_experience(job['experienceRequire'])
-            skill = get_skill(str(job['jobInfo']), job['keyword'])
-            compsize = get_compSize(job['compSize'])
-            keyword = job['keyword']
+            jobId = job[0]
+            keyword = job[5]
+            salary = get_salary(job[1])
+            education = get_education(job[2])
+            experience = get_experience(job[3])
+            skill = get_skill(str(job[4]), keyword)
+            compsize = get_compSize(job[6])
             self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compSize': compsize, 'skill': skill, 'experience':
                 experience, 'education': education,'salary': salary, 'keyword': keyword}
         print(self.frame)

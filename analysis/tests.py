@@ -38,23 +38,18 @@ def del_all_key():
 
 
 if __name__ == "__main__":
-    # del_all_key()
-    # df = pd.read_csv('../datas/data.csv')
-    df = pd.read_csv('result/newModel.csv')
 
-    data_columnsname = ['jobId', 'jobName', 'jobPlace', 'jobSalary', 'jobAdvantage', 'releaseTime', 'jobNeed',
-                        'educationRequire', 'experienceRequire', 'skillRequire', 'jobLink', 'jobInfo', 'jobNature',
-                        'jobLabels', 'companyId', 'compName', 'compSize', 'compIndustry', 'companyLabels', 'compLink',
-                        'compIntroduce', 'contactInfo', 'longitude', 'latitude', 'businessZones', 'compHome',
-                        'companyLogo', 'financeStage', 'keyword']
 
-    print(df.shape)
-    df = df.drop_duplicates('jobId')
-    print(df.shape)
-    # name = 'java_new'
-    # jobs = r.hvals(name)
-    # keys = r.hkeys(name)
-    # for key in keys:
-    #     job = r.hget(name, key)
-    #     job = pickle.loads(job)
-    #     print(job)
+    r = redis.Redis()
+    joblist = []
+    names  = r.keys(r'*_new')
+    for key in names:
+        print(key)
+    # print(df.shape)
+    # df = df.drop_duplicates('jobId')
+    # print(df.shape)
+
+    # a = [1,2]
+    # b = [3,4]
+    # for i, j in a, b:
+    #     print(i, j)

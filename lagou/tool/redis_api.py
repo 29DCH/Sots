@@ -15,13 +15,13 @@ import re
 host = settings['REDIS_HOST']
 port = settings['REDIS_PORT']
 r = redis.Redis(host=host, port=port, db=0)
-key = 'lagou_new:items'
-print(key, r.llen(key))  # key的长度，即爬取的数据量
-list_datas = []
-for i in range(r.llen(key)):
-    data = json.loads(r.lindex(key, i), encoding='utf-8')
-    list_datas.append(data)
-    print(i, data)    # 打印item的具体信息
+# key = 'lagou_new:items'
+# print(key, r.llen(key))  # key的长度，即爬取的数据量
+# list_datas = []
+# for i in range(r.llen(key)):
+#     data = json.loads(r.lindex(key, i), encoding='utf-8')
+#     list_datas.append(data)
+#     print(i, data)    # 打印item的具体信息
 
     # source, data = r.blpop([key])  # 取出并删除一条数据
     # item = json.loads(data)
@@ -33,10 +33,6 @@ for i in range(r.llen(key)):
 # print(res['jobId'].count())
 # print(time.time())
 
-# 删除jobid和关键字组成的键值对
-# for k in r.keys():
-#     if re.compile('.*?:items').match(k.decode('utf-8')):
-#         print(k.decode('utf-8'))
-#     else:
-#         r.delete(k)
-#         print('del ', k.decode('utf-8'))
+datas = r.lrange('wuyou:start_urls', 0, r.llen('wuyou:start_urls'))
+for data in datas:
+    print(data)

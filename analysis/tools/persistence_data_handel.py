@@ -35,9 +35,7 @@ def persistence_company(path: str):
         oldcomps = Company.objects.values_list('companyId')
         for comp in oldcomps:
             oldcompanyidset.add(comp[0])
-        print(oldcompanyidset)
         df = pd.read_csv(path)
-        print(df.tail())
         df = df[csv_conf.data_columnsname]
         df = df[start_index:]
         # 以防万一
@@ -106,7 +104,6 @@ def persistence_job(path: str):
     cont = 0
     for index, row in rows:
         companyId = row[14]
-        # TODO 修改外键获取方式
         job = Job()
         # try:
         job.jobId = row[0]
@@ -174,7 +171,6 @@ def persistence_djob(path: str):
     count = 0
     for index, row in rows:
         jobId = row[0]
-        # TODO 修改外键获取方式
         djob = DigitizedJob()
         djob.Job = jobidtojob[jobId]
         djob.compSize = row[1]
@@ -198,11 +194,16 @@ def persistence_djob(path: str):
 
 
 # TODO 添加各种图表需要的数据
-def persistence_all():
+def persistence_origindata():
     try:
-        csv_duplication()
         persistence_company(datapath)
         persistence_job(datapath)
+    except TimeoutError as e:
+        print('database error occurred ', e)
+
+
+def persistence_digitizeddata():
+    try:
         persistence_djob(didatapath)
     except TimeoutError as e:
         print('database error occurred ', e)

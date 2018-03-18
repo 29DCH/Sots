@@ -11,7 +11,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from analysis.digitization import get_digitaluser, Analysis, jobmatch, getmaxpoint
-from analysis.models import Job, DigitizedJob, SpiderConf
+from analysis.models import Job, DigitizedJob, SpiderConf, Keyword, Hotword
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
@@ -113,11 +113,14 @@ def job_list(request):
 
             # compSize = body['compSize']
             place = body['place']
-            experience = body['exper']
-            education = body['edu']
+            # experience = body['exper'] TODO delete
+            experience = '4'
+            # education = body['edu'] TODO education
+            education = '本科'
             skills = body['skills']
         except KeyError as e:
-            return pack_job_result([])
+            print('error', e)
+            return JsonResponse(pack_job_result([]), safe=False)
         # 将提交表单的字段转化为数字
         user = get_digitaluser(skills, experience, education, '', 'java')
         result = predic(user)
@@ -155,22 +158,42 @@ def get_searchKeyword(request):
     skillsfile = open('analysis/result/keywords')
     for skill in skillsfile.readlines():
         skills.append(skill.strip())
+    skills = skills[:10]
+    salary = ['5K', '10K', '15K', '20K']
+
+    jobs = []
+    for i in range(5):
+        randid = random.randint(29000, 40000)
+        print('get job : ', randid)
+        job = Job.objects.get(id=randid)
+        jobs.append(job)
 
     res = {
         'releaseTime': releaseTime,
         'workExperience': workExperience,
         'education': education,
-        'skills': skills
+        'skills': skills,
+        'salary': salary,
+        'recommend': pack_recommend(jobs),
     }
 
     return JsonResponse(res)
+
+def pack_recommend(jobs):
+    recs = []
+    for job in jobs:
+        recs.append({
+            'content': job.JobName,
+            'hot': True,
+            'url': job.jobLink
+        })
 
 # 推荐职位
 def get_recommendInformation(request):
     jobs = []
     for i in range(5):
 
-        randid = random.randint(0, 5000)
+        randid = random.randint(29000, 40000)
         print('get job : ', randid)
         job = Job.objects.get(id=randid)
         jobs.append(job)

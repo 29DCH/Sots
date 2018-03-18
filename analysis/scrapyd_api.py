@@ -154,22 +154,24 @@ class ScrapydApi:
 if __name__ == '__main__':
     project_name = 'sots'
     kword = 'php'
-    # targets = [
-    #     'local',
-    #     'slave01',
-    # ]
-    # deploy(project_name, targets)  # 部署到scrapyd
+    targets = [
+        'local',
+        'slave01',
+    ]
+    deploy(project_name, targets)  # 部署到scrapyd
 
     # 根据scrapy.cfg查看对应关系
-    scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
+    # scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
     # scrapyd_slave_01 = ScrapydApi('192.168.71.143')  # slave01对应192.168.71.143
 
     # master端爬虫, 可多次执行run_master_spider函数,修改kword、start_page、max_allow_page等生成不同的url
     # run_stat = scrapyd_master.run_master_spider(project_name, 'lagou_start', kword, start_page=15, max_allow_page=5)
     # print(json.loads(run_stat))
     #
-    run_stat = scrapyd_master.run_slave_spider(project_name, 'lagou_new')
-    print(json.loads(run_stat))
+    # run_stat = scrapyd_master.run_slave_spider(project_name, 'lagou_new')
+    # print(json.loads(run_stat))
+    # run_stat = scrapyd_master.run_slave_spider(project_name, 'wuyou_second')
+    # print(json.loads(run_stat))
 
     # slave端爬虫,只需调用一次，不会自动关闭
     # run_stat = scrapyd_slave_01.run_slave_spider(project_name, 'lagou_new')

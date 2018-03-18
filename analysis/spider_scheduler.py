@@ -11,10 +11,11 @@ import redis
 
 from analysis import analysis
 from analysis.tools import csv_conf
-from analysis.tools.csv_conf import datapath
-from analysis.models import Job, Company, SpiderConf, AnalysisConf
+from analysis.tools.csv_conf import datapath, didatapath
+from analysis.models import Job, Company, SpiderConf, AnalysisConf, DigitizedJob
 from analysis.scrapyd_api import ScrapydApi
-from analysis.tools.persistence_data_handel import persistence_all
+from analysis.tools.default_values import defaults
+from analysis.tools.persistence_data_handel import persistence_origindata, persistence_digitizeddata
 
 
 def getjsjob(jsjob):
@@ -49,34 +50,59 @@ def getcolumnsname():
     return columnsname
 
 
-def getrow(jandc):
-    row = {'jobId': jandc['jobId'], 'jobName': jandc['jobName'], 'jobPlace': jandc['jobPlace'], 'jobSalary':
-        jandc['jobSalary'], 'jobAdvantage': jandc['jobAdvantage'], 'releaseTime': jandc['releaseTime'], 'jobNeed':
-               '', 'educationRequire': jandc['educationRequire'], 'experienceRequire': jandc['experienceRequire'],
-           'skillRequire': '', 'jobLink': jandc['jobLink'], 'jobInfo': jandc['jobInfo'],
-           'jobNature': jandc['jobNature'],
-           'jobLabels': jandc['jobLabels'], 'companyId': jandc['compId'], 'compName': jandc['compName'], 'compSize':
-               jandc['compSize'], 'compIndustry': jandc['compIndustry'], 'companyLabels': jandc['compLabels'],
-           'compLink': jandc['compLink'], 'compIntroduce': '', 'contactInfo': '', 'longitude': jandc['longitude'],
-           'latitude': jandc['latitude'], 'businessZones': jandc['businessZones'], 'compHome': jandc['compHome'],
-           'companyLogo': jandc['compLogo'], 'financeStage': jandc['financeStage'], 'keyword': unquote(jandc['keyword']), }
+def getvalue(jandc, key):
+    try:
+        value = jandc[key]
+    except KeyError:
+        print('nokey :', key, 'return ', defaults[key])
+        return defaults[key]
+    return value
 
+def getkeyword(jandc, keyword):
+    try:
+        kw = unquote(jandc[keyword])
+    except KeyError:
+        return 'java'
+    return kw
+
+def getrow(jandc):
+    try:
+        row = {'jobId': getvalue(jandc,'jobId'), 'jobName': getvalue(jandc,'jobName'), 'jobPlace': getvalue(jandc,'jobPlace'), 'jobSalary':
+            getvalue(jandc,'jobSalary'), 'jobAdvantage': getvalue(jandc,'jobAdvantage'), 'releaseTime': getvalue(jandc,'releaseTime'), 'jobNeed':
+                   '', 'educationRequire': getvalue(jandc,'educationRequire'), 'experienceRequire': getvalue(jandc,'experienceRequire'),
+               'skillRequire': '', 'jobLink': getvalue(jandc,'jobLink'), 'jobInfo': getvalue(jandc,'jobInfo'),
+               'jobNature': '',
+               'jobLabels': getvalue(jandc, 'jobLabels'), 'companyId': getvalue(jandc,'compId'), 'compName': getvalue(jandc,'compName'), 'compSize':
+                   getvalue(jandc,'compSize'), 'compIndustry': getvalue(jandc,'compIndustry'), 'companyLabels': getvalue(jandc,'compLabels'),
+               'compLink': getvalue(jandc,'compLink'), 'compIntroduce': '', 'contactInfo': '', 'longitude': getvalue(jandc,'longitude'),
+               'latitude': getvalue(jandc,'latitude'), 'businessZones': getvalue(jandc,'businessZones'), 'compHome': getvalue(jandc,'compHome'),
+               'companyLogo': getvalue(jandc,'compLogo'), 'financeStage': getvalue(jandc,'financeStage'), 'keyword':  getkeyword(jandc, 'keyword')}
+    except KeyError as e:
+        print(e)
+        return None
     return row
 
 
 def operations():
     # 判断文件是否存在
     r = redis.Redis()
-
-    name = 'lagou_new:items'
-    len = r.llen(name)
+    joblist = []
+    keys = r.keys(r'*:items')
     rows = []
-    joblist = r.lrange(name, 0, len)
 
-    for job in joblist:
-        r.lrem(name, job)  # 从缓存中移除已经获取的jobODO
-        jsjob = json.loads(job)
-        rows.append(getrow(jsjob))
+    for name in keys:
+        len = r.llen(name)
+        tmplist = r.lrange(name, 0, len)
+
+        for job in tmplist:
+            r.lrem(name, job)  # 从缓存中移除已经获取的jobODO
+            jsjob = json.loads(job)
+            if jsjob is not None:
+                row = getrow(jsjob)
+                print(row)
+                rows.append(row)
+        joblist.append(tmplist)
+    print(rows)
 
     oldjobidset = set()
 
@@ -130,17 +156,23 @@ def test():
     analysis.handle(path, allkey)
 
 
-# TODO 和数据处理分离
 def ontime_persistencer():
     # 当本地的数据条数超过数据库固定数量时进行操作
     while True:
         df = pd.read_csv(datapath)
         csv_size = df.shape[0]
         db_size = Job.objects.count()
-        if db_size+100 < csv_size:
+        if db_size+50 < csv_size:
             print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
             # 阻塞阻塞阻塞
-            persistence_all()
+            persistence_origindata()
+
+        db_size = DigitizedJob.objects.count()
+        csv_size = pd.read_csv(didatapath).shape[0]
+        # TODO 是否独立出来
+        if db_size+50 < csv_size:
+            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+            persistence_digitizeddata()
         sleep(60)
 
 
@@ -152,7 +184,7 @@ def spader_runner(spidername:str, keyword:str, start_page:str, maxpage:str):
     joblist = json.loads(joblist)
 
     print('start spider', spidername, 'keyword', keyword)
-    run_stat = spiderapi.run_master_spider(project_name, 'lagou_start', keyword, start_page=start_page,
+    run_stat = spiderapi.run_master_spider(project_name, spidername, keyword, start_page=start_page,
                                            max_allow_page=maxpage)
     print(json.loads(run_stat))
     # 启动爬虫或每隔一段时间向scrapyd服务端发送请求   看有没有正在运行的任务  当所有任务结束时开始文件操作和数据库操作
@@ -207,10 +239,10 @@ def ontime_spider():
 def scheduler():
     # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
     # spider_thread.start()
-    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
-    # analysis_thread.start()
-    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
-    persistence_thread.start()
+    analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    analysis_thread.start()
+    # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    # persistence_thread.start()
 
 if __name__ == '__main__':
     # ontime_spider(16, 9)
