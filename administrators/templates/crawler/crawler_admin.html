@@ -71,82 +71,20 @@
 				font-size: 18px;
 				font-family: 微软雅黑;
 			}
+            .na{
+                color: red;
+                background: paleturquoise;
+            }
 		</style>
 	</head>
 
 	<body>
 		<div class="container-fluid">
 			<!--导航条 start-->
-			<div class="row clearfix">
-				<div class="col-md-12 column">
-					<nav class="navbar navbar-default navbar-inverse" role="navigation">
-						<div class="container-fluid">
-							<div class="navbar-header">
-								<a class="navbar-brand" href="#">SOTS后台管理</a>
-							</div>
-							<div>
-								<ul class="nav navbar-nav">
-									<li class="active">
-										<a href="#"><span class="glyphicon glyphicon-home"></span>首页</a>
-									</li>
-									<li class="">
-										<a href="#"><span class="glyphicon glyphicon-move"></span>其他</a>
-									</li>
-								</ul>
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-										<a href="#"><span class="glyphicon glyphicon-pencil"></span>修改密码</a>
-									</li>
-									<li>
-										<a href="#"><span class="glyphicon glyphicon-backward"></span>退出管理</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</nav>
-				</div>
-			</div>
+
 			<!--导航条 end-->
 			<!--主题内容部分 start-->
 			<div class="row clearfix">
-				<!--功能菜单栏目 start-->
-				<div class="col-md-2 column">
-					<div class="panel-group" id="panel-159770">
-						<div class="panel panel-default panel-noPM">
-							<div class="panel-heading">
-								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-159770" href="#panel-element-26926">
-									<span class="caret"></span>常用工具
-								</a>
-
-							</div>
-							<div id="panel-element-26926" class="panel-collapse collapse">
-								<div class="panel-body">
-									<ul class="list-group">
-										<li class="list-group-item">搜索</li>
-										<li class="list-group-item">爬取设置</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="panel panel-default panel-noPM">
-							<div class="panel-heading">
-								<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-159770" href="#panel-element-306048">
-									<span class="caret"></span>其他
-								</a>
-							</div>
-							<div id="panel-element-306048" class="panel-collapse collapse">
-								<div class="panel-body">
-									<ul class="list-group">
-										<li class="list-group-item">网站基本信息</li>
-										<li class="list-group-item">查看日志</li>
-										<li class="list-group-item">数据备份</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--功能菜单栏目 end-->
 				<!--主体内容 start-->
 				<div class="col-md-10 column">
 					<!--爬取信息 start-->
@@ -181,11 +119,17 @@
 												<option>中国人才</option>
 											</select>-->
 											<!--<label for="id_select"></label>-->
-											<select id="id_select" name="spider" class="selectpicker bla bla bli" multiple data-live-search="true">
-												<option value="lagou_new">拉勾</option>
+{#											<select id="id_select" name="spider" class="selectpicker bla bla bli" multiple data-live-search="true">#}
+{#												<option value="lagou_new">拉勾</option>#}
+{#												<option value="zhilian">智联招聘</option>#}
+{#												<option value="rencai">中国人才</option>#}
+{#											</select>#}
+                                            <select id="id_select" name="spider" class="selectpicker bla bla bli">
+                                                <option value="lagou_new">拉勾</option>#}
 												<option value="zhilian">智联招聘</option>
 												<option value="rencai">中国人才</option>
-											</select>
+
+                                            </select>
 
 										</div>
 									</div>
@@ -264,16 +208,16 @@
 								</form>
 								<!--搜索表单 end-->
 								<!--搜索结果 start-->
-								<div class="well text-center">
-									<h3>已经爬取<span id="positionNum">10</span>个职位</h3>
-								</div>
-								<!--搜索结果 end-->
-							</div>
-							<div class="tab-pane" id="panel-906744" style="width: 60%;">
-								<p>
-									kkkkkkk
-								</p>
-							</div>
+{#								<div class="well text-center">#}
+{#									<h3>已经爬取<span id="positionNum">10</span>个职位</h3>#}
+{#								</div>#}
+{#								<!--搜索结果 end-->#}
+{#							</div>#}
+{#							<div class="tab-pane" id="panel-906744" style="width: 60%;">#}
+{#								<p>#}
+{#									kkkkkkk#}
+{#								</p>#}
+{#							</div>#}
 						</div>
 						<!--选型卡内容主体 end-->
 					</div>

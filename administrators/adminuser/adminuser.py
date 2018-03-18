@@ -11,7 +11,7 @@ def main(request):
 # 进入登陆页面
 def land(request):
     return render(request, 'index.html')
-
+    # return render(request, 'adminuser/VerificationCode.html')
 # 检查账号密码
 def checks( request):
     admins = administrator()
