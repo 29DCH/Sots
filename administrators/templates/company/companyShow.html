@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>company</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        onLoadSuccess:function(data){
+
+            $('#dg3').datagrid({
+                onLoadSuccess:function(data){
+                    if(data.total==0){
+                        var dc = $(this).data('datagrid').dc;
+                        var header2Row = dc.header2.find('tr.datagrid-header-row');
+                        dc.body2.find('table').append(header2Row.clone().css({"visibility":"hidden"}));
+                    }
+                }
+            });
+        }
+
+        $(function(){
+            //初始加载，表格宽度自适应
+            $(document).ready(function(){
+                fitCoulms();
+            });
+            //浏览器窗口大小变化后，表格宽度自适应
+            $(window).resize(function(){
+                fitCoulms();
+            });
+        })
+
+        //表格宽度自适应，这里的#dg是datagrid表格生成的div标签
+        function fitCoulms(){
+            $('#dg').datagrid({
+                fitColumns:true
+            });
+        }
+    </script>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            border: 0;
+            min-width: 2200px;
+            box-sizing: border-box;
+        }
+        .a1{
+            padding-left: 620px;
+        }
+        .p1{
+            padding-left: 620px;
+        }
+    </style>
+</head>
+<body>
+{#展示公司信息页面#}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>公司id</th>
+        <th>公司名称</th>
+        <th>公司规模</th>
+        <th>公司行业</th>
+        <th>公司标签</th>
+        <th>公司链接</th>
+        <th>公司介绍</th>
+        <th>联系信息</th>
+        <th>经度</th>
+        <th>纬度</th>
+        <th>商业区域</th>
+        <th>公司主页</th>
+        <th>公司LOGO</th>
+        <th>融资</th>
+        <th>操作</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for com in coms %}
+    <tr>
+        <td>{{ com.id  }}</td>
+        <td>{{ com.compName }}</td>
+        <td>{{ com.compSize  }}</td>
+        <td>{{  com.compIndustry }}</td>
+        <td>{{ com.companyLabels }}</td>
+        <td>{{ com.compLink }}</td>
+        <td>{{   com.compIntroduce }}</td>
+        <td>{{ com.contactInfo }}</td>
+        <td>{{ com.longitude }}</td>
+        <td>{{  com.latitude }}</td>
+        <td>{{ com.businessZones }}</td>
+        <td>{{ com.compHome }}</td>
+        <td>{{ com.companyLogo }}</td>
+        <td>{{ com.financeStage }}</td>
+        <td>
+            <a href="{% url 'companyEdit' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
+            <a href="{% url 'companyDel' %}?comid={{ com.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
+{#            <a href="{% url 'companyAdd' %}" class="easyui-linkbutton" iconCls="icon-edit" >添加</a>#}
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+        <p class="p1">第{{ page }} 页/总{{ pageAll }}页</p>
+        <p class="p1">{% if page == 1 and pageAll == page%}
+            上一页/下一页
+        {% elif page == 1 %}</p><br>
+            <a class="a1" href="{% url 'companyShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% elif pageAll == page%}
+            <a class="a1" href="{% url 'companyShowNext' %}?page={{ page }}&flag=0 ">上一页</a>
+        {% else%}
+        <br>
+            <a href="{% url 'companyShowNext' %}?page={{ page }}&flag=0 ">上一页</a>/
+            <a href="{% url 'companyShowNext' %}?page={{ page }}&flag=1 ">下一页</a>
+        {% endif %}
+    </tbody>
+</body>
+</html>

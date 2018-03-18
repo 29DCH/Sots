@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="infoSave" method="post">
+        {% csrf_token %}
+    学历：<input type="text" value="{{ userInfo.educationRequire }}" name="educationRequire"><br>
+    专业：<input type="text" value="{{ userInfo.major }}" name="major"><br>
+    学校：<input type="text" value="{{ userInfo.school }}" name="school"><br>
+    地点：<input type="text" value="{{ userInfo.jobWantedPlace }}" name="jobWantedPlace"><br>
+    经验(年限)：<input type="text" value="{{ userInfo.experienceRequire }}" name="experienceRequire"><br>
+    技能：<input type="text" value="{{ userInfo.skill }}" name="skill"><br>
+        <input type="submit" value="储存"><br>
+    </form>
+    <a href="testRandom">生成</a>
+</body>
+</html>

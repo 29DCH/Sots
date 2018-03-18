@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <title>管理员后台登录</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            padding-top: 120px; /*  一般导航栏默认50px  */
+            vertical-align: middle;
+        }
+
+        #frmLogin .input-group{/*设置每个输入框组之间的垂直距离*/
+            margin-bottom:40px ;
+        }
+        #frmLogin div{/*设置表单文字的样式*/
+            font-family:"microsoft yahei";
+            font-weight:bold;
+        }
+        #frmLogin #codeE{/*设置动态生成验证码标签的样式*/
+            font-size: 20px;
+            border: 1px dashed #999999;
+            display: inline-block;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class =  "container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <span class="glyphicon glyphicon-hand-right"></span>
+                    &nbsp;&nbsp;管理员后台登录
+                </h2>
+            </div>
+            <form action="{% url 'checks' %}" id="frmLogin" method="post">
+                {% csrf_token %}
+                <div class="panel-body">
+                    <div class="input-group">
+                       <span class="input-group-addon">
+                           <i class="glyphicon glyphicon-user"> &nbsp;用户名</i>
+                       </span>
+                        <input id="txtUser" type="text" class="form-control" placeholder="" name="username"/>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                             <i class="glyphicon glyphicon-lock"> &nbsp;密&nbsp;码</i>
+                        </span>
+                        <input id="txtPwd" type="password" class="form-control" placeholder="" name="password"/>
+                    </div>
+                    <input type="submit" class="btn btn-warning pull-right" value="点击登录"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+<!--<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>-->
+
+<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/verification.js' %}"></script>
+</body>
+</html>
