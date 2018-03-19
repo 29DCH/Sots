@@ -6,6 +6,26 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from fake_useragent import UserAgent
+
+
+# 动态随机设置user-agent
+class RandomUserAgent(object):
+    def __init__(self, crawler):
+        super(RandomUserAgent, self).__init__()
+        self.ua = UserAgent()
+        self.ua_type = crawler.settings.get('RANDOM_UA_TYPE', 'random')  # 从setting文件中读取RANDOM_UA_TYPE值
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler)
+
+    def process_request(self, request, spider):  # 系统电泳函数
+        def get_ua():
+            return getattr(self.ua, self.ua_type)
+        ua_random = get_ua()
+        spider.logger.info('===随机User-Agent===:{}'.format(ua_random))
+        request.headers.setdefault('User_Agent', ua_random)
 
 
 class LagouSpiderMiddleware(object):

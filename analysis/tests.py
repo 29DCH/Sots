@@ -38,22 +38,23 @@ def del_all_key():
 
 
 if __name__ == "__main__":
-    df = pd.DataFrame([['skill', 'point']])
-    fi = open('result/java_keywords')
-    skills =[]
-    point = []
-    for line in fi.readlines()[:10]:
-        ss = line.split(' ')
-        skills.insert(0,ss[0])
-        point.append(int(ss[1].strip()))
-        df.loc[df.shape[0]] = [ss[0].strip(), ss[1].strip()]
-    fi.close()
-    point.reverse()
-    print(df)
-    y_pos = np.arange(len(skills))
-    print(point, skills)
+    r = redis.Redis()
 
-    plt.bar(skills, point)
-    plt.title('java')
-    plt.xticks(rotation=50)
-    plt.show()
+    df = pd.read_csv('../datas/data.csv', low_memory=False)
+    df.drop_duplicates('jobId')
+    df = df['jobId']
+    idset = set()
+    for i in df:
+        idset.add(i)
+
+    print(len(idset))
+    keys = r.keys(r'*_new')
+    for key in keys:
+        ids = r.hkeys(key)
+        for id in ids:
+            id = int(id.decode())
+            if id in idset:
+                r.hdel(key, id)
+                print('delete ', id)
+            else:
+                print('not')

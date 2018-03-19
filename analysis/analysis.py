@@ -6,6 +6,7 @@ from analysis.words_split import words_split
 
 def handle(path:str, keywords):
     r = redis.Redis()
+    print('handle all key : ', keywords)
     for keyword in keywords:
         if(not isinstance(keyword, str)):
             continue

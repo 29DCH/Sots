@@ -19,17 +19,19 @@ def get_skills(str):
         skills.append(s)
     return skills
 
+
 skillmaxpoint = 20
 placepoiont = 10
 educationpoint = 5
 experiencepoint = 5
 
+
 def getmaxpoint():
-    return skillmaxpoint+placepoiont+educationpoint+experiencepoint
+    return skillmaxpoint + placepoiont + educationpoint + experiencepoint
+
 
 # 根据地点经验学历技能选出最佳匹配
 def jobmatch(jobs, skills, experience, education, place):
-
     experience = float(experience)
     education = get_education(education)
 
@@ -41,18 +43,18 @@ def jobmatch(jobs, skills, experience, education, place):
         jobexperience = job.experienceRequire
         jobeducation = job.educationRequire
         point = 0
-        for skill in get_skills(skills):        # 技能匹配
+        for skill in get_skills(skills):  # 技能匹配
             if skill in jobkeyword:
                 point += 1
-        if jobplace.__eq__(place):              # 地点匹配
-            point+=placepoiont
+        if jobplace.__eq__(place):  # 地点匹配
+            point += placepoiont
 
-        if experience>=get_experience(jobexperience):                     # 经验匹配
-            point+=experiencepoint
+        if experience >= get_experience(jobexperience):  # 经验匹配
+            point += experiencepoint
         else:
             continue
-        if education>=get_education(jobeducation):   # 学历匹配
-            point+=educationpoint
+        if education >= get_education(jobeducation):  # 学历匹配
+            point += educationpoint
         else:
             continue
         if matches.get(point) is None:
@@ -166,7 +168,7 @@ def get_compSize(words: str):
         try:
             nums = re.findall(reg, words)
         except TypeError as e:
-            print("error occurred.",e)
+            print("error occurred.", e)
             return 100
         sums = 0
         num = 0
@@ -191,9 +193,9 @@ class Analysis:
         mdpath = didatapath
         ifexists = os.path.exists(mdpath)
         if ifexists:
-            self.frame = pd.read_csv(mdpath)
+            self.frame = pd.read_csv(mdpath, low_memory=False)
         else:
-            self.frame = pd.DataFrame()
+            self.frame = pd.DataFrame([mdpath])
 
         self.frame = self.frame[columns]
         self.jobs = []
@@ -206,7 +208,7 @@ class Analysis:
         #     self.jobs+=r.hvals(name)
 
         start_index = Job.objects.count()
-        df = pd.read_csv(datapath)
+        df = pd.read_csv(datapath, low_memory=False)
         df = df[csv_conf.todigital_columnsname]
         start_index += 1
         df = df[start_index:]
@@ -215,17 +217,16 @@ class Analysis:
         rows = df.iterrows()
         for index, row in rows:
             self.jobs.append(row)
-            # TODO 修改handle为从rows里面获取字段
             pass
-
 
     def handel(self):
         path = didatapath
-
+        count = 0
         # 遍历关键字相同的job
+        # TODO 分批次存储
         for job in self.jobs:
             # job =  pickle.loads(job)
-            print('digitization : ',job)
+            print('digitization : ', job)
             jobId = job[0]
             keyword = job[5]
             salary = get_salary(job[1])
@@ -234,12 +235,15 @@ class Analysis:
             skill = get_skill(str(job[4]), keyword)
             compsize = get_compSize(job[6])
             self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compSize': compsize, 'skill': skill, 'experience':
-                experience, 'education': education,'salary': salary, 'keyword': keyword}
+                experience, 'education': education, 'salary': salary, 'keyword': keyword}
+            count+=1
+            if count == 1000:
+                print('dijob 1000 save')
+                self.frame.to_csv(path)
+                count=0
         print(self.frame)
         print(self.frame.shape)
-
         self.frame.to_csv(path)
-
 
     # def handel(self):
     #     self._get_salary()

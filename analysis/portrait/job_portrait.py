@@ -53,7 +53,7 @@ def getgraph(djob:DigitizedJob):
 
 def getallgraph(path: str):
     # TODO
-    frame = pd.read_csv(path)
+    frame = pd.read_csv(path, low_memory=False)
 
     mean = frame.mean()
     education = mean['education']

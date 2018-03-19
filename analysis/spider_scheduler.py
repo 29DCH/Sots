@@ -58,6 +58,7 @@ def getvalue(jandc, key):
         return defaults[key]
     return value
 
+
 def getkeyword(jandc, keyword):
     try:
         kw = unquote(jandc[keyword])
@@ -65,18 +66,27 @@ def getkeyword(jandc, keyword):
         return 'java'
     return kw
 
+
 def getrow(jandc):
     try:
-        row = {'jobId': getvalue(jandc,'jobId'), 'jobName': getvalue(jandc,'jobName'), 'jobPlace': getvalue(jandc,'jobPlace'), 'jobSalary':
-            getvalue(jandc,'jobSalary'), 'jobAdvantage': getvalue(jandc,'jobAdvantage'), 'releaseTime': getvalue(jandc,'releaseTime'), 'jobNeed':
-                   '', 'educationRequire': getvalue(jandc,'educationRequire'), 'experienceRequire': getvalue(jandc,'experienceRequire'),
-               'skillRequire': '', 'jobLink': getvalue(jandc,'jobLink'), 'jobInfo': getvalue(jandc,'jobInfo'),
+        row = {'jobId': getvalue(jandc, 'jobId'), 'jobName': getvalue(jandc, 'jobName'),
+               'jobPlace': getvalue(jandc, 'jobPlace'), 'jobSalary':
+                   getvalue(jandc, 'jobSalary'), 'jobAdvantage': getvalue(jandc, 'jobAdvantage'),
+               'releaseTime': getvalue(jandc, 'releaseTime'), 'jobNeed':
+                   '', 'educationRequire': getvalue(jandc, 'educationRequire'),
+               'experienceRequire': getvalue(jandc, 'experienceRequire'),
+               'skillRequire': '', 'jobLink': getvalue(jandc, 'jobLink'), 'jobInfo': getvalue(jandc, 'jobInfo'),
                'jobNature': '',
-               'jobLabels': getvalue(jandc, 'jobLabels'), 'companyId': getvalue(jandc,'compId'), 'compName': getvalue(jandc,'compName'), 'compSize':
-                   getvalue(jandc,'compSize'), 'compIndustry': getvalue(jandc,'compIndustry'), 'companyLabels': getvalue(jandc,'compLabels'),
-               'compLink': getvalue(jandc,'compLink'), 'compIntroduce': '', 'contactInfo': '', 'longitude': getvalue(jandc,'longitude'),
-               'latitude': getvalue(jandc,'latitude'), 'businessZones': getvalue(jandc,'businessZones'), 'compHome': getvalue(jandc,'compHome'),
-               'companyLogo': getvalue(jandc,'compLogo'), 'financeStage': getvalue(jandc,'financeStage'), 'keyword':  getkeyword(jandc, 'keyword')}
+               'jobLabels': getvalue(jandc, 'jobLabels'), 'companyId': getvalue(jandc, 'compId'),
+               'compName': getvalue(jandc, 'compName'), 'compSize':
+                   getvalue(jandc, 'compSize'), 'compIndustry': getvalue(jandc, 'compIndustry'),
+               'companyLabels': getvalue(jandc, 'compLabels'),
+               'compLink': getvalue(jandc, 'compLink'), 'compIntroduce': '', 'contactInfo': '',
+               'longitude': getvalue(jandc, 'longitude'),
+               'latitude': getvalue(jandc, 'latitude'), 'businessZones': getvalue(jandc, 'businessZones'),
+               'compHome': getvalue(jandc, 'compHome'),
+               'companyLogo': getvalue(jandc, 'compLogo'), 'financeStage': getvalue(jandc, 'financeStage'),
+               'keyword': getkeyword(jandc, 'keyword')}
     except KeyError as e:
         print(e)
         return None
@@ -99,10 +109,8 @@ def operations():
             jsjob = json.loads(job)
             if jsjob is not None:
                 row = getrow(jsjob)
-                print(row)
                 rows.append(row)
         joblist.append(tmplist)
-    print(rows)
 
     oldjobidset = set()
 
@@ -128,7 +136,7 @@ def test():
     path = 'datas/data.csv'
     ifexists = os.path.exists(path)
     if ifexists:
-        frame = pd.read_csv(path)
+        frame = pd.read_csv(path, low_memory=False)
         frame = frame[csv_conf.data_columnsname]
     else:
         frame = pd.DataFrame(getcolumnsname())
@@ -136,7 +144,7 @@ def test():
     print('old job set size = ', frame.shape[0])
 
     r = redis.Redis()
-    names  = r.keys(r'*_new')
+    names = r.keys(r'*_new')
     for name in names:
         print(name)
         vals = r.hvals(name)
@@ -150,7 +158,6 @@ def test():
     allkey = frame['keyword']
     allkey = allkey.drop_duplicates()
 
-    print(allkey)
     frame.to_csv(path)
 
     analysis.handle(path, allkey)
@@ -159,29 +166,26 @@ def test():
 def ontime_persistencer():
     # 当本地的数据条数超过数据库固定数量时进行操作
     while True:
-        df = pd.read_csv(datapath)
+        df = pd.read_csv(datapath, low_memory=False)
         csv_size = df.shape[0]
         db_size = Job.objects.count()
-        if db_size+50 < csv_size:
+        if db_size + 50 < csv_size:
             print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
             # 阻塞阻塞阻塞
             persistence_origindata()
 
         db_size = DigitizedJob.objects.count()
-        csv_size = pd.read_csv(didatapath).shape[0]
+        csv_size = pd.read_csv(didatapath, low_memory=False).shape[0]
         # TODO 是否独立出来
-        if db_size+50 < csv_size:
+        if db_size + 50 < csv_size:
             print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
             persistence_digitizeddata()
         sleep(60)
 
 
-
-def spader_runner(spidername:str, keyword:str, start_page:str, maxpage:str):
+def spader_runner(spidername: str, keyword: str, start_page: str, maxpage: str):
     spiderapi = ScrapydApi('localhost')
     project_name = 'sots'
-    joblist = spiderapi.list_job(project_name)
-    joblist = json.loads(joblist)
 
     print('start spider', spidername, 'keyword', keyword)
     run_stat = spiderapi.run_master_spider(project_name, spidername, keyword, start_page=start_page,
@@ -191,23 +195,25 @@ def spader_runner(spidername:str, keyword:str, start_page:str, maxpage:str):
 
 
 def ontime_analysis():
-    spiderapi = ScrapydApi('localhost')
-    project_name = 'sots'
     while True:
-        joblist = spiderapi.list_job(project_name)
-        joblist = json.loads(joblist)
-
-        print(datetime.time(datetime.now()), ' request ', joblist)
         #  获取数据库的配置时间来启动一个分析线程
         analysis_conf = AnalysisConf.objects.all()[0:1]
         schetime = analysis_conf[0].starttime
+        scheyear = schetime.year
+        schemonth = schetime.month
+        scheday = schetime.day
         schehour = schetime.hour
         scheminute = schetime.minute
+
         now = datetime.now()
+        nowyear = now.year
+        nowmonth = now.month
+        nowday = now.day
         nowhour = now.hour
         nowminute = now.minute
         print('analysis schetime: ', schehour, ':', scheminute, ' now ', nowhour, ':', nowminute)
-        if nowhour == schehour and nowminute == scheminute:
+        if nowyear ==scheyear and nowmonth==schemonth and  nowday == scheday and\
+                nowhour == schehour and nowminute == scheminute:
             thread = Thread(target=operations, name='startanalysis', args=())
             thread.start()
         sleep(60)
@@ -221,15 +227,22 @@ def ontime_spider():
         conf = SpiderConf.objects.all()
         for con in conf:
             schetime = con.starttime
+            scheyear = schetime.year
+            schemonth = schetime.month
+            scheday = schetime.day
             schehour = schetime.hour
             scheminute = schetime.minute
 
             now = datetime.now()
+            nowyear = now.year
+            nowmonth = now.month
+            nowday = now.day
             nowhour = now.hour
             nowminute = now.minute
             nowsecond = now.second
             print('scrapy schetime: ', schehour, ':', scheminute, ' now ', nowhour, ':', nowminute)
-            if nowhour == schehour and nowminute == scheminute:
+            if  nowyear ==scheyear and nowmonth==schemonth and  nowday == scheday and\
+                    nowhour == schehour and nowminute == scheminute:
                 print('ok ', nowhour, '：', scheminute)
                 spader_runner(con.spiderName, con.keyword, con.startPage, con.maxAllowPage)
                 print('开始扒取')
@@ -243,6 +256,7 @@ def scheduler():
     analysis_thread.start()
     # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
     # persistence_thread.start()
+
 
 if __name__ == '__main__':
     # ontime_spider(16, 9)
