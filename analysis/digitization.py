@@ -1,18 +1,14 @@
 import re
-from operator import itemgetter
 import os
 import pickle
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-import time
 
 import redis
 
-from analysis import csv_conf
-from analysis.models import Job
+from analysis.tools import csv_conf
+from analysis.tools.csv_conf import didatapath
 from analysis.tools.NLtool import get_keyword, get_keywords
-from analysis.tools.csv_to_database import persistence_djob, persistence_job
 
 
 def get_skills(str):
@@ -186,10 +182,10 @@ def get_compSize(words: str):
 
 class Analysis:
 
-    def __init__(self, keyword):
+    def __init__(self):
         # 判断文件存在
         columns = csv_conf.digital_columnsname
-        mdpath = 'analysis/result/newModel.csv'
+        mdpath = didatapath
         ifexists = os.path.exists(mdpath)
         if ifexists:
             self.frame = pd.read_csv(mdpath)
@@ -197,18 +193,19 @@ class Analysis:
             self.frame = pd.DataFrame()
 
         self.frame = self.frame[columns]
-
+        self.jobs = []
         r = redis.Redis()
-        keyname = keyword + '_new'
-        self.jobs = r.hvals(keyname)
+
+        names = r.keys(r'*_new')
+        for name in names:
+            self.jobs+=r.hvals(name)
         # len = r.llen(keyname)
         # self.jobs = r.lrange(keyname, 0, len)
 
-        self.keyword = keyword
         # self.columns = x[['jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'compSize', 'jobId', 'keyword']]
 
     def handel(self):
-        path = 'analysis/result/newModel.csv'
+        path = didatapath
 
         # 遍历关键字相同的job
         for job in self.jobs:
@@ -218,7 +215,7 @@ class Analysis:
             salary = get_salary(job['jobSalary'])
             education = get_education(job['educationRequire'])
             experience = get_experience(job['experienceRequire'])
-            skill = get_skill(str(job['jobInfo']), self.keyword)
+            skill = get_skill(str(job['jobInfo']), job['keyword'])
             compsize = get_compSize(job['compSize'])
             keyword = job['keyword']
             self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compSize': compsize, 'skill': skill, 'experience':
@@ -228,7 +225,6 @@ class Analysis:
 
         self.frame.to_csv(path)
 
-        return path
 
     # def handel(self):
     #     self._get_salary()

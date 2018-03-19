@@ -50,6 +50,7 @@ def getgraph(djob:DigitizedJob):
     return graph
 
 
+
 def getallgraph(path: str):
     # TODO
     frame = pd.read_csv(path)
@@ -70,12 +71,10 @@ def getonegraph(id):
     return graph
 
 
-# 以城市为key的职位信息
-def jobcity(request):
+# TODO 修改数据获取方式
+def jobcity():
     starttime = time.time()
 
-    # TODO 也要判断文件的存在  数据库的话外键需要单次批量查询的差不多100*时间   需要考虑
-    # TODO 考虑加入关键字
     r = redis.Redis()
     keyname = 'jobcity'
     djobs = DigitizedJob.objects.all()
