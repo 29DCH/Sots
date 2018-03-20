@@ -35,7 +35,7 @@ def persistence_company(path: str):
         oldcomps = Company.objects.values_list('companyId')
         for comp in oldcomps:
             oldcompanyidset.add(comp[0])
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, low_memory=False)
         df = df[csv_conf.data_columnsname]
         df = df[start_index:]
         # 以防万一
@@ -80,7 +80,7 @@ def persistence_job(path: str):
     print('start insert job')
     start_index = Job.objects.count()
     if path:
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, low_memory=False)
         df = df[csv_conf.data_columnsname]
         start_index+=1
         df = df[start_index:]
@@ -145,7 +145,7 @@ def persistence_djob(path: str):
     if path:
         start_index = DigitizedJob.objects.count()
         start_index+=1
-        df = pd.read_csv(path)
+        df = pd.read_csv(path, low_memory=False)
         print(df.tail())
 
         df = df[csv_conf.digital_columnsname]

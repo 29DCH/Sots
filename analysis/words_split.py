@@ -39,6 +39,7 @@ class Words:
         tmp = sorted(self.word_dict.items(), key=lambda x: x[1], reverse=True)
         keys = []
         vals = []
+        Hotword.objects.filter(keyword=keyword).delete()
         for i in tmp[:20]:
             keys.append(i[0])
             vals.append(i[1])
@@ -66,7 +67,7 @@ def words_split(path:str, keyword):
     starttime = time.time()
 
     # 从文件中获取
-    x = pd.read_csv(path)
+    x = pd.read_csv(path, low_memory=False)
     x = x[(x['keyword']==keyword)]
     requirements = x['jobInfo']
     s = ''

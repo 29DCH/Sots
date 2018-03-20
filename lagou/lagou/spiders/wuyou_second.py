@@ -3,6 +3,7 @@ from scrapy.conf import settings
 from scrapy_redis.spiders import RedisSpider
 import re
 from lagou.items import LagouItem
+import redis
 
 
 # 51job爬虫第二部分,从redis取出详情页的url,并爬取
@@ -10,11 +11,18 @@ class WuyouSecondSpider(RedisSpider):
     name = "wuyou_second"
     redis_key = settings['WUYOU_REDIS_KEY']
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        host = settings['REDIS_HOST']
+        port = settings['REDIS_PORT']
+        self.rds = redis.Redis(host=host, port=port, db=0)
+
     def parse(self, response):
         item = LagouItem()  # 格式需要和lagou网的数据一致
         try:
             item['spider'] = self.name
             item['jobLink'] = response.url
+            item['keyword'] = self.rds.hget(settings['URL_WITH_KEYWORD'], response.url).decode('utf-8')
             item['jobName'] = response.xpath('/html/body/div[3]/div[2]/div[2]/div/div[1]/h1/text()').extract()[0]
             item['jobId'] = response.xpath('//*[@id="hidJobID"]/@value').extract()[0]
             item['jobPlace'] = response.xpath('/html/body/div[3]/div[2]/div[2]/div/div[1]/span/text()').extract()[0]

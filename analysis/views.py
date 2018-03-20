@@ -33,8 +33,8 @@ def get_carouselData(request):
 
 
 def access(request):
-    return render(request, 'analysis/access.html')
 
+    pass
 
 def persistence(request):
     persistence_company('datas/data.csv')

@@ -1,10 +1,10 @@
 # Create your tests here.
 import re
 from math import nan
-
+import matplotlib.pyplot as plt
 import pandas as pd
 import redis
-
+import numpy as np
 
 # from analysis import csv_conf
 # from analysis.csv_conf import datapath
@@ -38,18 +38,23 @@ def del_all_key():
 
 
 if __name__ == "__main__":
-
-
     r = redis.Redis()
-    joblist = []
-    names  = r.keys(r'*_new')
-    for key in names:
-        print(key)
-    # print(df.shape)
-    # df = df.drop_duplicates('jobId')
-    # print(df.shape)
 
-    # a = [1,2]
-    # b = [3,4]
-    # for i, j in a, b:
-    #     print(i, j)
+    df = pd.read_csv('../datas/data.csv', low_memory=False)
+    df.drop_duplicates('jobId')
+    df = df['jobId']
+    idset = set()
+    for i in df:
+        idset.add(i)
+
+    print(len(idset))
+    keys = r.keys(r'*_new')
+    for key in keys:
+        ids = r.hkeys(key)
+        for id in ids:
+            id = int(id.decode())
+            if id in idset:
+                r.hdel(key, id)
+                print('delete ', id)
+            else:
+                print('not')
