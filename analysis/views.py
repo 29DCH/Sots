@@ -6,6 +6,7 @@ import pandas as pd
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from analysis.models import Carousel
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -21,6 +22,14 @@ from analysis.tools.persistence_data_handel import persistence_job, persistence_
 
 def index(request):
     return render(request, 'analysis/index.html')
+
+def get_carouselData(request):
+    carousels = Carousel.objects.filter(state=1)
+    result = []
+    for carousel in carousels:
+        r = {'photo_url': carousel.photo_url, 'content_url': carousel.content_url}
+        result.append(r)
+    return JsonResponse(result,  safe=False)
 
 
 def access(request):
