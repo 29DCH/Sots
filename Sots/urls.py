@@ -23,7 +23,8 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
     get_recommendInformation, get_hotJob, get_personRecommend, \
-    get_allrequirementsDiagrams, test_url, get_carouselData
+    get_allrequirementsDiagrams, test_url, get_carouselData, get_user_data, get_user_action, get_user_feature, \
+    get_job_need, get_job_detail, get_salary_analysis, get_comp_scale, get_comp_statu
 import administrators.website.website as web
 import administrators.test.test as te
 import administrators.carousel.carousel as carousel
@@ -138,6 +139,14 @@ urlpatterns = [
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
     url(r'sots/carouselData', get_carouselData),# 前台轮播
+    url(r'sot/visualanalysis/user-data', get_user_data),
+    url(r'sot/visualanalysis/user-action', get_user_action),
+    url(r'sot/visualanalysis/user-feature', get_user_feature),
+    url(r'sot/visualanalysis/job-need', get_job_need),
+    url(r'sot/visualanalysis/job-detail', get_job_detail),
+    url(r'sot/visualanalysis/salary-analysis', get_salary_analysis),
+    url(r'sot/visualanalysis/comp-scale', get_comp_scale),
+    url(r'sot/visualanalysis/comp-statu', get_comp_statu),
 
 
     # 测试

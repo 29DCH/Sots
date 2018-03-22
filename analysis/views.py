@@ -17,11 +17,13 @@ from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
 from analysis.spider_scheduler import scheduler, test
+from analysis.tools.model_tool import get_random_job_id
 from analysis.tools.persistence_data_handel import persistence_job, persistence_djob, persistence_company
 
 
 def index(request):
     return render(request, 'analysis/index.html')
+
 
 def get_carouselData(request):
     carousels = Carousel.objects.filter(state=1)
@@ -29,24 +31,24 @@ def get_carouselData(request):
     for carousel in carousels:
         r = {'photo_url': carousel.photo_url, 'content_url': carousel.content_url}
         result.append(r)
-    return JsonResponse(result,  safe=False)
+    return JsonResponse(result, safe=False)
 
 
 def access(request):
-
     pass
+
 
 def persistence(request):
     persistence_company('datas/data.csv')
     return HttpResponse(request)
 
 
-def updateclicktimes(job:Job):
+def updateclicktimes(job: Job):
     job.clicktimes += 1
     job.save()
 
 
-def pack_job_result(matchjobs:list):
+def pack_job_result(matchjobs: list):
     result = {}
 
     try:
@@ -62,7 +64,7 @@ def pack_job_result(matchjobs:list):
                 "compPosition": job.JobPlace,
                 "compPublishTime": '1.1',
                 "recruitmentSources": job.jobLink,
-                'matchingdegree': str(i['point']/getmaxpoint()*100)+'%'
+                'matchingdegree': str(i['point'] / getmaxpoint() * 100) + '%'
             }
             list.append(j)
     except Exception as e:
@@ -80,7 +82,7 @@ def pack_job_result(matchjobs:list):
     return result
 
 
-def pack_job_list(jobs:list):
+def pack_job_list(jobs: list):
     list = []
     for i in jobs:
         j = {
@@ -143,7 +145,6 @@ def job_list(request):
             job = Job.objects.get(id=djob.Job.id)
             jobs.append(job)
 
-
         # TODO 有效值检测(一个独立模块)
         result = jobmatch(jobs, skills, experience, education, place)
         # 拼接返回JSON
@@ -161,7 +162,7 @@ def get_searchKeyword(request):
         workExperience.append(i)
     workExperience.append('十年以上')
 
-    education = ['大专', '本科','硕士','博士']
+    education = ['大专', '本科', '硕士', '博士']
 
     skills = []
     skillsfile = open('analysis/result/keywords')
@@ -172,7 +173,7 @@ def get_searchKeyword(request):
 
     jobs = []
     for i in range(5):
-        randid = random.randint(29000, 40000)
+        randid = get_random_job_id()
         print('get job : ', randid)
         job = Job.objects.get(id=randid)
         jobs.append(job)
@@ -188,6 +189,7 @@ def get_searchKeyword(request):
 
     return JsonResponse(res)
 
+
 def pack_recommend(jobs):
     recs = []
     for job in jobs:
@@ -197,22 +199,26 @@ def pack_recommend(jobs):
             'url': job.jobLink
         })
 
+
 # 推荐职位
 def get_recommendInformation(request):
     jobs = []
     for i in range(5):
 
-        randid = random.randint(29000, 40000)
+        randid = get_random_job_id()
         print('get job : ', randid)
-        job = Job.objects.get(id=randid)
-        jobs.append(job)
+        try:
+            job = Job.objects.get(id=randid)
+            jobs.append(job)
+        except BaseException as e:
+            print(e)
+            i -= 1
     recommendjobs = pack_job_list(jobs)
     return JsonResponse(recommendjobs, safe=False)
 
 
 # 获取热门职位
 def get_hotJob(request):
-
     jobs = Job.objects.order_by('clicktimes')[:5]
     hotjobs = pack_job_list(jobs)
     return JsonResponse(hotjobs, safe=False)
@@ -222,7 +228,7 @@ def get_hotJob(request):
 def get_personRecommend(request):
     jobs = []
     for i in range(5):
-        randid = random.randint(5200, 6000)
+        randid = get_random_job_id()
         print('get job : ', randid)
         job = Job.objects.get(id=randid)
         jobs.append(job)
@@ -233,7 +239,6 @@ def get_personRecommend(request):
 # TODO 在哪里显示？
 # 前端传入id数组
 def get_requirementsDiagrams(request):
-
     getonegraph(id)
     pass
 
@@ -242,3 +247,106 @@ def get_allrequirementsDiagrams(request):
     graph = getallgraph('analysis/result/newModel.csv')
 
     return JsonResponse(graph)
+
+
+def pack_graph_result(datas: dict, **kwargs):
+    if len(datas) == 0:
+        result = {'status': 'no'}
+    else:
+        result = {'status': 'yes'}
+
+        kwitems = kwargs.items()
+        for item in kwitems:
+            result[item[0]] = item[1]
+        items = datas.items()
+
+        sec = dict()
+        for item in items:
+            sec[item[0]] = item[1]
+
+        result['result'] = sec
+    return result
+
+
+def get_user_data(request):
+    datas = dict()
+    # {name:value} 教育水平 数量
+    datas['userEdu'] = []
+    # {name:number} 工作经验 数量
+    datas['userExper'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_user_action(request):
+    datas = dict()
+    # {name:value} 用户年龄段 数量
+    datas['userage'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_user_feature(request):
+    datas = dict()
+    # {name:value} 用户喜爱职位 数量
+    datas['favJob'] = []
+    # {name:value} 用户喜爱城市 数量
+    datas['favCity'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_job_need(request):
+    datas = dict()
+    # {name:value} 岗位 数量
+    datas['jobnum'] = []
+    # {name:value} 技能 数量
+    datas['skillnum'] = []
+    # {name:value} 工作经验 数量
+    datas['workskill'] = []
+
+    return JsonResponse(pack_graph_result(datas, num=10))
+
+
+def get_job_detail(request):
+    datas = dict()
+    # {name:value} 岗位 top10
+    datas['jobtop'] = []
+    # {name:value} 岗位 数量
+    datas['jobtype'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_salary_analysis(request):
+    datas = dict()
+    # {name:value} 薪水top10 岗位和平均薪资
+    datas['jobtop'] = []
+    # {name:value} 福利权重top10 福利数量
+    datas['jobwelfare'] = []
+    # {name:value} 城市 平均工资
+    datas['citysalary'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_comp_scale(request):
+    datas = dict()
+    # {name:value} 公司类型 数量
+    datas['compscalenum'] = []
+    # {name:value} 城市性质 公司数量
+    datas['compcitynum'] = []
+    # {name:value} 不同规模大小的公司 数量
+    datas['compsizenum'] = []
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_comp_statu(request):
+    datas = dict()
+    # {name:value} 公司类型 他的数量
+    datas['comptype'] = []
+    # {name:value} 公司类型 公司数量
+    datas['compnature'] = []
+
+    return JsonResponse(pack_graph_result(datas))

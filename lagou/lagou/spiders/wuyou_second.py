@@ -27,7 +27,7 @@ class WuyouSecondSpider(RedisSpider):
             item['jobId'] = response.xpath('//*[@id="hidJobID"]/@value').extract()[0]
             item['jobPlace'] = response.xpath('/html/body/div[3]/div[2]/div[2]/div/div[1]/span/text()').extract()[0]
             item['jobSalary'] = response.xpath('/html/body/div[3]/div[2]/div[2]/div/div[1]/strong/text()').extract()[0]
-            item['jobLabels'] = response.xpath('/html/body/div[3]/div[2]/div[3]/div[2]/div/div[1]/p[1]/span[2]/text()').extract()[0]
+            item['jobLabels'] = response.xpath('//*/div[@class="mt10"]//span[@class="el"]/text()').extract()
             item['jobInfo'] = response.xpath('/html/body/div[3]/div[2]/div[3]/div[2]/div/p/text()').extract()
             if len(item['jobInfo']) == 0:
                 item['jobInfo'] = response.xpath('/html/body/div[3]/div[2]/div[3]/div[2]/div/text()').extract()

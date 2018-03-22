@@ -79,6 +79,9 @@ def get_salary(words: str):
 
 
 if __name__ == "__main__":
-    df = pd.DataFrame(columns=['jobId', 'jobSalary', 'educationRequire', 'experienceRequire', 'jobInfo', 'keyword', 'compSize'])
-    print(df)
+    di = {'a':1,'b':2}
+
+    items = di.items()
+    for item in items:
+        print(item[0], item[1])
     pass

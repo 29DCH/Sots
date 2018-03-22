@@ -158,7 +158,7 @@ if __name__ == '__main__':
         'local',
         # 'slave01',
     ]
-    # deploy(project_name, targets)  # 部署到scrapyd
+    deploy(project_name, targets)  # 部署到scrapyd
 
     # 根据scrapy.cfg查看对应关系
     # scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
