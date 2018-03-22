@@ -23,7 +23,7 @@ import administrators.job.job as job
 import administrators.company.company as com
 from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
     get_recommendInformation, get_hotJob, get_personRecommend, \
-    get_allrequirementsDiagrams, test_url
+    get_allrequirementsDiagrams, test_url, get_carouselData
 import administrators.website.website as web
 import administrators.test.test as te
 import administrators.carousel.carousel as carousel
@@ -127,14 +127,7 @@ urlpatterns = [
     url(r'admin/companyDel', com.delete, name='companyDel'),  # 公司删除
     url(r'admin/companyEdit', com.edit, name='companyEdit'),
 
-    # 轮播图片
-    url(r'admin/carouselShow$',carousel.show, name='carouselShow'), # 轮播展示
-    url(r'admin/carouselShowNext', carousel.showNext, name='carouselShowNext'),
-    url(r'admin/carouselDel', carousel.delete, name='carouselDel'),
-    url(r'admin/carouselAdd', carousel.add, name='carouselAdd'),
-    url(r'admin/carouselSave', carousel.save, name='carouselSave'),
-    url(r'admin/carouselEdit', carousel.edit, name='carouselEdit'),
-    url(r'admin/carouselUpdate', carousel.update, name='carouselUpdate'),
+
 
 
     url(r'^$', index, name='index'),        #前台首页
@@ -144,6 +137,7 @@ urlpatterns = [
     url(r'sots/hotJob', get_hotJob),            #热门职位
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
+    url(r'sots/carouselData', get_carouselData),# 前台轮播
 
 
     # 测试
