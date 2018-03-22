@@ -49,9 +49,7 @@ class Words:
             hotword.keyword = keyword
             hotword.save()
 
-        save_keywords(keys, vals,self.keyword)
-
-
+        save_keywords(keys, vals, self.keyword)
 
         # df = pd.DataFrame(list(vals))
         # print(df)
@@ -62,14 +60,15 @@ class Words:
         # plt.show()
 
 
-def words_split(path:str, keyword):
+def words_split(path: str, keyword):
     # 加载用户字典
     starttime = time.time()
 
     # 从文件中获取
     x = pd.read_csv(path, low_memory=False)
-    x = x[(x['keyword']==keyword)]
+    x = x[(x['keyword'] == keyword)]
     requirements = x['jobInfo']
+    print('keyword ', keyword, 'shape ', x.shape)
     s = ''
     for req in requirements:
         s += str(req).strip()

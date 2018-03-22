@@ -158,7 +158,7 @@ if __name__ == '__main__':
         'local',
         # 'slave01',
     ]
-    deploy(project_name, targets)  # 部署到scrapyd
+    # deploy(project_name, targets)  # 部署到scrapyd
 
     # 根据scrapy.cfg查看对应关系
     # scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
@@ -169,7 +169,6 @@ if __name__ == '__main__':
     # print(json.loads(run_stat))
     # run_stat = scrapyd_master.run_master_spider(project_name, 'wuyou_first', kword, start_page=15, max_allow_page=5)
     # print(json.loads(run_stat))
-
     # slave端爬虫,只需调用一次，不会自动关闭
     # run_stat = scrapyd_slave_01.run_slave_spider(project_name, 'lagou_new')
     # print(json.loads(run_stat))

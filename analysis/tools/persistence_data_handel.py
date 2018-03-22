@@ -23,7 +23,6 @@ def csv_duplication():
     pass
 
 
-# TODO 去重方式需要考虑
 def persistence_company(path: str):
     print('insert comp start')
     if path:
@@ -88,29 +87,13 @@ def persistence_job(path: str):
         df = df.drop_duplicates('jobId')
     else:
         return
-    compidset = set()
-    compid = df['companyId']
-    for i in compid:
-        compidset.add(i)
-
-    companys = Company.objects.filter(companyId__in=compidset)
-    compidtocomp = {}
-    for i in companys:
-        compidtocomp[i.companyId] = i
 
     rows = df.iterrows()
-    print('-----------query over-----------')
     list_to_insert = list()
     cont = 0
     for index, row in rows:
-        companyId = row[14]
         job = Job()
-        # try:
         job.jobId = row[0]
-        job.company = compidtocomp[companyId]
-        # except TypeError as e:
-        #     # print('type error ', e)
-        #     continue
         job.JobName = row[1]
         job.JobPlace = row[2]
         job.JobSalary = row[3]
@@ -124,6 +107,7 @@ def persistence_job(path: str):
         job.jobInfo = row[11]
         job.jobNature = row[12]
         job.jobLabels = row[13]
+        job.company_id = row[14]
         job.keyword = row[28]
         list_to_insert.append(job)
         cont += 1
@@ -152,15 +136,6 @@ def persistence_djob(path: str):
         df = df[start_index:]
         # 以防万一
         df = df.drop_duplicates('jobId')
-        jobids = df['jobId']
-        jobidset = set()
-        for id in jobids:
-            jobidset.add(id)
-
-        jobs = Job.objects.filter(jobId__in=jobidset)
-        jobidtojob = {}
-        for i in jobs:
-            jobidtojob[i.jobId] = i
     else:
         return
     rows = df.iterrows()
@@ -170,10 +145,9 @@ def persistence_djob(path: str):
 
     count = 0
     for index, row in rows:
-        jobId = row[0]
         djob = DigitizedJob()
-        djob.Job = jobidtojob[jobId]
         djob.compSize = row[1]
+        djob.job_id = row[0]
         djob.skill = row[2]
         djob.experience = row[3]
         djob.education = row[4]

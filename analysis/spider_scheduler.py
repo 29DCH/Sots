@@ -252,10 +252,10 @@ def ontime_spider():
 def scheduler():
     # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
     # spider_thread.start()
-    analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
-    analysis_thread.start()
-    # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
-    # persistence_thread.start()
+    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    # analysis_thread.start()
+    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    persistence_thread.start()
 
 
 if __name__ == '__main__':

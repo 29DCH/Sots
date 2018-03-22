@@ -27,7 +27,7 @@ def get_dict():
     f = open('analysis/tools/dict', 'r')
     dic = []
     for i in f.readlines():
-        dic.append(i)
+        dic.append(i.strip())
     return dic
 
 

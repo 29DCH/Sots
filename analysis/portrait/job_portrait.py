@@ -71,12 +71,12 @@ def getonegraph(id):
     return graph
 
 
-# TODO 修改数据获取方式
 def jobcity():
     starttime = time.time()
 
     r = redis.Redis()
     keyname = 'jobcity'
+    # TODO 修改为文件获取
     djobs = DigitizedJob.objects.all()
     for djob in djobs:
         job = djob.Job

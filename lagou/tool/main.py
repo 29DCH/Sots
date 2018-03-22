@@ -19,13 +19,16 @@ import redis
 
 keyword = 'python'
 start_page = 1
-max_allow_page = 10  # 往后爬的页数
+max_allow_page = 1000  # 往后爬的页数
 
 # TODO(hk): 爬虫管理api
 # 运行爬虫（分布式），部署后，主服务器运行run_lagou_start函数，从服务器运行run_lagou_new函数
 def run_lagou_start():
-    line = 'scrapy crawl lagou_start -a keyword=%s -a start_page=%s -a max_allow_page=%s' % (keyword, str(start_page), str(max_allow_page))
+    # line = 'scrapy crawl wuyou_first -a keyword=%s -a start_page=%s -a max_allow_page=%s' % (keyword, str(start_page), str(max_allow_page))
+    # cmdline.execute(line.split())
+    line = 'scrapy runspider ../lagou/spiders/wuyou_second.py'
     cmdline.execute(line.split())
+
 
 def run_lagou_new():
     line = 'scrapy runspider ../lagou/spiders/lagou_new.py'

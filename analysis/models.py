@@ -37,7 +37,7 @@ class Job(models.Model):
     jobInfo = models.TextField()
     jobNature = models.CharField(max_length=200)
     jobLabels = models.CharField(max_length=300)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    company_id = models.IntegerField(default=0)
     clicktimes = models.IntegerField(default=0)
     keyword = models.CharField(max_length=100)
     pass
@@ -51,7 +51,7 @@ class DigitizedJob(models.Model):
     education = models.IntegerField(default=0)
     salary = models.FloatField(default=5)
     # Job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, unique=True)
-    Job = models.OneToOneField(Job, on_delete=models.CASCADE, null=True,unique=True)
+    job_id = models.IntegerField(unique=True)
     keyword = models.CharField(max_length=300)
 
 # 网站表

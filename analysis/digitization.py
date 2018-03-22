@@ -6,7 +6,7 @@ import pandas as pd
 
 import redis
 
-from analysis.models import Job
+from analysis.models import Job, DigitizedJob
 from analysis.tools import csv_conf
 from analysis.tools.csv_conf import didatapath, datapath
 from analysis.tools.NLtool import get_keyword, get_keywords
@@ -142,23 +142,44 @@ def get_skill(words: str, keyword):
     return point
 
 
-# TODO 识别万元
 def get_salary(words: str):
-    reg = r'[0-9]*'
+    reg = r'[0-9]*\.?[0-9]+'
     try:
         x = re.findall(reg, words)
     except TypeError:
+        print('error')
         return 0
     sums = 0.0
     tmp = 0
     for j in x:
-        if j.isnumeric():
-            sums += float(j)
-            tmp += 1
+        sums += float(j)
+        tmp += 1
     if tmp > 0:
         sa = sums / tmp
     else:
         sa = 0
+    year_reg = '.*年.*'
+    day_reg1 = '.*日.*'
+    day_reg2 = '.*天.*'
+    if re.match(day_reg1, words) or re.match(day_reg2, words):
+        sa = sa*30
+    elif re.match(year_reg, words):
+        sa = sa/12
+    wan_reg = '.*万.*'
+    yuan_reg1 = '.*元.*'
+    yuan_reg2 = '.*块.*'
+    qian_reg1 = '.*k.*'
+    qian_reg2 = '.*K.*'
+    qian_reg3 = '.*千.*'
+    if re.match(wan_reg, words):
+        sa = sa*10
+    elif re.match(yuan_reg1, words) or re.match(yuan_reg2, words):
+        sa = sa/1000
+    elif re.match(qian_reg1, words) or re.match(qian_reg2, words) or re.match(qian_reg3, words):
+        sa =sa
+    else:
+        return 0
+
     return sa
 
 
@@ -194,10 +215,10 @@ class Analysis:
         ifexists = os.path.exists(mdpath)
         if ifexists:
             self.frame = pd.read_csv(mdpath, low_memory=False)
+            self.frame = self.frame[columns]
         else:
-            self.frame = pd.DataFrame([mdpath])
+            self.frame = pd.DataFrame(columns = columns)
 
-        self.frame = self.frame[columns]
         self.jobs = []
 
         # TODO 修改完后删除
@@ -207,7 +228,7 @@ class Analysis:
         # for name in names:
         #     self.jobs+=r.hvals(name)
 
-        start_index = Job.objects.count()
+        start_index = DigitizedJob.objects.count()
         df = pd.read_csv(datapath, low_memory=False)
         df = df[csv_conf.todigital_columnsname]
         start_index += 1
@@ -223,13 +244,15 @@ class Analysis:
         path = didatapath
         count = 0
         # 遍历关键字相同的job
-        # TODO 分批次存储
         for job in self.jobs:
             # job =  pickle.loads(job)
             print('digitization : ', job)
             jobId = job[0]
             keyword = job[5]
+            # TODO 单位判断
             salary = get_salary(job[1])
+            if salary == 0:
+                continue
             education = get_education(job[2])
             experience = get_experience(job[3])
             skill = get_skill(str(job[4]), keyword)
