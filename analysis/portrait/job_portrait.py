@@ -122,5 +122,36 @@ def jobcity():
     print ('耗时：', endtime-starttime)
 
 
+def job_need():
+    datas = dict()
+    # {name:value} 岗位 数量
+    datas['jobnum'] = []
+    # {name:value} 技能 数量
+    datas['skillnum'] = []
+    # {name:value} 工作经验 数量
+    datas['workskill'] = []
+    return datas
+
+
+def job_detail():
+    datas = dict()
+    # {name:value} 岗位 top10
+    datas['jobtop'] = []
+    # {name:value} 岗位 数量
+    datas['jobtype'] = []
+    return datas
+
+
+def salary_analysis():
+    datas = dict()
+    # {name:value} 薪水top10 岗位和平均薪资
+    datas['jobtop'] = []
+    # {name:value} 福利权重top10 福利数量
+    datas['jobwelfare'] = []
+    # {name:value} 城市 平均工资
+    datas['citysalary'] = []
+    return datas
+
+
 if __name__ == '__main__':
     getallgraph('../result/newModel2018-03-01 09:32:41.csv')

@@ -1,20 +1,19 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
+    {% load static %}
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOTS</title>
-  <base href="/">
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/font-awesome.css">
-  <!-- <script src="./assets/js/echarts.simple-2.js"></script> -->
-  <script src="./assets/js/echarts-wordcloud.min"></script>
-  
-  <link rel="icon" type="image/x-icon" href="/my.ico">
+  <base href="">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/font-awesome.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static favicon.ico %}">
 </head>
 <body>
 <app-root>
+
   <style>
     app-root {
       display: flex;
@@ -64,5 +63,10 @@
 
   Loading<span class="d">.</span><span class="d d-2">.</span><span class="d d-3">.</span>
 </app-root>
-<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="scripts.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
+<script type="text/javascript" src="{% static 'inline.bundle.js' %}"></script>
+<script type="text/javascript" src="{% static 'polyfills.bundle.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts.bundle.js'%}"></script>
+<script type="text/javascript" src="{% static 'styles.bundle.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor.bundle.js' %}"></script>
+<script type="text/javascript" src="{% static 'main.bundle.js' %}"></script></body>
 </html>

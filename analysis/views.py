@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from analysis.digitization import get_digitaluser, Analysis, jobmatch, getmaxpoint
 from analysis.models import Job, DigitizedJob, SpiderConf, Keyword, Hotword
+from analysis.portrait import user_portrait, job_portrait, company_portrait
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
@@ -165,9 +166,10 @@ def get_searchKeyword(request):
     education = ['大专', '本科', '硕士', '博士']
 
     skills = []
-    skillsfile = open('analysis/result/keywords')
+    skillsfile = open('analysis/result/java_keywords')
     for skill in skillsfile.readlines():
-        skills.append(skill.strip())
+        skill = (skill.split(' ')[0].strip())
+        skills.append(skill)
     skills = skills[:10]
     salary = ['5K', '10K', '15K', '20K']
 
@@ -269,84 +271,49 @@ def pack_graph_result(datas: dict, **kwargs):
 
 
 def get_user_data(request):
-    datas = dict()
-    # {name:value} 教育水平 数量
-    datas['userEdu'] = []
-    # {name:number} 工作经验 数量
-    datas['userExper'] = []
+    datas = user_portrait.user_data()
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_user_action(request):
-    datas = dict()
-    # {name:value} 用户年龄段 数量
-    datas['userage'] = []
+    datas = user_portrait.user_action()
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_user_feature(request):
-    datas = dict()
-    # {name:value} 用户喜爱职位 数量
-    datas['favJob'] = []
-    # {name:value} 用户喜爱城市 数量
-    datas['favCity'] = []
+    datas = user_portrait.user_feature()
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_job_need(request):
-    datas = dict()
-    # {name:value} 岗位 数量
-    datas['jobnum'] = []
-    # {name:value} 技能 数量
-    datas['skillnum'] = []
-    # {name:value} 工作经验 数量
-    datas['workskill'] = []
+    datas = job_portrait.job_need()
 
     return JsonResponse(pack_graph_result(datas, num=10))
 
 
 def get_job_detail(request):
-    datas = dict()
-    # {name:value} 岗位 top10
-    datas['jobtop'] = []
-    # {name:value} 岗位 数量
-    datas['jobtype'] = []
+    datas = job_portrait.job_detail()
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_salary_analysis(request):
-    datas = dict()
-    # {name:value} 薪水top10 岗位和平均薪资
-    datas['jobtop'] = []
-    # {name:value} 福利权重top10 福利数量
-    datas['jobwelfare'] = []
-    # {name:value} 城市 平均工资
-    datas['citysalary'] = []
+    datas = job_portrait.salary_analysis()
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_scale(request):
-    datas = dict()
-    # {name:value} 公司类型 数量
-    datas['compscalenum'] = []
-    # {name:value} 城市性质 公司数量
-    datas['compcitynum'] = []
-    # {name:value} 不同规模大小的公司 数量
-    datas['compsizenum'] = []
+    datas = company_portrait.comp_scale()
+
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_statu(request):
-    datas = dict()
-    # {name:value} 公司类型 他的数量
-    datas['comptype'] = []
-    # {name:value} 公司类型 公司数量
-    datas['compnature'] = []
+    datas = company_portrait.comp_status()
 
     return JsonResponse(pack_graph_result(datas))
