@@ -27,7 +27,8 @@
     {% csrf_token %}
     <input type="hidden" name = "id" value="{{ web.id }}">
     网站名称：<input type="text" name="name" value="{{ web.name }}"><br>
-    网址：<input type="text" name="url" value="{{ web.url }}">
+    网址：<input type="text" name="url" value="{{ web.url }}"><br>
+    爬虫名：<input type="text" name="spider" value="{{ web.spider }}">
     <input type="submit" value="确定">
 </form>
 </body>

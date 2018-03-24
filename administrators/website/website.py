@@ -61,7 +61,8 @@ def add(request):
 def save(request):
     name = request.POST['name']
     url = request.POST['url']
-    web = m.website(name=name, url=url)
+    spider = request.POST['spider']
+    web = m.Website(name=name, url=url, spider=spider)
     web.save()
     return show(request)
 
@@ -76,10 +77,12 @@ def update(request):
     id = request.POST['id']
     name = request.POST['name']
     url = request.POST['url']
+    spider = request.POST['spider']
 
     web = m.Website.objects.get(id = id)
     web.name = name
     web.url = url
+    web.spider = spider
 
     web.save()
     return show(request)
