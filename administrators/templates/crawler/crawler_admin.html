@@ -11,18 +11,12 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap-select.css' %}" />
 		<script type="text/javascript">
-
-
             $(window).on('load', function () {
-
-
                 $('.selectpicker').selectpicker({
                     'selectedText': 'cat'
                 });
-
-
-                // $('.selectpicker').selectpicker('hide');
             });
+
 
 		</script>
 		<style type="text/css">
@@ -80,9 +74,7 @@
 
 	<body>
 		<div class="container-fluid">
-			<!--导航条 start-->
 
-			<!--导航条 end-->
 			<!--主题内容部分 start-->
 			<div class="row clearfix">
 				<!--主体内容 start-->
@@ -95,16 +87,13 @@
 								<a href="#panel-738579" data-toggle="tab">搜索表单</a>
 							</li>
 							<li>
-								<a href="#panel-906744" data-toggle="tab">其他</a>
+								<a href="{% url 'list_crawler_job' %}">其他</a>
 							</li>
 						</ul>
 						<!--选项卡 end-->
 						<!--选型卡内容主体 start-->
 						<div class="tab-content">
 							<div class="tab-pane active" id="panel-738579">
-								<!--<p>
-									I'm in Section 1.
-								</p>-->
 								<!--搜索表单 start-->
 								<form role="form" class="form-horizontal" method="post" action="{% url 'start_spider' %}">
 									{% csrf_token %}
@@ -112,22 +101,10 @@
 										<p class="p1">关键字爬取:</p>
 										<label for="id_select" class="col-sm-2 control-label">爬取目标网站</label>
 										<div class="col-sm-8">
-											<!--<select class=" form-control webSelect">
-												<option>默认全部</option>
-												<option>拉勾</option>
-												<option>智联招聘</option>
-												<option>中国人才</option>
-											</select>-->
-											<!--<label for="id_select"></label>-->
-{#											<select id="id_select" name="spider" class="selectpicker bla bla bli" multiple data-live-search="true">#}
-{#												<option value="lagou_new">拉勾</option>#}
-{#												<option value="zhilian">智联招聘</option>#}
-{#												<option value="rencai">中国人才</option>#}
-{#											</select>#}
                                             <select id="id_select" name="spider" class="selectpicker bla bla bli">
-                                                <option value="lagou_new">拉勾</option>#}
+                                                <option value="lagou_start">拉勾</option>
+												<option value="wuyou_first">51job</option>
 												<option value="zhilian">智联招聘</option>
-												<option value="rencai">中国人才</option>
 
                                             </select>
 
@@ -173,33 +150,6 @@
 											</select>
 										</div>
 									</div>
-<br>
-									<!--<div class="form-group">-->
-										<!--<p class="p1">url链接爬取:</p>-->
-										<!--<label for="url" class="col-sm-2 control-label">url</label>-->
-										<!--<div class="col-sm-8">-->
-											<!--<input type="text" class="form-control" id="url" >-->
-										<!--</div>-->
-									<!--</div>-->
-
-									<!--<div class="form-group positionDiv">-->
-										<!--<label for="position" class="col-sm-2 control-label">职位</label>-->
-										<!--<div class="col-sm-8">-->
-											<!--<input type="text" class="form-control" id="position" placeholder="职位">-->
-										<!--</div>-->
-									<!--</div>-->
-
-									<!--<div class="form-group">-->
-										<!--<div class="col-sm-offset-2 col-sm-8">-->
-											<!--&lt;!&ndash;<div class="checkbox">-->
-												<!--<label>-->
-								                    <!--<input type="checkbox">请记住我-->
-								                <!--</label>-->
-											<!--</div>&ndash;&gt;-->
-											<!--<button type="button" class="addItem" onclick="onaddItem()"><span class="glyphicon glyphicon-plus"></span></button>-->
-										<!--</div>-->
-									<!--</div>-->
-
 									<div class="form-group">
 										<div class="col-sm-offset-2 col-sm-8">
 											<button type="submit" class="btn btn-default" onclick="turnWords(this)">搜索</button>
@@ -207,19 +157,12 @@
 									</div>
 								</form>
 								<!--搜索表单 end-->
-								<!--搜索结果 start-->
-{#								<div class="well text-center">#}
-{#									<h3>已经爬取<span id="positionNum">10</span>个职位</h3>#}
-{#								</div>#}
-{#								<!--搜索结果 end-->#}
-{#							</div>#}
-{#							<div class="tab-pane" id="panel-906744" style="width: 60%;">#}
-{#								<p>#}
-{#									kkkkkkk#}
-{#								</p>#}
-{#							</div>#}
+
 						</div>
 						<!--选型卡内容主体 end-->
+
+                        </div>
+
 					</div>
 					<!--爬取信息 end-->
 				</div>
@@ -227,7 +170,8 @@
 			</div>
 			<!--主题内容部分 end-->
 		</div>
-		<script>
+        </div>
+        <script>
 			function onaddItem() {
 				var temp = '\
 							<div class="form-group">\
@@ -239,20 +183,7 @@
 							';
 				$(".positionDiv").after(temp);
 			}
-			/*处理提交按钮*/
-			function turnWords(obj) {
-				var s = obj.innerText;
-				console.log(s);
-				$(obj).toggleClass("btn-danger");
-				if(s == "搜索") {
-					obj.innerHTML = "暂停";
-					console.log("暂停按钮");
-				} else {
-					obj.innerHTML = "搜索";
-					console.log("搜索按钮");
-				}
-			}
-			 
+
 		</script>
 	</body>
 

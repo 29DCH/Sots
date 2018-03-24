@@ -1,11 +1,23 @@
+import redis
+
 from analysis.digitization import Analysis
-from analysis.tools.csv_to_mysql import write_job_to_mysql, write_diJob_to_mysql
 from analysis.words_split import words_split
 
 
-def handle(path:str):
-    words_split(path)
-    diPath = Analysis('xxx.csv').handel()
+def handle(path:str, keywords):
+    r = redis.Redis()
+    print('handle all key : ', keywords)
+    for keyword in keywords:
+        if(not isinstance(keyword, str)):
+            continue
+        print(keyword, type(keyword))
+        words_split(path, keyword)
+        # 每一个关键字分析完之后删除缓存中的对应list
+    Analysis().handel()
+    for keyword in keywords:
+        r.delete(keyword+"_new")
 
-    write_job_to_mysql('datas/java_data.csv')
-    write_diJob_to_mysql(diPath)
+
+# TODO 分析以城市为关键字的职位信息
+def city():
+    pass

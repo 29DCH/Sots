@@ -1,21 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    目标网站,职位名称,开始时间,结束时间,数据量,速度(条/s),状态<br>
-    {% for job in job_list.running %}
-        {{ job.spider }}, {{ job.keyword }}, {{ job.start_time }}, ----, {{ job.count }}, {{ job.speed }}, running,
-        <a href="{% url 'end_job' %}?job_id={{ job.id }}">
-            <input type="button" value="结束" width="50px" height="50px"/>
-        </a>
-        <br>
-    {% endfor %}
-    {% for job in job_list.finished %}
-        {{ job.spider }}, {{ job.keyword }}, {{ job.start_time }}, {{ job.end_time }}, {{ job.count }}, {{ job.speed }}, finished<br>
-    {% endfor %}
+   <head>
+		<meta charset="UTF-8">
+		<title>SOTS后台管理</title>
+		{% load static %}
+		<script src="{% static 'bootstrap-3.3.7-dist/js/jquery-3.2.1.js' %}" type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap-select.js' %}" type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap-select.css' %}" />
+		<script type="text/javascript">
+            $(window).on('load', function () {
+                $('.selectpicker').selectpicker({
+                    'selectedText': 'cat'
+                });
+            });
 
+
+		</script>
+		<style type="text/css">
+			.tab-content {
+				padding: 3rem 1rem;
+				border: 1px solid #ddd;
+				border-top: none;
+			}
+
+			.glyphicon {
+				color: #dcd7d7;
+				padding: 0 9px;
+			}
+
+			a {
+				color: #333;
+			}
+
+			.well {
+				margin-top: 4rem;
+			}
+
+			.panel-group .panel+.panel {
+				margin-top: 0;
+			}
+
+			.panel-noPM {
+				/* border-color: #ddd; */
+				border: none;
+				margin-top: 0px;
+			}
+
+			em {
+				padding-left: 8px;
+			}
+
+			#positionNum {
+				font-style: italic;
+				padding: 0 10px;
+				color: #ccc;
+				font-size: 28px;
+				font-weight: bolder;
+			}
+			.p1{
+				padding-left: 100px;
+				font-size: 18px;
+				font-family: 微软雅黑;
+			}
+            .na{
+                color: red;
+                background: paleturquoise;
+            }
+		</style>
+	</head>
+<body>
+<div class="container-fluid">
+        <!--主题内容部分 start-->
+        <div class="row clearfix">
+            <!--主体内容 start-->
+            <div class="col-md-10 column">
+                <!--爬取信息 start-->
+                <div class="tabbable" id="tabs-130431">
+                    <!--选项卡 start-->
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="{% url 'crawler_admin' %}" >搜索表单</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'list_crawler_job' %}">其他</a>
+                        </li>
+                    </ul>
+           <table class="table table-bordered" id="dg">
+              <thead>
+                   <tr>
+                       <th>爬虫名</th>
+                       <th>职位名称</th>
+                       <th>开始页</th>
+                       <th>页数</th>
+                       <th>开始时间</th>
+                       <th>状态</th>
+                       <th>编辑</th>
+                   </tr>
+              </thead>
+              <tbody>
+              {% for job in job_list %}
+
+              <tr>
+                  <td> {{ job.spider }} </td>
+                  <td> {{ job.keyword }} </td>
+                  <td> {{ job.start_page }}</td>
+                  <td> {{ job.max_allow_page }} </td>
+                  <td> {{ job.start_time }}</td>
+                  <td> {{ job.state }} </td>
+                  <td>
+                      {% if job.state == '未开始'%}
+                        <a href="{% url 'end_job' %}?job_id={{ job.id }}">
+                            <input type="button" value="删除" width="50px" height="50px"/>
+                        </a>
+                      {% else %}
+                          ----
+                      {% endif %}
+                  </td>
+              {% endfor %}
+              </tr>
+              </tbody>
+          </table>
+                </div>
+            </div>
+        </div>
+</div>
+<script>
+			function onaddItem() {
+				var temp = '\
+							<div class="form-group">\
+								<label for="position" class="col-sm-2 control-label">职位</label>\
+								<div class="col-sm-8">\
+									<input type="text" class="form-control" class="position" placeholder="职位">\
+								</div>\
+							</div>\
+							';
+				$(".positionDiv").after(temp);
+			}
+
+		</script>
 </body>
 </html>

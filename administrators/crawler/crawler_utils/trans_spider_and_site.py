@@ -9,14 +9,14 @@
 
 
 def trans(name):
-    # 需改为从数据库读取
+    # TODO(kkh) 需改为从数据库读取
     table = {
-        'lagou_new': '拉勾网',
-        '拉勾': 'lagou_new',
+        'lagou_start': '拉勾网',
+        '拉勾': 'lagou_start',
         'zhilian': '智联招聘',
         '智联招聘': 'zhilian',
-        'rencai': '中国人才网',
-        '中国人才网': 'rencai',
+        'wuyou_first': '51job',
+        '51job': 'wuyou_first',
     }
     res = ''
     for key in table.keys():

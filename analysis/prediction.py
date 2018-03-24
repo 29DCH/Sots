@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 
+# TODO 点击进入页面时训练模型
 # TODO 接收一个求职者的基本信息  list结构  如['20','4', '2', '2000']    处理后进行匹配
 def predic(user:list):
     # 读取数据

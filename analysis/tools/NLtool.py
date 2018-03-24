@@ -46,7 +46,7 @@ def get_keyword(jobinfo):
     jobinfo = clean_words(jobinfo)
     user_dict = get_dict()
     words = pseg.cut(jobinfo)
-    word_list = []
+    word_set = set()
     for wds in words:
         if wds.flag == 'eng' or wds.word in user_dict:
             match = re.match(r'[\u4e00-\u9fa5]+', wds.word)
@@ -55,25 +55,30 @@ def get_keyword(jobinfo):
                 wo = str(wds.word).lower()
             else:
                 wo = wds.word
-            word_list.append(wo)
+            word_set.add(wo)
+    word_list = list(word_set)
     return word_list
 
 
 # 读取关键字
-def get_keywords():
-    f = open('analysis/result/keywords')
+def get_keywords(keyword='java'):
+    f = open('analysis/result/'+keyword+'_keywords', 'r')
     keywords = []
     for i in f.readlines():
-        keywords.append(str(i).strip())
+        line = str(i).strip()
+        keyandheat = line.split(' ')
+        keywords.append(keyandheat[0])
     return keywords
 
 
 # 保存关键字
-def save_keywords(keywords):
-    f = open('analysis/result/keywords', 'w')
+def save_keywords(keywords, heat, keyword):
+    f = open('analysis/result/'+keyword+'_keywords', 'w')
+    index = 0
     for i in keywords:
-        f.write(i)
+        f.write(i+' '+str(heat[index]))
         f.write('\n')
+        index+=1
     f.close()
 
 
