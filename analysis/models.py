@@ -58,6 +58,7 @@ class DigitizedJob(models.Model):
 class Website(models.Model):
     url = models.CharField(max_length=50)
     name = models.CharField(max_length=20)
+    spider = models.CharField(max_length=20)
 
 # 轮播表
 class Carousel(models.Model):

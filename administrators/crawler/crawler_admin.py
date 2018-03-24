@@ -15,7 +15,8 @@ import time
 
 # 添加爬虫任务的页面
 def crawler_index(request):
-    return render(request, 'crawler/crawler_admin.html')
+    infos = md.Website.objects.all()
+    return render(request, 'crawler/crawler_admin.html', {'infos': infos})
 
 
 # 将爬虫初始条件存入数据库

@@ -26,7 +26,8 @@
 <form action="{% url 'websiteSave' %}" method="post">
     {% csrf_token %}
     网站名称：<input type="text" name="name"><br>
-    网址：<input type="text" name="url">
+    网址：<input type="text" name="url"><br>
+    爬虫名：<input type="text" name="spider">
     <input type="submit" value="确定">
 </form>
 </body>

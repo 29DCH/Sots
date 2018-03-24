@@ -22,15 +22,15 @@
     <tr>
         <th>编号</th>
         <th>名称</th>
-        <th>网址</th>
+        <th>爬虫名</th>
     </tr>
     </thead>
     <tbody>
         {% for web in webs %}
             <tr>
                 <td>{{ web.id }}</td>
-                <td>{{ web.name }}</td>
-                <td><a href="http://{{ web.url }}">{{ web.url }}</a></td>
+                <td><a href="http://{{ web.url }}">{{ web.name }}</a></td>
+                <td>{{ web.spider }}</td>
                 <td>
                     <a href="{% url 'websiteEdit'%}?wid={{ web.id }}" class="easyui-linkbutton" iconCls="icon-edit" >编辑</a>
                     <a href="{% url 'websiteDel' %}?wid={{ web.id }}" class="easyui-linkbutton" iconCls="icon-cancel">删除</a>
