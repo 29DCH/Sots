@@ -57,5 +57,7 @@ def update(request):
 
 # 退出登录
 def exit(request):
+    for i in range(1, 11):
+        pass
     return render(request, 'index.html')
 

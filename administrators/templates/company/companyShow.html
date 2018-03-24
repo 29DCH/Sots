@@ -79,7 +79,7 @@
     <tbody>
     {% for com in coms %}
     <tr>
-        <td>{{ com.id  }}</td>
+        <td>{{ forloop.counter }}</td>
         <td>{{ com.compName }}</td>
         <td>{{ com.compSize  }}</td>
         <td>{{  com.compIndustry }}</td>

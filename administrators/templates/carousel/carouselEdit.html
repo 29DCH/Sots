@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<img src="{% static 'image/carousel/' %}{{ carousel.photo_url }}">
+<img src="{{ carousel.photo_url }}">
 <form action="{% url 'carouselUpdate' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="id" value="{{ carousel.id }}">

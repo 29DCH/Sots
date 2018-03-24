@@ -33,7 +33,7 @@ def showNext(request):
     # print(page)
     carousels = m.Carousel.objects.all()
     if carousels.count()%10 == 0:
-        pageAll = carousels.count()/10
+        pageAll = int(carousels.count()/10)
     else:
         pageAll = int(carousels.count()/10)+1
     paginator = Paginator(carousels, 10)  # Show 25 contacts per page
@@ -61,24 +61,13 @@ def save(request):
     photo = request.FILES.get('photo_url')
 
     content_url = request.POST['content_url']
-    carousel = m.Carousel(content_url=content_url, photo_url=photo.name, state=1)
+    carousel = m.Carousel(content_url=content_url, photo_url='/static/image/carousel/'+photo.name, state=1)
     carousel.save()
-    path_dst_file = os.path.join('image/update', photo.name)
+    path_dst_file = os.path.join('administrators/static/image/carousel', photo.name)
     destination = open(path_dst_file, 'wb+')  # 打开特定的文件进行二进制的写操作
     for chunk in photo.chunks():  # 分块写入文件
         destination.write(chunk)
     destination.close()
-    # 在临时文件夹中修改图片大小，存入正式文件夹
-    infile = 'administrators/static/image/update/' + photo.name
-    outfile = 'administrators/static/image/carousel/' + photo.name
-    im = Image.open(infile)
-    (x, y) = im.size
-    x_s = 200
-    y_s = 200
-    out = im.resize((x_s, y_s), Image.ANTIALIAS)
-    out.save(outfile)
-    # 删除临时文件夹中的图片
-    os.remove(infile)
 
     return show(request)
     # photo = request.FILES.get('photo_url')
@@ -110,25 +99,13 @@ def update(request):
     content_url = request.POST['content_url']
     carousel = m.Carousel.objects.get(id=id)
     carousel.content_url = content_url
-    carousel.photo_url = photo.name
+    carousel.photo_url = '/static/image/carousel/'+photo.name
     carousel.save()
-    path_dst_file = os.path.join('administrators/static/image/update', photo.name)
+    path_dst_file = os.path.join('administrators/static/image/carousel', photo.name)
     destination = open(path_dst_file, 'wb+')  # 打开特定的文件进行二进制的写操作
     for chunk in photo.chunks():  # 分块写入文件
         destination.write(chunk)
     destination.close()
-    # 在临时文件夹中修改图片大小，存入正式文件夹
-    infile = 'administrators/static/image/update/'+photo.name
-    outfile = 'administrators/static/image/carousel/'+photo.name
-    im = Image.open(infile)
-    (x, y) = im.size
-    x_s = 250
-    y_s = 250
-    out = im.resize((x_s, y_s), Image.ANTIALIAS)
-    out.save(outfile)
-    #删除临时文件夹中的图片
-    os.remove(infile)
-
     return show(request)
 
 
