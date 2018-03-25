@@ -45,6 +45,16 @@ def login(request):
     print(result['isOK'])
     return JsonResponse(result, safe=False)
 
+def postuserName(request):
+    b = request.body.decode()
+    body = eval(b)
+    username = body['username']
+    if us.objects.filter(username=username).count() == 0:
+        result = None
+    else:
+        result = {'usernameLike': {'errorInfor': '用户名 已经注册哦'}}
+    return JsonResponse(result, safe=False)
+
 # 将用户个人信息提交到后台
 @csrf_exempt
 def postPersonalInformation(request):

@@ -21,6 +21,7 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
+from analysis.personalCenter import login, postuserName, registered
 from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
     get_recommendInformation, get_hotJob, get_personRecommend, \
     get_allrequirementsDiagrams, test_url, get_carouselData, get_user_data, get_user_action, get_user_feature, \
@@ -139,14 +140,17 @@ urlpatterns = [
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
     url(r'sots/carouselData', get_carouselData),# 前台轮播
-    url(r'sot/visualanalysis/userdata', get_user_data),
-    url(r'sot/visualanalysis/useraction', get_user_action),
-    url(r'sot/visualanalysis/userfeature', get_user_feature),
-    url(r'sot/visualanalysis/jobneed', get_job_need),
-    url(r'sot/visualanalysis/jobdetail', get_job_detail),
-    url(r'sot/visualanalysis/salaryanalysis', get_salary_analysis),
-    url(r'sot/visualanalysis/compscale', get_comp_scale),
-    url(r'sot/visualanalysis/compstatu', get_comp_statu),
+    url(r'sots/visualanalysis/userdata', get_user_data),
+    url(r'sots/visualanalysis/useraction', get_user_action),
+    url(r'sots/visualanalysis/userfeature', get_user_feature),
+    url(r'sots/visualanalysis/jobneed', get_job_need),
+    url(r'sots/visualanalysis/jobdetail', get_job_detail),
+    url(r'sots/visualanalysis/salaryanalysis', get_salary_analysis),
+    url(r'sots/visualanalysis/compscale', get_comp_scale),
+    url(r'sots/visualanalysis/compstatu', get_comp_statu),
+    url(r'sots/logIn', login),
+    url(r'sots/postuserName', postuserName),
+    url(r'sots/registered', registered),
 
 
     # 测试

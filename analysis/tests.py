@@ -79,9 +79,13 @@ def get_salary(words: str):
 
 
 if __name__ == "__main__":
-    di = {'a':1,'b':2}
-
-    items = di.items()
-    for item in items:
-        print(item[0], item[1])
+    arr = []
+    arr.append(('03-16发布', 30065))
+    arr.append(('03-17发布', 21611))
+    arr.append(('03-15发布', 9085))
+    arr.append(('03-14发布', 4288))
+    arr.append(('03-13发布', 4104))
+    arr.append(('03-13发布', 4104))
+    arr.append(('03-12发布', 2724))
+    sorted()
     pass

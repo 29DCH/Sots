@@ -255,7 +255,7 @@ def pack_graph_result(datas: dict, **kwargs):
     if len(datas) == 0:
         result = {'status': 'no'}
     else:
-        result = {'status': 'yes'}
+        result = {'status': 'ok'}
 
         kwitems = kwargs.items()
         for item in kwitems:
@@ -272,48 +272,53 @@ def pack_graph_result(datas: dict, **kwargs):
 
 def get_user_data(request):
     datas = user_portrait.user_data()
-
+    print(pack_graph_result(datas))
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_user_action(request):
     datas = user_portrait.user_action()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_user_feature(request):
     datas = user_portrait.user_feature()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_job_need(request):
     datas = job_portrait.job_need()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas, num=10))
 
 
 def get_job_detail(request):
     datas = job_portrait.job_detail()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_salary_analysis(request):
     datas = job_portrait.salary_analysis()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_scale(request):
     datas = company_portrait.comp_scale()
-
-
+    print(pack_graph_result(datas))
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_statu(request):
     datas = company_portrait.comp_status()
+    print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))

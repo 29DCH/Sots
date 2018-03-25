@@ -139,7 +139,7 @@ def test():
         frame = pd.read_csv(path, low_memory=False)
         frame = frame[csv_conf.data_columnsname]
     else:
-        frame = pd.DataFrame(getcolumnsname())
+        frame = pd.DataFrame(columns=getcolumnsname())
     print(frame.shape)
     print('old job set size = ', frame.shape[0])
 
@@ -252,10 +252,10 @@ def ontime_spider():
 def scheduler():
     # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
     # spider_thread.start()
-    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
-    # analysis_thread.start()
-    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
-    persistence_thread.start()
+    analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    analysis_thread.start()
+    # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    # persistence_thread.start()
 
 
 if __name__ == '__main__':

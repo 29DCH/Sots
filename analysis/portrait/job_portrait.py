@@ -1,9 +1,13 @@
 import time
 
 import pickle
-import redis
+from datetime import datetime
 
-from analysis.models import DigitizedJob, DigitizedCity
+import redis
+from django.db import connection
+from django.db.models import Count, Sum
+
+from analysis.models import DigitizedJob, DigitizedCity, Job, Hotword
 import pandas as pd
 
 
@@ -48,7 +52,6 @@ def getgraph(djob:DigitizedJob):
         }]
     }
     return graph
-
 
 
 def getallgraph(path: str):
@@ -124,32 +127,70 @@ def jobcity():
 
 def job_need():
     datas = dict()
-    # {name:value} 岗位 数量
+    # 以发布时间为组
+    releasenum = Job.objects.values_list('releaseTime').annotate(num=Count('id')).order_by('-num')[:10]
     datas['jobnum'] = []
-    # {name:value} 技能 数量
+    for obj in releasenum:
+        datas['jobnum'].append({'value':obj[1], 'name':obj[0]})
+
+    skillnum = Hotword.objects.values_list('hotword').annotate(heat=Sum('heat')).order_by('-heat')[:20]
     datas['skillnum'] = []
-    # {name:value} 工作经验 数量
+    for obj in skillnum:
+        datas['skillnum'].append({'value':obj[1], 'name':obj[0]})
+
+    # TODO api错误
+    exprnum = Job.objects.values_list('experienceRequire').annotate(num=Count('id')).order_by('-num')[:5]
     datas['workskill'] = []
+    for obj in skillnum:
+        datas['workskill'].append({'value':obj[1], 'name':obj[0]})
+
     return datas
 
 
 def job_detail():
     datas = dict()
-    # {name:value} 岗位 top10
+    releasenum = Job.objects.values_list('JobName').annotate(num=Count('id')).order_by('-num')[:10]
+    # TODO 显示问题
     datas['jobtop'] = []
-    # {name:value} 岗位 数量
     datas['jobtype'] = []
+    for obj in releasenum:
+        datas['jobtop'].append({'value':obj[1], 'name':obj[0]})
+        datas['jobtype'].append({'value':obj[1], 'name':obj[0]})
+
     return datas
 
 
 def salary_analysis():
     datas = dict()
-    # {name:value} 薪水top10 岗位和平均薪资
-    datas['jobtop'] = []
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            SELECT AVG(analysis_digitizedjob.salary) as salary, COUNT(analysis_job.id) as num,analysis_job.JobName
+        from analysis_job
+        JOIN analysis_digitizedjob
+        ON analysis_digitizedjob.job_id = analysis_job.jobId
+        GROUP BY analysis_job.JobName
+        ORDER by num DESC,salary DESC
+        LIMIT 10
+        ''')
+        jobs = []
+        for i in range(10):
+            row = cursor.fetchone()
+            print(row)
+            jobs.append(row)
+    datas['salarytop'] = []
+    Job.objects.filter()
+    for obj in jobs:
+        datas['salarytop'].append({'value':obj[0], 'name':obj[2]})
+
     # {name:value} 福利权重top10 福利数量
     datas['jobwelfare'] = []
     # {name:value} 城市 平均工资
+    citys = DigitizedCity.objects.values_list('sum', 'salary', 'cityname').order_by('-sum', '-salary')[:10]
     datas['citysalary'] = []
+    for obj in citys:
+        datas['citysalary'].append({'value':obj[1], 'name':obj[2]})
+
     return datas
 
 

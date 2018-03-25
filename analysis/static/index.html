@@ -1,26 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-    {% load static %}
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOTS</title>
-  <base href="">
-  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'assets/css/font-awesome.css' %}">
-  <link rel="icon" type="image/x-icon" href="{% static favicon.ico %}">
+  <base href="/">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/font-awesome.css">
+  <!-- <script src="./assets/js/echarts.simple-2.js"></script> -->
+  <link rel="icon" type="image/x-icon" href="/my.ico">
 </head>
 <body>
 <app-root>
-
   <style>
     app-root {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-
       color: pink;
       text-transform: uppercase;
       font-family: -apple-system,
@@ -63,10 +61,6 @@
 
   Loading<span class="d">.</span><span class="d d-2">.</span><span class="d d-3">.</span>
 </app-root>
-<script type="text/javascript" src="{% static 'inline.bundle.js' %}"></script>
-<script type="text/javascript" src="{% static 'polyfills.bundle.js' %}"></script>
-<script type="text/javascript" src="{% static 'scripts.bundle.js'%}"></script>
-<script type="text/javascript" src="{% static 'styles.bundle.js' %}"></script>
-<script type="text/javascript" src="{% static 'vendor.bundle.js' %}"></script>
-<script type="text/javascript" src="{% static 'main.bundle.js' %}"></script></body>
+<script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="scripts.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
 </html>
