@@ -6,7 +6,7 @@ except ImportError:
 
 class SimpleMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        if request.path != '/admin/login' and request.path != '/admin/checks':
+        if request.path.startswith('/admin') and request.path != '/admin/login' and request.path != '/admin/checks':
             if request.session.get('adminUser', None):
                 pass
             else:
