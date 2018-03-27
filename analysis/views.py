@@ -105,7 +105,6 @@ def test_url(request):
     # test()
 
 
-# TODO 只会被调用一次的爬虫启动接口
 def start_spider(request):
     project_name = 'sots'
     kword = 'php'
@@ -113,7 +112,7 @@ def start_spider(request):
     run_stat = scrapyd_master.run_slave_spider(project_name, 'lagou_new')
     print(json.loads(run_stat))
 
-
+# TODO 每次匹配结果存入数据库
 @csrf_exempt
 def job_list(request):
     if request.method == 'POST':
@@ -146,7 +145,6 @@ def job_list(request):
             job = Job.objects.get(id=djob.Job.id)
             jobs.append(job)
 
-        # TODO 有效值检测(一个独立模块)
         result = jobmatch(jobs, skills, experience, education, place)
         # 拼接返回JSON
         list = pack_job_result(result)
@@ -154,7 +152,6 @@ def job_list(request):
         return JsonResponse(list, safe=False)
 
 
-# TODO 修改为从文件或数据库获取
 def get_searchKeyword(request):
     releaseTime = ['本周发布', '本月发布', '三个月內发布']
 
@@ -238,7 +235,6 @@ def get_personRecommend(request):
     return JsonResponse(recommendjobs, safe=False)
 
 
-# TODO 在哪里显示？
 # 前端传入id数组
 def get_requirementsDiagrams(request):
     getonegraph(id)

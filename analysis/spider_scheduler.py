@@ -105,7 +105,7 @@ def operations():
         tmplist = r.lrange(name, 0, len)
 
         for job in tmplist:
-            r.lrem(name, job)  # 从缓存中移除已经获取的jobODO
+            r.lrem(name, job)
             jsjob = json.loads(job)
             if jsjob is not None:
                 row = getrow(jsjob)
@@ -176,7 +176,6 @@ def ontime_persistencer():
 
         db_size = DigitizedJob.objects.count()
         csv_size = pd.read_csv(didatapath, low_memory=False).shape[0]
-        # TODO 是否独立出来
         if db_size + 50 < csv_size:
             print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
             persistence_digitizeddata()
@@ -250,12 +249,12 @@ def ontime_spider():
 
 
 def scheduler():
-    # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
-    # spider_thread.start()
+    spider_thread = Thread(target=ontime_spider, name='ontime_spider')
+    spider_thread.start()
     analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
     analysis_thread.start()
-    # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
-    # persistence_thread.start()
+    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    persistence_thread.start()
 
 
 if __name__ == '__main__':

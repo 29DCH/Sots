@@ -150,7 +150,6 @@ class ScrapydApi:
         return r.text
 
 
-# TODO(hk): 测试发布分布式爬虫并修改相关操作的函数
 if __name__ == '__main__':
     project_name = 'sots'
     kword = 'php'

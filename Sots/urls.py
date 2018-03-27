@@ -151,7 +151,7 @@ urlpatterns = [
     url(r'sots/logIn', login),
     url(r'sots/postuserName', postuserName),
     url(r'sots/registered', registered),
-
+    # TODO personalEdit
 
     # 测试
     url(r'access', access, name='access'),

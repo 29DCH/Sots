@@ -95,7 +95,6 @@ class AnalysisConf(models.Model):
     starttime = models.DateTimeField()
 
 
-# TODO 添加关键字表及对应的热词表
 class Keyword(models.Model):
     keyword = models.CharField(max_length=100, unique=True)
 

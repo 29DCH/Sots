@@ -18,6 +18,5 @@ def handle(path:str, keywords):
         r.delete(keyword+"_new")
 
 
-# TODO 分析以城市为关键字的职位信息
 def city():
     pass

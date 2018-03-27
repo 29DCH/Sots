@@ -125,6 +125,7 @@ def jobcity():
     print ('耗时：', endtime-starttime)
 
 
+# TODO 时间排序
 def job_need():
     datas = dict()
     # 以发布时间为组
@@ -138,7 +139,6 @@ def job_need():
     for obj in skillnum:
         datas['skillnum'].append({'value':obj[1], 'name':obj[0]})
 
-    # TODO api错误
     exprnum = Job.objects.values_list('experienceRequire').annotate(num=Count('id')).order_by('-num')[:5]
     datas['workskill'] = []
     for obj in skillnum:
@@ -149,17 +149,19 @@ def job_need():
 
 def job_detail():
     datas = dict()
-    releasenum = Job.objects.values_list('JobName').annotate(num=Count('id')).order_by('-num')[:10]
+    releasenum = Job.objects.values_list('JobName').annotate(num=Count('id')).order_by('-num')[:20]
     # TODO 显示问题
     datas['jobtop'] = []
     datas['jobtype'] = []
-    for obj in releasenum:
+    for obj in releasenum[:10]:
         datas['jobtop'].append({'value':obj[1], 'name':obj[0]})
+    for obj in releasenum:
         datas['jobtype'].append({'value':obj[1], 'name':obj[0]})
 
     return datas
 
 
+# TODO 浮点数  职位数量  排序
 def salary_analysis():
     datas = dict()
 
