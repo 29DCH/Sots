@@ -25,5 +25,6 @@ class User(models.Model):
     phone = models.CharField(max_length=300)
     workingTime = models.CharField(max_length=300)
     status = models.CharField(max_length=20)
-
+    category = models.CharField(max_length=20,default='1')
+    graduates = models.CharField(max_length=20,default='2')
 

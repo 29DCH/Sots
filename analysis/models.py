@@ -90,6 +90,14 @@ class SpiderConf(models.Model):
     startPage = models.IntegerField(default=1)
     maxAllowPage = models.IntegerField(default=100)
 
+# 城市列表
+class City(models.Model):
+    citycode = models.CharField(max_length=20)
+    adcode = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+    center = models.CharField(max_length=20)
+    level = models.CharField(max_length=20)
+    areacode = models.CharField(max_length=20)
 
 class AnalysisConf(models.Model):
     starttime = models.DateTimeField()

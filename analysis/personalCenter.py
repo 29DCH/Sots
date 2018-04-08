@@ -1,9 +1,27 @@
 # 个人中心、登录注册
+
+
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+
 from administrators.models import User as us
 from analysis.models import BrowseRecords as br
 from analysis.models import Job as job
+from analysis.models import City as city
+
+
+# 注册的用户名校验
+@csrf_exempt
+def postuserName(request):
+    b = request.body.decode()
+    body = eval(b)
+    username = body['username']
+    if us.objects.filter(username=username).count() == 0:
+        result = None
+    else:
+        result = {'usernameLike': {'errorInfor': '用户名 已经注册哦'}}
+    return JsonResponse(result, safe=False)
 
 #注册
 @csrf_exempt
@@ -27,7 +45,7 @@ def registered(request):
 # 登录
 @csrf_exempt
 def login(request):
-    print(request.body)
+    # print(request.body)
     b = request.body.decode()
     body = eval(b)
     username = body['username']
@@ -41,18 +59,48 @@ def login(request):
             result = {'isOK': "Yes"}
             request.session['username'] = user.username
             request.session['uid'] = user.id
+            request.session['status'] = user.status
 
     print(result['isOK'])
     return JsonResponse(result, safe=False)
 
-def postuserName(request):
+# 是否登录校验
+
+
+# 前台获取性别、城市、学历、工作年限的列表信息
+def personalEdit(request):
+    c = city.objects.filter(level='province')
+    citys = []
+    for ci in c:
+        citys.append(ci.name)
+    personalEdit = {
+        'status': 'Yes',
+        'result': {
+            'provinces': citys,
+            'edu': ['不便透露', '大专', '本科', '硕士', '博士'],
+            'sex': ['男', '女', '其他'],
+            'workTimes': ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            'graduates' : ['是','否']
+        }
+    }
+    return JsonResponse(personalEdit, safe=False)
+
+# 根据省份查询对应的市集合
+def personalCity(request):
     b = request.body.decode()
     body = eval(b)
-    username = body['username']
-    if us.objects.filter(username=username).count() == 0:
-        result = None
-    else:
-        result = {'usernameLike': {'errorInfor': '用户名 已经注册哦'}}
+    provinceName = body['province']
+
+    province = city.objects.get(name=provinceName, level='province')
+    adcode = province.adcode
+    code = adcode[:2]
+    cs = city.objects.filter(adcode__startswith=code, level='city')
+    name = []
+    for c in cs:
+        name.append(c.name)
+        #print(c.name)
+    result = {'result' : {'citys':name}}
+
     return JsonResponse(result, safe=False)
 
 # 将用户个人信息提交到后台
@@ -76,12 +124,10 @@ def postPersonalInformation(request):
     user.name = body['name']
     user.phone = body['phone']
     user.workingTime = body['workingTime']
+    user.graduates = body['graduates']
     user.state = 'SUBMITTED' # 用户填写完信息后改变状态
     user.save()
-    result = body
-
-
-    result['status'] = user.state
+    result = {'isOK': "Yes"}
     return JsonResponse(result, safe=False)
 
 # 前台获得个人信息
