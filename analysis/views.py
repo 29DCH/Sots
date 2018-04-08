@@ -17,7 +17,7 @@ from analysis.portrait import user_portrait, job_portrait, company_portrait
 from analysis.portrait.job_portrait import getonegraph, getallgraph
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
-from analysis.spider_scheduler import scheduler, test
+from analysis.spider_scheduler import scheduler
 from analysis.tools.model_tool import get_random_job_id
 from analysis.tools.persistence_data_handel import persistence_job, persistence_djob, persistence_company
 
@@ -102,7 +102,6 @@ def pack_job_list(jobs: list):
 
 def test_url(request):
     scheduler()
-    # test()
 
 
 def start_spider(request):
@@ -142,7 +141,7 @@ def job_list(request):
         jobs = []
 
         for djob in djobs:
-            job = Job.objects.get(id=djob.Job.id)
+            job = Job.objects.get(jobId=djob.job_id)
             jobs.append(job)
 
         result = jobmatch(jobs, skills, experience, education, place)

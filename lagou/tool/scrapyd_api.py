@@ -7,6 +7,7 @@
 
 import os
 
+import json
 import requests
 
 
@@ -150,10 +151,9 @@ class ScrapydApi:
         return r.text
 
 
-# TODO(hk): 测试发布分布式爬虫并修改相关操作的函数
 if __name__ == '__main__':
     project_name = 'sots'
-    kword = 'php'
+    kword = 'python'
     targets = [
         'local',
         # 'slave01',
@@ -162,10 +162,10 @@ if __name__ == '__main__':
 
     # 根据scrapy.cfg查看对应关系
     # scrapyd_master = ScrapydApi('localhost')  # local的地址对应localhost
-    # scrapyd_slave_01 = ScrapydApi('192.168.71.143')  # slave01对应192.168.71.143
+    # scrapyd_slave_01 = ScrapydApi('localhost')  # slave01对应192.168.71.143
 
     # master端爬虫, 可多次执行run_master_spider函数,修改kword、start_page、max_allow_page等生成不同的url
-    # run_stat = scrapyd_master.run_master_spider(project_name, 'lagou_start', kword, start_page=15, max_allow_page=5)
+    # run_stat = scrapyd_master.run_master_spider(project_name, 'lagou_start', kword, start_page=1, max_allow_page=5)
     # print(json.loads(run_stat))
     # run_stat = scrapyd_master.run_master_spider(project_name, 'wuyou_first', kword, start_page=15, max_allow_page=5)
     # print(json.loads(run_stat))
@@ -174,3 +174,4 @@ if __name__ == '__main__':
     # print(json.loads(run_stat))
     # run_stat = scrapyd_slave_01.run_slave_spider(project_name, 'wuyou_second')
     # print(json.loads(run_stat))
+    # scrapyd_slave_01.stop_spider(project_name, '142dc8c0357f11e8a53ef406698db0ad')
