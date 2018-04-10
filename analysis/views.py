@@ -60,7 +60,7 @@ def pack_job_result(matchjobs: list):
             j = {
                 "id": job.id,
                 "compName": job.JobName,
-                "compPlace": job.JobPlace,
+                "compPlace": job.releaseTime,
                 "compSalary": job.JobSalary,
                 "compPosition": job.JobPlace,
                 "compPublishTime": '1.1',
@@ -82,14 +82,13 @@ def pack_job_result(matchjobs: list):
     print(result)
     return result
 
-
 def pack_job_list(jobs: list):
     list = []
     for i in jobs:
         j = {
             "id": i.id,
             "compName": i.JobName,
-            "compPlace": i.JobPlace,
+            "compPlace": i.releaseTime,
             "compSalary": i.JobSalary,
             "compPosition": i.JobPlace,
             "compPublishTime": '1.1',
@@ -135,7 +134,7 @@ def job_list(request):
         user = get_digitaluser(skills, experience, education, '', 'java')
         result = predic(user)
 
-        djobs = DigitizedJob.objects.order_by('salary').filter(salary__gt=result)[0:50]
+        djobs = DigitizedJob.objects.order_by('salary').filter(salary__gt=result)[0:100]
         print(djobs[0].salary)
 
         jobs = []
@@ -201,7 +200,7 @@ def pack_recommend(jobs):
 # 推荐职位
 def get_recommendInformation(request):
     jobs = []
-    for i in range(5):
+    for i in range(20):
 
         randid = get_random_job_id()
         print('get job : ', randid)
@@ -217,7 +216,7 @@ def get_recommendInformation(request):
 
 # 获取热门职位
 def get_hotJob(request):
-    jobs = Job.objects.order_by('clicktimes')[:5]
+    jobs = Job.objects.order_by('clicktimes')[:20]
     hotjobs = pack_job_list(jobs)
     return JsonResponse(hotjobs, safe=False)
 
@@ -225,7 +224,7 @@ def get_hotJob(request):
 # 猜你喜欢
 def get_personRecommend(request):
     jobs = []
-    for i in range(5):
+    for i in range(20):
         randid = get_random_job_id()
         print('get job : ', randid)
         job = Job.objects.get(id=randid)

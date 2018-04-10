@@ -1,24 +1,20 @@
-import pickle
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import time
-
-import redis
 from jieba import analyse
 
-from analysis.models import Keyword, Hotword
+from analysis.models import Keyword, Hotword, Job
+from analysis.tools import hbase_tool
 from analysis.tools.NLtool import get_dict, get_stop_words, clean_words, save_keywords, word_pseg
+from concurrent.futures import ThreadPoolExecutor
+executor = ThreadPoolExecutor(50)
 
 tfidf = analyse.extract_tags
 textrank = analyse.textrank
 
+stop = get_stop_words()
 
 class Words:
-    def __init__(self, word_str, keyword):
-        self.keyword = keyword
+    def __init__(self, word_str):
         self.word_str = word_str
-        self.stop = get_stop_words()  # 停用词
         self.usewords = ''
         self.word_dict = {}
 
@@ -30,66 +26,83 @@ class Words:
         # 去掉停用词
         stoped_list = []
         for i in self.word_dict.keys():
-            if i in self.stop:
+            if i in stop:
                 stoped_list.append(i)
         for i in stoped_list:
             print('delete key ', i)
             self.word_dict.pop(i)
 
         tmp = sorted(self.word_dict.items(), key=lambda x: x[1], reverse=True)
-        keys = []
-        vals = []
-        Hotword.objects.filter(keyword=keyword).delete()
-        for i in tmp[:20]:
-            keys.append(i[0])
-            vals.append(i[1])
-            hotword = Hotword()
-            hotword.hotword = i[0]
-            hotword.heat = i[1]
-            hotword.keyword = keyword
-            hotword.save()
 
-        save_keywords(keys, vals, self.keyword)
+        # Hotword.objects.filter(keyword=keyword).delete()
+        # TODO 存储所有到数据库
+        for i in tmp:
+            # 查询是否存在
+            if Hotword.objects.filter(hotword=i[0], keyword=keyword).exists():
+                hotword = Hotword.objects.filter(keyword=keyword).get(hotword=i[0])
+                hotword.heat += int(i[1])
+                hotword.save()
+            else:
+                # keys.append(i[0])
+                # vals.append(i[1])
+                hotword = Hotword()
+                hotword.hotword = i[0]
+                hotword.heat = i[1]
+                hotword.keyword = keyword
+                hotword.save()
 
-        # df = pd.DataFrame(list(vals))
-        # print(df)
-        # df.index = list(keys)
-        # df.plot(figsize=(10.24, 7.68), kind='bar')
-        #
-        # plt.title(u'result:')
-        # plt.show()
+keywords = {}
+ct = 0
+
+def thread_deal(s, keyword):
+    global ct
+    global keywords
+    W = Words(s)
+    W.word_handle(keywords.get(keyword))
+    ct+=1
+    print(ct, " count words : ", keyword, s)
+    del W
 
 
-def words_split(path: str, keyword):
-    # 加载用户字典
-    starttime = time.time()
 
-    # 从文件中获取
-    x = pd.read_csv(path, low_memory=False)
-    x = x[(x['keyword'] == keyword)]
-    requirements = x['jobInfo']
-    print('keyword ', keyword, 'shape ', x.shape)
-    s = ''
-    for req in requirements:
-        s += str(req).strip()
+def words_split():
+    global keywords
 
-    # 如果keyword不存在于数据库则创建
+    # mysql 中的ids
+    oldids = Job.objects.values_list('jobId')
+    oldidset = set()
+    for comp in oldids:
+        oldidset.add(comp[0])
+    # hbase 中的 ids
     try:
-        Keyword.objects.get(keyword__contains=keyword)
-    except BaseException as e:
-        print(e)
-        newkeyword = Keyword()
-        newkeyword.keyword = keyword
-        newkeyword.save()
+        newidset = hbase_tool.getalljobid()
+    except BrokenPipeError as e:
+        print(e.strerror)
+        return
 
-    kw = Keyword.objects.get(keyword__contains=keyword)
-    # 分析更新之后的关键字
-    W = Words(s, keyword)
-    W.word_handle(kw)
-    endtime = time.time()
-    print('time:', endtime - starttime)
+    # TODO 修改
+    newset = newidset
+    # newset = newidset - oldidset
 
+    print("start split words")
+    # 缓存keyword对象
+    allkw = Keyword.objects.all()
+    for kw in allkw:
+        keywords[kw.keyword] = kw
+    for id in newset:
+        keyword = hbase_tool.getkeyword_byjobid(id)
+        s = hbase_tool.getjobinfo_byjobid(id)
+        s = str(s).strip()
+
+        # 判断缓存中是否存在
+        if(keywords.get(keyword) is None):
+            print("new keyword : ", keyword)
+            newkeyword = Keyword()
+            newkeyword.keyword = keyword
+            newkeyword.save()
+            kw = Keyword.objects.get(keyword__contains=keyword)
+            keywords[keyword] = kw
+        executor.submit(thread_deal, s, keyword)
 
 if __name__ == '__main__':
     pass
-    # words_split('../datas/data.csv')

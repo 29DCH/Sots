@@ -6,6 +6,7 @@ from threading import Thread
 from time import sleep
 from urllib.parse import unquote
 
+import async as async
 import pandas as pd
 import redis
 from django.utils.timezone import now
@@ -77,7 +78,7 @@ def getrow(jandc):
                'jobPlace': getvalue(jandc, 'jobPlace'), 'jobSalary':
                    getvalue(jandc, 'jobSalary'), 'jobAdvantage': getvalue(jandc, 'jobAdvantage'),
                'releaseTime': getvalue(jandc, 'releaseTime'), 'jobNeed':
-                   '', 'educationRequire': getvalue(jandc, 'educationRequire'),
+                   getvalue(jandc, 'jobNeed'), 'educationRequire': getvalue(jandc, 'educationRequire'),
                'experienceRequire': getvalue(jandc, 'experienceRequire'),
                'skillRequire': '', 'jobLink': getvalue(jandc, 'jobLink'), 'jobInfo': getvalue(jandc, 'jobInfo'),
                'jobNature': '',
@@ -113,7 +114,7 @@ def get_insertjobtupple(row):
     job.append(str(row['experienceRequire']))
     job.append(str(row['skillRequire']))
     job.append(str(row['jobLink']))
-    job.append(str([row['jobInfo']]))
+    job.append(str(row['jobInfo']))
     job.append(str(row['jobNature']))
     job.append(str(row['jobLabels']))
     job.append(int(row['companyId']))
@@ -158,11 +159,13 @@ def getredissize():
 
 
 def operations():
-    # 判断文件是否存在
     r = redis.Redis()
     keys = r.keys(r'*:items')
-
-    oldjobidset = getalljobid()
+    try:
+        oldjobidset = getalljobid()
+    except BrokenPipeError as e:
+        print("Broken pipe try again : ", e.strerror)
+        return
 
     starttime = now()
     count = 0
@@ -183,9 +186,12 @@ def operations():
                     # print('new job', newId)
                     hcomp = get_insertcomptupple(row)
                     hjob = get_insertjobtupple(row)
-                    hbase_tool.insert_job(hjob)
-                    hbase_tool.insert_company(hcomp)
-
+                    try:
+                        hbase_tool.insert_job(hjob)
+                        hbase_tool.insert_company(hcomp)
+                    except BrokenPipeError as e:
+                        print(e.strerror)
+                        return
     # TODO 独立出来一个模块
     # analysis.handle(path, allkey)
     endtime = now()
@@ -193,20 +199,18 @@ def operations():
 
 
 def ontime_persistencer():
-    # 当本地的数据条数超过数据库固定数量时进行操作
     while True:
-        df = pd.read_csv(datapath, low_memory=False)
-        csv_size = df.shape[0]
-        db_size = Job.objects.count()
-        if db_size + 50 < csv_size:
-            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+        jobhbsize = hbase_tool.count_job()
+        jobdb_size = Job.objects.count()
+        if jobdb_size + 50 < jobhbsize:
+            print('db_size ', jobdb_size, 'hb_size', jobhbsize, 'start insert')
             # 阻塞阻塞阻塞
             persistence_origindata()
 
-        db_size = DigitizedJob.objects.count()
-        csv_size = pd.read_csv(didatapath, low_memory=False).shape[0]
-        if db_size + 50 < csv_size:
-            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+        djobdb_size = DigitizedJob.objects.count()
+        djobhbsize = hbase_tool.count_djob()
+        if djobdb_size + 50 < djobhbsize:
+            print('db_size ', djobdb_size, 'hb_size', djobhbsize, 'start insert')
             persistence_digitizeddata()
         sleep(60)
 
@@ -225,11 +229,13 @@ def spider_runner(spidername: str, keyword: str, start_page: str, maxpage: str):
 def ontime_analysis():
     while True:
         cachesize = getredissize()
+        print("cache size ： ", cachesize)
         if cachesize < 50:
             print("cache size is too small, wait for 10 second")
             sleep(10)
         else:
             operations()
+            sleep(10)
 
 
 # 考虑一个配置文件和一个对应的表
@@ -262,12 +268,40 @@ def ontime_spider():
         sleep(60)
 
 
-# TODO 尝试去掉csv文件。尝试将定时任务改为hbase实时任务。
+def ontime_handel():
+    analysis.handle()
+    # TODO 修改
+    # while(True):
+    #     jobhbsize = hbase_tool.count_job()
+    #     jobdb_size = Job.objects.count()
+    #     if jobdb_size + 50 < jobhbsize:
+    #         analysis.handle()
+    #     sleep(60)
+
+
+
+def ontime_countwords():
+    while(True):
+        analysis.count_words()
+        print("waiting")
+        sleep(60)
+    # while(True):
+    #     jobhbsize = hbase_tool.count_job()
+    #     jobdb_size = Job.objects.count()
+    #     if jobdb_size + 50 < jobhbsize:
+    #         analysis.count_words()
+    #     sleep(60)
+
+
 def scheduler():
-    spider_thread = Thread(target=ontime_spider, name='ontime_spider')
-    spider_thread.start()
-    analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
-    analysis_thread.start()
+    # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
+    # spider_thread.start()
+    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    # analysis_thread.start()
+    # handle_thread = Thread(target=ontime_handel, name='ontime_handel')
+    # handle_thread.start()
+    handle_thread = Thread(target=ontime_countwords, name='ontime_countwords')
+    handle_thread.start()
     # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
     # persistence_thread.start()
 

@@ -16,5 +16,5 @@ defaults = {
     'compLogo' : '',
     'financeStage' : '',
     'keyword':'java',
-
+    'jobNeed':''
 }

@@ -3,6 +3,8 @@ import re
 import jieba
 import jieba.posseg as pseg
 
+from analysis.models import Keyword, Hotword
+
 jieba.load_userdict('analysis/tools/dict')
 
 """
@@ -61,13 +63,14 @@ def get_keyword(jobinfo):
 
 # 读取关键字
 def get_keywords(keyword='java'):
-    f = open('analysis/result/'+keyword+'_keywords', 'r')
-    keywords = []
-    for i in f.readlines():
-        line = str(i).strip()
-        keyandheat = line.split(' ')
-        keywords.append(keyandheat[0])
-    return keywords
+    # f = open('analysis/result/'+keyword+'_keywords', 'r')
+    # TODO 倒序查询hotword
+    kw = Keyword.objects.get(keyword=keyword)
+    keywords = Hotword.objects.filter(keyword=kw).values_list('hotword').order_by('-heat')[:20]
+    kwset = set()
+    for i in keywords:
+        kwset.add(i[0])
+    return kwset
 
 
 # 保存关键字

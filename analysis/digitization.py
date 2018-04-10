@@ -1,15 +1,19 @@
 import re
 import os
 import pickle
+from math import nan
+from threading import Thread
+
 import numpy as np
 import pandas as pd
 
 import redis
 
 from analysis.models import Job, DigitizedJob
-from analysis.tools import csv_conf
+from analysis.tools import csv_conf, hbase_tool
 from analysis.tools.csv_conf import didatapath, datapath
 from analysis.tools.NLtool import get_keyword, get_keywords
+from concurrent.futures import ThreadPoolExecutor
 
 
 def get_skills(str):
@@ -73,7 +77,7 @@ def jobmatch(jobs, skills, experience, education, place):
                 'job': i
             }
             results.append(result)
-        if len(results) > 5:
+        if len(results) >25:
             break
     print(results)
     return results
@@ -135,6 +139,8 @@ def get_experience(words):
 def get_skill(words: str, keyword):
     keywords = get_keywords(keyword)
     words = get_keyword(words)
+    print(keywords)
+    print(words)
     point = 0
     for j in words:
         if j in keywords:
@@ -185,7 +191,7 @@ def get_salary(words: str):
 
 def get_compSize(words: str):
     reg = r'[0-9]*'
-    if words is not np.nan:
+    if words is not nan:
         try:
             nums = re.findall(reg, words)
         except TypeError as e:
@@ -199,7 +205,7 @@ def get_compSize(words: str):
                 num += 1
         if num >= 1:
             sums = sums / num
-            return sums
+            return int(sums)
         else:
             return 1
     else:
@@ -207,123 +213,52 @@ def get_compSize(words: str):
 
 
 class Analysis:
-
     def __init__(self):
-        # 判断文件存在
-        columns = csv_conf.digital_columnsname
-        mdpath = didatapath
-        ifexists = os.path.exists(mdpath)
-        if ifexists:
-            self.frame = pd.read_csv(mdpath, low_memory=False)
-            self.frame = self.frame[columns]
-        else:
-            self.frame = pd.DataFrame(columns = columns)
+        newidset = hbase_tool.getjobids()
 
+        oldidset = set()
+        oldcomps = Job.objects.values_list('jobId')
+        for comp in oldcomps:
+            oldidset.add(comp[0])
+
+        # TODO 修改
+        self.newset = newidset
+        # self.newset = newidset - oldidset
         self.jobs = []
 
-        # TODO 修改完后删除
-        # r = redis.Redis()
-        #
-        # names = r.keys(r'*_new')
-        # for name in names:
-        #     self.jobs+=r.hvals(name)
 
-        start_index = DigitizedJob.objects.count()
-        df = pd.read_csv(datapath, low_memory=False)
-        df = df[csv_conf.todigital_columnsname]
-        start_index += 1
-        df = df[start_index:]
-        # 以防万一
-        df = df.drop_duplicates('jobId')
-        rows = df.iterrows()
-        for index, row in rows:
-            self.jobs.append(row)
-            pass
-
+    # TODO 存入hbase
     def handel(self):
-        path = didatapath
         count = 0
         # 遍历关键字相同的job
-        for job in self.jobs:
+        for id in self.newset:
             # job =  pickle.loads(job)
-            print('digitization : ', job)
-            jobId = job[0]
-            keyword = job[5]
-            # TODO 单位判断
-            salary = get_salary(job[1])
+            row = hbase_tool.getjob_byjobid(id)
+            print('digitization : ', row)
+            jobId = id
+            keyword = row[-1]
+            salary = get_salary(row[3])
             if salary == 0:
                 continue
-            education = get_education(job[2])
-            experience = get_experience(job[3])
-            skill = get_skill(str(job[4]), keyword)
-            compsize = get_compSize(job[6])
-            self.frame.loc[self.frame.shape[0]] = {'jobId': jobId, 'compSize': compsize, 'skill': skill, 'experience':
-                experience, 'education': education, 'salary': salary, 'keyword': keyword}
-            count+=1
-            if count == 1000:
-                print('dijob 1000 save')
-                self.frame.to_csv(path)
-                count=0
-        print(self.frame)
-        print(self.frame.shape)
-        self.frame.to_csv(path)
+            education = get_education(row[7])
+            experience = get_experience(row[8])
+            # TODO 检查这里
+            skill = get_skill(str(row[11]), keyword)
+            compsize = get_compSize(hbase_tool.getcompsize_bycompid(row[14]))
 
-    # def handel(self):
-    #     self._get_salary()
-    #     self._get_education()
-    #     self._get_experience()
-    #     self._get_skill()
-    #     self._get_comp_size()
-    #     self.frame.insert(0, 'jobId', self.columns['jobId'])
-    #     self.frame.insert(self.frame.shape[1]+1, 'keyword', self.columns['keyword'])
-    #     print(self.frame.head())
-    #     # self.frame.plot(figsize=(10.24, 7.68))
-    #     # plt.show()
-    #     path = 'analysis/result/newModel.csv'
-    #     self.frame.to_csv(path, encoding="utf-8")
-    #     return path
+            print(compsize)
 
-    # def _get_salary(self):
-    #     t = self.columns['jobSalary']
-    #     salary = []
-    #     # 判断是xk-yk形式  还是 xk形式
-    #     for i in t:
-    #         # 匹配结果便利一遍  将所有数字形式的转为float相加然后取平均数
-    #         sa = get_salary(i)
-    #         salary.append(sa)
-    #     self.frame.insert(0, 'salary', salary)
-    #
-    # def _get_education(self):
-    #     t = self.columns['educationRequire']
-    #     education = []
-    #     for i in t:
-    #         education.append(get_education(i))
-    #     self.frame.insert(0, 'education', education)
-    #
-    # def _get_experience(self):
-    #     # 合法数据形式: 不限; x-y年; x年以上
-    #     t = self.columns['experienceRequire']
-    #     experience = []
-    #     reg = r'[0-9]*'
-    #     for i in t:
-    #         experience.append(get_experience(i))
-    #     self.frame.insert(0, 'experience', experience)
-    #
-    # # 将每一条记录的要求中的关键字与统计结果中的关键词匹配
-    # def _get_skill(self):
-    #     # 读取关键字
-    #     t = self.columns['jobInfo']
-    #     skill = []
-    #     for i in t:
-    #         skill.append(get_skill(i, ))
-    #     self.frame.insert(0, 'skill', skill)
-    #
-    # def _get_comp_size(self):
-    #     t = self.columns['compSize']
-    #     compSize = []
-    #     for i in t:
-    #         compSize.append(get_compSize(i))
-    #     self.frame.insert(0, 'compSize', compSize)
+            djob = []
+            djob.append(compsize)
+            djob.append(skill)
+            djob.append(experience)
+            djob.append(education)
+            djob.append(salary)
+            djob.append(jobId)
+            djob.append(keyword)
+            print("insert djob : ", djob)
+            hbase_tool.insert_djob(djob)
+
 
 
 if __name__ == '__main__':
