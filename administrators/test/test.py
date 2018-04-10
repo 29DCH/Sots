@@ -4,10 +4,30 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from administrators.models import User as ui
 from analysis.models import Carousel as c
+from analysis.models import City as city
 import random
 
 def show(request):
     return render(request, 'test/show.html')
+
+#
+def postCity(request):
+    return render(request, 'test/postCity.html')
+# 根据省份查询对应的市集合
+def personalCity(request):
+    # b = request.body.decode()
+    # body = eval(b)
+    # provinceName = body['province']
+    provinceName = request.POST['province']
+    # print(provinceName)
+    province = city.objects.get(name=provinceName, level='province')
+    adcode = province.adcode
+    code = adcode[:2]
+    # print(code)
+    citys = city.objects.filter(adcode__startswith=code, level='city')
+    # for cit in citys:
+    #     print(cit.name)
+    return render(request, 'test/city.html', {'citys' : citys})
 
 def rando(request):
     username = ['12424242@qq.com','24242@qq.com','34242@qq.com','66464242@qq.com']

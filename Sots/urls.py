@@ -21,7 +21,8 @@ import administrators.models as admo
 import administrators.user.user as us
 import administrators.job.job as job
 import administrators.company.company as com
-from analysis.personalCenter import login, postuserName, registered
+from analysis.personalCenter import login, postuserName, \
+    registered, personalEdit, postPersonalInformation, personalCity
 from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
     get_recommendInformation, get_hotJob, get_personRecommend, \
     get_allrequirementsDiagrams, test_url, get_carouselData, get_user_data, get_user_action, get_user_feature, \
@@ -148,17 +149,24 @@ urlpatterns = [
     url(r'sots/visualanalysis/salaryanalysis', get_salary_analysis),
     url(r'sots/visualanalysis/compscale', get_comp_scale),
     url(r'sots/visualanalysis/compstatu', get_comp_statu),
-    url(r'sots/logIn', login),
-    url(r'sots/postuserName', postuserName),
-    url(r'sots/registered', registered),
+    url(r'sots/logIn', login),# 登录校验
+    url(r'sots/postuserName', postuserName),# 注册用户名的异步校验
+    url(r'sots/registered', registered),# 注册校验
+    url(r'sots/personalEdit', personalEdit),# 前台获取性别、城市、学历、工作年限的列表信息
+    url(r'sots/personalCity', personalCity),# 根据省份查询对应的市集合
+    url(r'sots/postPersonalInformation', postPersonalInformation),# 前台用户个人信息提交
     # TODO personalEdit
 
-    # 测试
+    # 测试0
     url(r'access', access, name='access'),
     url(r'persistence', persistence, name='persistence'),
     url(r'operation', test_url),
+    url(r'postCity', te.postCity),
+    url(r'city', te.personalCity, name='city'),
 
     # 随机生成求职者的测试数据，存入数据库
+
+
     # url(r'admin/img', te.imgs, name='img'),# 图片测试
     # url(r'admin/testShow', te.img, name='testShow'),# 图片测试
     url(r'admin/testShow', te.show, name='testShow'),  # 展示页面
