@@ -56,12 +56,9 @@ def login(request):
         user = us.objects.filter(username=username).get()
         #print(user.password)
         if user.password == password:
-            result = {'isOK': "Yes"}
-            request.session['username'] = user.username
-            request.session['uid'] = user.id
-            request.session['status'] = user.status
-
-    print(result['isOK'])
+            result = {'isOK': "Yes",
+                      'status': user.status,
+                      'username': user.username}
     return JsonResponse(result, safe=False)
 
 # 是否登录校验
@@ -106,12 +103,10 @@ def personalCity(request):
 # 将用户个人信息提交到后台
 @csrf_exempt
 def postPersonalInformation(request):
-    username = request.session['username']
-    user = us.objects.filter(username=username).get()
-
-    print(request.body)
     b = request.body.decode()
     body = eval(b)
+    username = body['username']
+    user = us.objects.filter(username=username).get()
 
     user.settledCity = body['settledCity']
     user.degree = body['degree']
@@ -132,11 +127,9 @@ def postPersonalInformation(request):
 
 # 前台获得个人信息
 def getPersonalInformation(request):
-    if 'username' not in request.session.keys():
-       result = {'status':'NOTLOGIN'}
-       return JsonResponse(result)
-    else:
-        username = request.session['username']
+    b = request.body.decode()
+    body = eval(b)
+    username = body['username']
 
     user = us.objects.filter(username = username).get()
     if(user.status == 'SUBMITTED'):
