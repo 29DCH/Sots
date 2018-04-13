@@ -202,16 +202,20 @@ def ontime_persistencer():
     while True:
         jobhbsize = hbase_tool.count_job()
         jobdb_size = Job.objects.count()
+        print("job : ", jobdb_size, " : ", jobhbsize)
         if jobdb_size + 50 < jobhbsize:
             print('db_size ', jobdb_size, 'hb_size', jobhbsize, 'start insert')
             # 阻塞阻塞阻塞
             persistence_origindata()
-
+        else:
+            print('no job')
         djobdb_size = DigitizedJob.objects.count()
         djobhbsize = hbase_tool.count_djob()
         if djobdb_size + 50 < djobhbsize:
             print('db_size ', djobdb_size, 'hb_size', djobhbsize, 'start insert')
             persistence_digitizeddata()
+        else:
+            print('no djob')
         sleep(60)
 
 
@@ -269,28 +273,22 @@ def ontime_spider():
 
 
 def ontime_handel():
-    analysis.handle()
-    # TODO 修改
-    # while(True):
-    #     jobhbsize = hbase_tool.count_job()
-    #     jobdb_size = Job.objects.count()
-    #     if jobdb_size + 50 < jobhbsize:
-    #         analysis.handle()
-    #     sleep(60)
+    while(True):
+        djobhbsize = hbase_tool.count_djob()
+        jobhbsize = hbase_tool.count_job()
+        if djobhbsize + 50 < jobhbsize:
+            analysis.handle()
+        sleep(60)
 
 
 
 def ontime_countwords():
     while(True):
-        analysis.count_words()
-        print("waiting")
+        jobhbsize = hbase_tool.count_job()
+        jobdb_size = Job.objects.count()
+        if jobdb_size + 50 < jobhbsize:
+            analysis.count_words()
         sleep(60)
-    # while(True):
-    #     jobhbsize = hbase_tool.count_job()
-    #     jobdb_size = Job.objects.count()
-    #     if jobdb_size + 50 < jobhbsize:
-    #         analysis.count_words()
-    #     sleep(60)
 
 
 def scheduler():
@@ -300,11 +298,11 @@ def scheduler():
     # analysis_thread.start()
     # handle_thread = Thread(target=ontime_handel, name='ontime_handel')
     # handle_thread.start()
-    handle_thread = Thread(target=ontime_countwords, name='ontime_countwords')
-    handle_thread.start()
-    # persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
-    # persistence_thread.start()
-
+    # handle_thread = Thread(target=ontime_countwords, name='ontime_countwords')
+    # handle_thread.start()
+    persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
+    persistence_thread.start()
+#
 
 if __name__ == '__main__':
     # ontime_spider(16, 9)

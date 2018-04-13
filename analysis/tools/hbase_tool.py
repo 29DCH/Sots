@@ -5,12 +5,11 @@ from time import sleep
 import phoenixdb as phoenixdb
 
 database_url = 'https://localhost:8765/'
-conn = phoenixdb.connect(database_url, autocommit=True)
-lock = threading.Lock()
 
 
 def create_comptable():
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -31,12 +30,13 @@ def create_comptable():
   financeStage varchar(200)
 )
     ''')
-    lock.release()
+    
 
 
 def create_djobtable():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -51,12 +51,13 @@ def create_djobtable():
 )
 
     """)
-    lock.release()
+    
 
 
 def create_jobtable():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -81,151 +82,176 @@ def create_jobtable():
       keyword           VARCHAR(100)    NULL
     )
         ''')
-    lock.release()
+    
 
 
 def count_job():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select count(*) from analysis_job")
-    lock.release()
+    
     return cursor.fetchone()[0]
 
 def count_djob():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select count(*) from analysis_digitizedjob")
-    lock.release()
+    
     return cursor.fetchone()[0]
 
 
 def getjob_bykeyword(keyword):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select * from analysis_job where keyword = '" + keyword + "'")
     jobs = cursor.fetchall()
     for job in jobs:
         print(job)
-    lock.release()
+    
 
 
 
 def getjob_byjobid(jobid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select * from analysis_job where jobid = " + str(jobid))
-    lock.release()
+    
     return cursor.fetchone()
 
 
 def getjobandcomp_byjobid(jobid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute('''
     SELECT * FROM ANALYSIS_JOB AS a
     JOIN ANALYSIS_COMPANY AS c
     ON a.COMPANY_ID = c.COMPANYID
     where jobid = ''' + str(jobid))
-    lock.release()
+    
     return cursor.fetchone()
 
 def getdjob_byjobid(jobid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select * from ANALYSIS_DIGITIZEDJOB where job_id = " + str(jobid))
-    lock.release()
+    
     return cursor.fetchone()
 
 
+def getdjobs_withcity():
+    conn = phoenixdb.connect(database_url, autocommit=True)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT d.EXPERIENCE, d.SKILL, d.EDUCATION, d.COMPSIZE,d.SALARY, j.JOBPLACE
+        FROM ANALYSIS_DIGITIZEDJOB AS d 
+        JOIN ANALYSIS_JOB	AS j
+        ON d.JOB_ID = j.JOBID
+    ''')
+    return cursor.fetchall()
+
 
 def getjobinfo_byjobid(jobid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select jobinfo from analysis_job where jobid = " + str(jobid))
-    lock.release()
+    
     return cursor.fetchone()[0]
 
 
 def getkeyword_byjobid(jobid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select keyword from analysis_job where jobid = " + str(jobid))
-    lock.release()
+    
     return cursor.fetchone()[0]
 
 
 def getjobids():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select jobid from analysis_job")
     ids = cursor.fetchall()
     newidset = set()
     for id in ids:
         newidset.add(id[0])
-    lock.release()
+    
     return newidset
 
 
 def getdjobids():
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
-    cursor.execute("select jobid from ANALYSIS_DIGITIZEDJOB")
+    cursor.execute("select job_id from ANALYSIS_DIGITIZEDJOB")
     ids = cursor.fetchall()
     newidset = set()
     for id in ids:
         newidset.add(id[0])
-    lock.release()
+    
     return newidset
 
 
 def getcomp_bycompid(compid):
-    lock.acquire()
+    
 
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select * from analysis_company where COMPANYID = " + str(compid))
-    lock.release()
+    
     return cursor.fetchone()
 
 
 def getcompsize_bycompid(compid):
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select compsize from analysis_company where COMPANYID = " + str(compid))
-    lock.release()
+    
     return cursor.fetchone()[0]
 
 
 def getcompids():
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select COMPANYID from analysis_company")
     ids = cursor.fetchall()
     newidset = set()
     for id in ids:
         newidset.add(id[0])
-    lock.release()
+    
     return newidset
 
 
 def getjobinfo_bykeyword(keyword, limit=100):
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("select * from analysis_job where keyword = '" + keyword + "' limit " + limit)
     jobs = cursor.fetchall()
     result = []
     for job in jobs:
         result.append(job[0])
-    lock.release()
+    
     return result
 
 
@@ -241,7 +267,8 @@ def insert_company(com=None):
                'nan', 0, 0, '[''东外滩'', ''八佰伴'', ''梅园'']', 'http://www.imdada.cn',
                'i/image/M00/40/E3/CgpFT1lbMmCAJyQhAAA1-lNtzeQ674.png', 'D轮及以上']
 
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute('''
          upsert INTO analysis_company
@@ -249,7 +276,7 @@ def insert_company(com=None):
     VALUES(?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
         ''', com)
 
-    lock.release()
+    
 
 def insert_job(job=None):
     """
@@ -263,20 +290,22 @@ def insert_job(job=None):
                '[''岗位职责：'', ''1、负责公司产品的功能规划、需求分析设计、技术实现和用户体验；'', ''2、负责所属模块的代码开发、调试与维护工作；'', ''3、积极响应客户需求并进行开发/定制化开发和交付；'', ''4、参与公司产品的架构优化，性能优化并辅助其他模块进行技术实现；'', ''5、协助并完成其他各类技术开发任务。'', ''岗位要求：'', ''1、计算机或者相关专业，统招全日制本科及以上学历。'', ''2、良好的问题理解能力，能够理解以及处理复杂逻辑。'', ''3、具备较强的自学能力，团队精神及抗压能力。'', ''4、3年以上的Java开发及应用经验，掌握JSDK，J2EE的相关知识，精通JAVA、JSP、SERVERLET编程，熟悉多线程编程，熟练掌握AJAX，jquery；'', ''5、熟练掌握JAVASCRIPT脚本编写，了解XML，XSLT,CSS的相关知识。'', ''6、掌握数据库的相关知识，熟悉SQLSERVER及ORACLE，具备SQL、触发器、函数、存储过程的编写能力。'', ''7、具有一定的文档编写能力，了解UML。'', ''8、熟悉基本网络设置，能够应用多种操作系统，WINDOWS,LINUX等），熟悉RESIN,TOMCAT等中间件的使用'', ''1、提供有竞争力的薪资，执行相对公平合理的绩效政策和薪酬结构；'', ''2、其他福利：美味三餐、各种补贴、生日和节日福利、年休、优秀员工出国旅游等；'', ''3、作息时间：每天八小时工作制（9:00-18:00，午休1小时），双休+国家法定节假日+带薪假期。'', ''我们的诚意：'', ''-免费提供一日三餐，独立员工食堂，专业大厨亲自掌勺，保证膳食均衡；'', ''-转正既有年假，每年两次加薪机会，年终Bonus，那是必须的！'', ''-每月绩效奖金+研发奖金，用工资条上的数字体现你的技术和实力；'', ''-和你的付出相符的薪水；'', ''-每年一次国内旅游，优秀员工国外旅游，去年塞班岛，今年巴厘岛；'', ''-每年一次全面体检，关爱你的健康；'', ''-员工活动室（乒乓球、桌球），篮球场、浦东羽毛球馆常年场地，均免费；'', ''-安全舒适人体工学椅，时刻保护你的肩颈和腰椎；'', ''-每月至少一次团建，餐后水果，零食茶点免费供应；'']',
                '全职', '[''java'']', 24995, 'java']
 
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute('''
     upsert INTO analysis_job
 (jobId, JobName, JobPlace, JobSalary, JobAdvantage, releaseTime, jobNeed, educationRequire, experienceRequire, skillRequire, jobLink, jobInfo, jobNature, jobLabels, company_id, keyword)
 VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ''', job)
-    lock.release()
+    
 
 
 def insert_djob(djob=None):
     if djob is None:
         djob = [1, 1, 1, 1, 1, 1, 'asf']
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute(
         '''
@@ -284,35 +313,67 @@ def insert_djob(djob=None):
 VALUES(?,?,?,?,?,?,?)
         ''',
         djob)
-    lock.release()
+    
 
 
 def ntest_phoenix():
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute("SELECT *  FROM analysis_company ")
     all = cursor.fetchall()
     for item in all:
         print(item)
-    lock.release()
+    
 
 
 def getalljobid():
-    lock.acquire()
+    
+    conn = phoenixdb.connect(database_url, autocommit=True) 
     cursor = conn.cursor()
     cursor.execute('select jobId from analysis_job')
     all = cursor.fetchall()
     jobidset = set()
     for one in all:
         jobidset.add(one[0])
-    lock.release()
     return jobidset
 
 
+def get_cityjobsalary(city, **kwargs):
+    conn = phoenixdb.connect(database_url, autocommit=True)
+    cursor = conn.cursor()
+    start = kwargs.get('start')
+    end = kwargs.get('end')
+
+    if(end is None):
+        start = str(start)
+        cursor.execute("""
+            SELECT COUNT(JOBID) AS s
+            FROM ANALYSIS_JOB AS j
+            JOIN ANALYSIS_DIGITIZEDJOB AS d ON j.JOBID=d.job_id
+            WHERE d.salary > """+start+""" AND j.JOBPLACE LIKE '"""+city+"""%'
+        """)
+        result = cursor.fetchone()[0]
+    else:
+        start = str(start)
+        end = str(end)
+        cursor.execute("""
+                   SELECT COUNT(JOBID) AS s
+                    FROM ANALYSIS_JOB AS j
+                    JOIN ANALYSIS_DIGITIZEDJOB AS d ON j.JOBID=d.job_id
+                    WHERE d.salary <= """+start+"""  AND d.SALARY>"""+end+""" AND j.JOBPLACE LIKE '"""+city+"""%'
+
+                """)
+        result = cursor.fetchone()[0]
+    print(city,start, end, result)
+    return result
+
+
 if __name__ == '__main__':
+    print(get_cityjobsalary('上海', start=50))
     # print(getjob_byjobid(1010419))
     # print(getjobandcomp_byjobid(1010419))
-    print(getcompsize_bycompid(3772570))
+    # print(getdjobids())
     # for i in range(100000):
     #     print(getdjob_byjobid(1))
     # create_djobtable()

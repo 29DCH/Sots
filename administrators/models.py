@@ -27,4 +27,9 @@ class User(models.Model):
     status = models.CharField(max_length=20)
     category = models.CharField(max_length=20,default='1')
     graduates = models.CharField(max_length=20,default='2')
+    age = models.IntegerField()
+    expectJob = models.CharField(max_length=200)
+    expectSalary = models.CharField(max_length=100)
+    expectCity = models.CharField(max_length=100)
+
 

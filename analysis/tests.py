@@ -80,4 +80,6 @@ def get_salary(words: str):
 
 
 if __name__ == "__main__":
-    pass
+    s = '[1,2,6,6]'
+
+    print(s)

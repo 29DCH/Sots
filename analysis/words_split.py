@@ -64,7 +64,6 @@ def thread_deal(s, keyword):
     del W
 
 
-
 def words_split():
     global keywords
 
@@ -81,8 +80,8 @@ def words_split():
         return
 
     # TODO 修改
-    newset = newidset
-    # newset = newidset - oldidset
+    # newset = newidset
+    newset = newidset - oldidset
 
     print("start split words")
     # 缓存keyword对象

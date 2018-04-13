@@ -14,6 +14,8 @@ from analysis.tools import csv_conf, hbase_tool
 from analysis.tools.csv_conf import didatapath, datapath
 from analysis.tools.NLtool import get_keyword, get_keywords
 from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
+executor = ThreadPoolExecutor(20)
 
 
 def get_skills(str):
@@ -114,7 +116,7 @@ def get_experience(words):
     try:
         match = re.match(reg, words)
     except TypeError as e:
-        print('error occurred.', e);
+        print('error occurred.', e)
         return 0
     if not match.group():  # 全为中文,即不限
         return 0
@@ -136,14 +138,19 @@ def get_experience(words):
             return sums
 
 
+
+
+keyword_keywords = {}
 def get_skill(words: str, keyword):
-    keywords = get_keywords(keyword)
+    global keyword_keywords
+    if keyword_keywords.get(keyword) is None:
+        keywords = get_keywords(keyword)
+        keyword_keywords[keyword] = keywords
     words = get_keyword(words)
-    print(keywords)
-    print(words)
     point = 0
+
     for j in words:
-        if j in keywords:
+        if j in keyword_keywords[keyword]:
             point += 1
     return point
 
@@ -216,15 +223,11 @@ class Analysis:
     def __init__(self):
         newidset = hbase_tool.getjobids()
 
-        oldidset = set()
-        oldcomps = Job.objects.values_list('jobId')
-        for comp in oldcomps:
-            oldidset.add(comp[0])
+        oldidset = hbase_tool.getdjobids()
 
         # TODO 修改
-        self.newset = newidset
-        # self.newset = newidset - oldidset
-        self.jobs = []
+        # self.newset = newidset
+        self.newset = newidset - oldidset
 
 
     # TODO 存入hbase
@@ -235,29 +238,31 @@ class Analysis:
             # job =  pickle.loads(job)
             row = hbase_tool.getjob_byjobid(id)
             print('digitization : ', row)
-            jobId = id
-            keyword = row[-1]
-            salary = get_salary(row[3])
-            if salary == 0:
-                continue
-            education = get_education(row[7])
-            experience = get_experience(row[8])
-            # TODO 检查这里
-            skill = get_skill(str(row[11]), keyword)
-            compsize = get_compSize(hbase_tool.getcompsize_bycompid(row[14]))
+            executor.submit(thread_work, row, id)
+            print(count)
+            count+=1
 
-            print(compsize)
+def thread_work(row, id):
+    jobId = id
+    keyword = row[-1]
+    salary = get_salary(row[3])
+    if salary == 0:
+        return
+    education = get_education(row[7])
+    experience = get_experience(row[8])
+    skill = get_skill(str(row[11]), keyword)
+    compsize = get_compSize(hbase_tool.getcompsize_bycompid(row[14]))
 
-            djob = []
-            djob.append(compsize)
-            djob.append(skill)
-            djob.append(experience)
-            djob.append(education)
-            djob.append(salary)
-            djob.append(jobId)
-            djob.append(keyword)
-            print("insert djob : ", djob)
-            hbase_tool.insert_djob(djob)
+
+    djob = []
+    djob.append(compsize)
+    djob.append(skill)
+    djob.append(experience)
+    djob.append(education)
+    djob.append(salary)
+    djob.append(jobId)
+    djob.append(keyword)
+    hbase_tool.insert_djob(djob)
 
 
 

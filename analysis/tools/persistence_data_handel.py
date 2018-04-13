@@ -96,9 +96,10 @@ def persistence_company():
     print("old size = ", len(oldidset), 'new size = ', len(newidset))
     # 得到新增
     newset = newidset - oldidset
-    print("new set ", newset)
+    print("new set ", len(newset))
     batchidlist = list()
     for id in newset:
+        print(id)
         batchidlist.append(id)
 
         if len(batchidlist) == 1000:
@@ -149,7 +150,7 @@ def persistence_djob():
     newidset = hbase_tool.getdjobids()
 
     oldidset = set()
-    oldcomps = DigitizedJob.objects.values_list('jobId')
+    oldcomps = DigitizedJob.objects.values_list('job_id')
     for comp in oldcomps:
         oldidset.add(comp[0])
     print("old size = ", len(oldidset), 'new size = ', len(newidset))
@@ -182,7 +183,7 @@ def persistence_origindata():
 
 def persistence_digitizeddata():
     try:
-        persistence_djob(didatapath)
+        persistence_djob()
     except TimeoutError as e:
         print('database error occurred ', e)
 
