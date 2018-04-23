@@ -15,7 +15,7 @@ jieba.load_userdict('analysis/tools/dict')
 # TODO 改为后台可编辑
 def get_stop_words():
     stop_words = []
-    cfp = open('analysis/tools/stopwords', 'r+')  # 停用词的txt文件
+    cfp = open('analysis/tools/stopwords', 'r+', encoding='utf-8')  # 停用词的txt文件
     for line in cfp:
         for word in line.split():
             stop_words.append(word)
