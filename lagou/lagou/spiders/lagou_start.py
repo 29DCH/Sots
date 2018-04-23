@@ -22,6 +22,20 @@ class LagouStartSpider(scrapy.Spider):
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         # "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
         "User-Agent": UserAgent().random,
+        "Cookie": "user_trace_token=20180116103634-1c765330-7e57-4c47-a1ae-2baec502c969; "
+                  "__guid=237742470.677135601450133900.1516070194824.0908; "
+                  "LGUID=20180116103647-1980592f-fa66-11e7-a36a-5254005c3644; "
+                  "JSESSIONID=ABAAABAAADEAAFIE63AC027991718B3BEE73865711DFB6A; "
+                  "index_location_city=%E5%85%A8%E5%9B%BD; TG-TRACK-CODE=search_code; "
+                  "SEARCH_ID=9e1fa09e0fd24151b8b7466a2838492f; X_HTTP_TOKEN=a4e093ddf1682f80c73918df395c4a6b; _gat=1; "
+                  "PRE_UTM=; PRE_HOST=; PRE_SITE=https%3A%2F%2Fwww.lagou.com%2Fjobs%2Flist_%25E5%25A4%25A7%25E6%2595"
+                  "%25B0%25E6%258D%25AE%3FlabelWords%3D%26fromSearch%3Dtrue%26suginput%3D; "
+                  "PRE_LAND=https%3A%2F%2Fwww.lagou.com%2Fjobs%2F3996747.html; monitor_count=7; "
+                  "_gid=GA1.2.1804455135.1522582809; _ga=GA1.2.971822018.1522582809; "
+                  "LGSID=20180401202451-ad1011fd-35a7-11e8-ac20-525400f775ce; "
+                  "LGRID=20180401202503-b43338aa-35a7-11e8-ac20-525400f775ce; "
+                  "Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1522582809; "
+                  "Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1522585509",
     }
     custom_settings = {
         'DEFAULT_REQUEST_HEADERS': headers,  # 单独设置headers,避免与其他爬虫冲突,但会覆盖中间件的设置

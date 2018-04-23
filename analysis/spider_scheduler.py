@@ -6,8 +6,12 @@ from threading import Thread
 from time import sleep
 from urllib.parse import unquote
 
+import async as async
 import pandas as pd
 import redis
+from django.utils.timezone import now
+
+from analysis.tools import hbase_tool
 
 from analysis import analysis
 from analysis.tools import csv_conf
@@ -15,6 +19,7 @@ from analysis.tools.csv_conf import datapath, didatapath
 from analysis.models import Job, Company, SpiderConf, AnalysisConf, DigitizedJob
 from analysis.scrapyd_api import ScrapydApi
 from analysis.tools.default_values import defaults
+from analysis.tools.hbase_tool import getalljobid
 from analysis.tools.persistence_data_handel import persistence_origindata, persistence_digitizeddata
 
 
@@ -73,7 +78,7 @@ def getrow(jandc):
                'jobPlace': getvalue(jandc, 'jobPlace'), 'jobSalary':
                    getvalue(jandc, 'jobSalary'), 'jobAdvantage': getvalue(jandc, 'jobAdvantage'),
                'releaseTime': getvalue(jandc, 'releaseTime'), 'jobNeed':
-                   '', 'educationRequire': getvalue(jandc, 'educationRequire'),
+                   getvalue(jandc, 'jobNeed'), 'educationRequire': getvalue(jandc, 'educationRequire'),
                'experienceRequire': getvalue(jandc, 'experienceRequire'),
                'skillRequire': '', 'jobLink': getvalue(jandc, 'jobLink'), 'jobInfo': getvalue(jandc, 'jobInfo'),
                'jobNature': '',
@@ -93,96 +98,128 @@ def getrow(jandc):
     return row
 
 
-def operations():
-    # 判断文件是否存在
-    r = redis.Redis()
-    joblist = []
-    keys = r.keys(r'*:items')
-    rows = []
+def get_insertjobtupple(row):
+    # jobId, JobName, JobPlace, JobSalary, JobAdvantage, releaseTime, jobNeed, educationRequire, experienceRequire,
+    # skillRequire, jobLink, jobInfo, jobNature, jobLabels, company_id, clicktimes, keyword
+    job = []
 
+    job.append(int(row['jobId']))
+    job.append(str(row['jobName']))
+    job.append(str(row['jobPlace']))
+    job.append(str(row['jobSalary']))
+    job.append(str(row['jobAdvantage']))
+    job.append(str(row['releaseTime']))
+    job.append(str(row['jobNeed']))
+    job.append(str(row['educationRequire']))
+    job.append(str(row['experienceRequire']))
+    job.append(str(row['skillRequire']))
+    job.append(str(row['jobLink']))
+    job.append(str(row['jobInfo']))
+    job.append(str(row['jobNature']))
+    job.append(str(row['jobLabels']))
+    job.append(int(row['companyId']))
+    job.append(str(row['keyword']))
+
+    return job
+
+
+def get_insertcomptupple(row):
+    # companyId, compName, compSize, compIndustry, companyLabels, compLink, compIntroduce, contactInfo, longitude,
+    # latitude, businessZones, compHome, companyLogo, financeStage
+    comp = []
+
+    '''
+    '''
+
+    comp.append(int(row['companyId']))
+    comp.append(str(row['compName']))
+    comp.append(str(row['compSize']))
+    comp.append(str(row['compIndustry']))
+    comp.append(str(row['companyLabels']))
+    comp.append(str(row['compLink']))
+    comp.append(str(row['compIntroduce']))
+    comp.append(str(row['contactInfo']))
+    comp.append(0.0)
+    comp.append(0.0)
+    comp.append(str(row['businessZones']))
+    comp.append(str(row['compHome']))
+    comp.append(str(row['companyLogo']))
+    comp.append(str(row['financeStage']))
+
+    return comp
+
+
+def getredissize():
+    r = redis.Redis()
+    keys = r.keys(r"*:items")
+    size = 0
+    for name in keys:
+        size += r.llen(name)
+    return size
+
+
+def operations():
+    r = redis.Redis()
+    keys = r.keys(r'*:items')
+    try:
+        oldjobidset = getalljobid()
+    except BrokenPipeError as e:
+        print("Broken pipe try again : ", e.strerror)
+        return
+
+    starttime = now()
+    count = 0
     for name in keys:
         len = r.llen(name)
         tmplist = r.lrange(name, 0, len)
+        count += len
 
         for job in tmplist:
-            r.lrem(name, job)
             jsjob = json.loads(job)
+            r.lrem(name, job)
             if jsjob is not None:
                 row = getrow(jsjob)
-                rows.append(row)
-        joblist.append(tmplist)
-
-    oldjobidset = set()
-
-    # 获取所有职位
-    jobids = Job.objects.values_list('jobId')
-    for jobid in jobids:
-        oldjobidset.add(jobid[0])
-
-    for newrow in rows:
-        newId = newrow['jobId']
-        if int(newId) in oldjobidset:
-            print('old job', newId)
-        else:
-            print('new job', newId)
-            # 加入以关键字为键的redis list
-            keyname = newrow['keyword'] + '_new'
-            r.hset(keyname, newId, dumps(newrow))
-            # r.lpush(keyname, dumps(newrow))
-    test()
-
-
-def test():
-    path = 'datas/data.csv'
-    ifexists = os.path.exists(path)
-    if ifexists:
-        frame = pd.read_csv(path, low_memory=False)
-        frame = frame[csv_conf.data_columnsname]
-    else:
-        frame = pd.DataFrame(columns=getcolumnsname())
-    print(frame.shape)
-    print('old job set size = ', frame.shape[0])
-
-    r = redis.Redis()
-    names = r.keys(r'*_new')
-    for name in names:
-        print(name)
-        vals = r.hvals(name)
-        for val in vals:
-            newrow = loads(val)
-            frame.loc[frame.shape[0] + 1] = newrow
-
-    print('new job size : ', frame.shape[0])
-
-    # 获取关键字集合
-    allkey = frame['keyword']
-    allkey = allkey.drop_duplicates()
-
-    frame.to_csv(path)
-
-    analysis.handle(path, allkey)
+                newId = row['jobId']
+                if int(newId) in oldjobidset:
+                    pass
+                else:
+                    # print('new job', newId)
+                    hcomp = get_insertcomptupple(row)
+                    hjob = get_insertjobtupple(row)
+                    try:
+                        hbase_tool.insert_job(hjob)
+                        hbase_tool.insert_company(hcomp)
+                    except BrokenPipeError as e:
+                        print(e.strerror)
+                        return
+    # TODO 独立出来一个模块
+    # analysis.handle(path, allkey)
+    endtime = now()
+    print("insert", count, "'s rows cost", (endtime - starttime))
 
 
 def ontime_persistencer():
-    # 当本地的数据条数超过数据库固定数量时进行操作
     while True:
-        df = pd.read_csv(datapath, low_memory=False)
-        csv_size = df.shape[0]
-        db_size = Job.objects.count()
-        if db_size + 50 < csv_size:
-            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+        jobhbsize = hbase_tool.count_job()
+        jobdb_size = Job.objects.count()
+        print("job : ", jobdb_size, " : ", jobhbsize)
+        if jobdb_size + 50 < jobhbsize:
+            print('db_size ', jobdb_size, 'hb_size', jobhbsize, 'start insert')
             # 阻塞阻塞阻塞
             persistence_origindata()
-
-        db_size = DigitizedJob.objects.count()
-        csv_size = pd.read_csv(didatapath, low_memory=False).shape[0]
-        if db_size + 50 < csv_size:
-            print('db_size ', db_size, 'csv_size', csv_size, 'start insert')
+        else:
+            print('no job')
+        djobdb_size = DigitizedJob.objects.count()
+        djobhbsize = hbase_tool.count_djob()
+        if djobdb_size + 50 < djobhbsize:
+            print('db_size ', djobdb_size, 'hb_size', djobhbsize, 'start insert')
             persistence_digitizeddata()
+        else:
+            print('no djob')
         sleep(60)
 
 
-def spader_runner(spidername: str, keyword: str, start_page: str, maxpage: str):
+def spider_runner(spidername: str, keyword: str, start_page: str, maxpage: str):
     spiderapi = ScrapydApi('localhost')
     project_name = 'sots'
 
@@ -195,27 +232,14 @@ def spader_runner(spidername: str, keyword: str, start_page: str, maxpage: str):
 
 def ontime_analysis():
     while True:
-        #  获取数据库的配置时间来启动一个分析线程
-        analysis_conf = AnalysisConf.objects.all()[0:1]
-        schetime = analysis_conf[0].starttime
-        scheyear = schetime.year
-        schemonth = schetime.month
-        scheday = schetime.day
-        schehour = schetime.hour
-        scheminute = schetime.minute
-
-        now = datetime.now()
-        nowyear = now.year
-        nowmonth = now.month
-        nowday = now.day
-        nowhour = now.hour
-        nowminute = now.minute
-        print('analysis schetime: ', schehour, ':', scheminute, ' now ', nowhour, ':', nowminute)
-        if nowyear ==scheyear and nowmonth==schemonth and  nowday == scheday and\
-                nowhour == schehour and nowminute == scheminute:
-            thread = Thread(target=operations, name='startanalysis', args=())
-            thread.start()
-        sleep(60)
+        cachesize = getredissize()
+        print("cache size ： ", cachesize)
+        if cachesize < 50:
+            print("cache size is too small, wait for 10 second")
+            sleep(10)
+        else:
+            operations()
+            sleep(10)
 
 
 # 考虑一个配置文件和一个对应的表
@@ -240,22 +264,45 @@ def ontime_spider():
             nowminute = now.minute
             nowsecond = now.second
             print('scrapy schetime: ', schehour, ':', scheminute, ' now ', nowhour, ':', nowminute)
-            if  nowyear ==scheyear and nowmonth==schemonth and  nowday == scheday and\
+            if nowyear == scheyear and nowmonth == schemonth and nowday == scheday and \
                     nowhour == schehour and nowminute == scheminute:
                 print('ok ', nowhour, '：', scheminute)
-                spader_runner(con.spiderName, con.keyword, con.startPage, con.maxAllowPage)
+                spider_runner(con.spiderName, con.keyword, con.startPage, con.maxAllowPage)
                 print('开始扒取')
         sleep(60)
 
 
+def ontime_handel():
+    while(True):
+        djobhbsize = hbase_tool.count_djob()
+        jobhbsize = hbase_tool.count_job()
+        if djobhbsize + 50 < jobhbsize:
+            analysis.handle()
+        sleep(60)
+
+
+
+def ontime_countwords():
+    while(True):
+        jobhbsize = hbase_tool.count_job()
+        jobdb_size = Job.objects.count()
+        if jobdb_size + 50 < jobhbsize:
+            analysis.count_words()
+        sleep(60)
+
+
 def scheduler():
-    spider_thread = Thread(target=ontime_spider, name='ontime_spider')
-    spider_thread.start()
-    analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
-    analysis_thread.start()
+    # spider_thread = Thread(target=ontime_spider, name='ontime_spider')
+    # spider_thread.start()
+    # analysis_thread = Thread(target=ontime_analysis, name='ontime_analysis')
+    # analysis_thread.start()
+    # handle_thread = Thread(target=ontime_handel, name='ontime_handel')
+    # handle_thread.start()
+    # handle_thread = Thread(target=ontime_countwords, name='ontime_countwords')
+    # handle_thread.start()
     persistence_thread = Thread(target=ontime_persistencer, name='ontime_persistencer')
     persistence_thread.start()
-
+#
 
 if __name__ == '__main__':
     # ontime_spider(16, 9)

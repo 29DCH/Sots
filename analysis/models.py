@@ -4,6 +4,9 @@ from django.db import models
 from django.db import models
 
 # 招聘公司表
+from administrators.models import User
+
+
 class Company(models.Model):
     companyId = models.IntegerField()
     compName = models.CharField(max_length=500)
@@ -72,7 +75,6 @@ class BrowseRecords(models.Model):
     state = models.IntegerField() # 标识  1为浏览记录 2为收藏夹
 
 # 分析城市
-# TODO http://api.map.baidu.com/geocoder?address=城市&output=json&src=test 添加经纬度属性 不存在时调用api获取
 class DigitizedCity(models.Model):
     compSize = models.FloatField(default=50.0)
     skill = models.FloatField(default=5.0)
@@ -111,3 +113,17 @@ class Hotword(models.Model):
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, null=True)
     hotword = models.CharField(max_length=100)
     heat = models.IntegerField(default=0)
+
+
+class UserExpectJob(models.Model):
+    name = models.CharField(max_length=100)
+    sum = models.IntegerField()
+
+
+# 用户得分表
+class DiUser(models.Model):
+    edu = models.IntegerField() #学历得分
+    exp = models.IntegerField() #经验得分
+    gender = models.IntegerField() # 性别得分
+    age = models.IntegerField() # 年龄得分
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

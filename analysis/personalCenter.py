@@ -47,6 +47,10 @@ def registered(request):
 def login(request):
     # print(request.body)
     b = request.body.decode()
+    b = b.replace(r'true', r'True')
+    b = b.replace(r'null', r'None')
+
+
     body = eval(b)
     username = body['username']
     password = body['password']

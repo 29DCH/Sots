@@ -25,8 +25,12 @@ from analysis.personalCenter import login, postuserName, \
     registered, personalEdit, postPersonalInformation, personalCity
 from analysis.views import access, index, job_list, persistence, get_searchKeyword, \
     get_recommendInformation, get_hotJob, get_personRecommend, \
-    get_allrequirementsDiagrams, test_url, get_carouselData, get_user_data, get_user_action, get_user_feature, \
-    get_job_need, get_job_detail, get_salary_analysis, get_comp_scale, get_comp_statu
+    get_allrequirementsDiagrams, test_url, get_carouselData, get_user_data, get_user_feature, \
+    get_job_need, get_job_detail, get_salary_analysis, get_comp_scale, get_comp_statu, jianli, get_useragenum, \
+    get_userfavjob, get_userfavcity, test, get_usersex, get_postportrait, get_factorjobnum, get_topsalaryjobnum, \
+    get_avgsalaryjobnum, get_welfaresalaryfactor, get_factorsalary, get_industrycitycompnum, get_corporateportrait, \
+    get_compkind, get_citycompscale, get_difcompscalejobnum, get_difcompscaleedu, get_difcompscaleexper, \
+    get_cityindustrycompnum
 import administrators.website.website as web
 import administrators.test.test as te
 import administrators.carousel.carousel as carousel
@@ -141,8 +145,11 @@ urlpatterns = [
     url(r'sots/personRecommend', get_personRecommend),  #猜你喜欢
     url(r'sots/glyphicon', get_allrequirementsDiagrams),
     url(r'sots/carouselData', get_carouselData),# 前台轮播
-    url(r'sots/visualanalysis/userdata', get_user_data),
-    url(r'sots/visualanalysis/useraction', get_user_action),
+    url(r'sots/user/usereduexper', get_user_data),
+    url(r'sots/user/userfavjob', get_userfavjob),
+    url(r'sots/user/usersex', get_usersex),
+    url(r'sots/user/userfavcity', get_userfavcity),
+    url(r'sots/user/userage', get_useragenum),
     url(r'sots/visualanalysis/userfeature', get_user_feature),
     url(r'sots/visualanalysis/jobneed', get_job_need),
     url(r'sots/visualanalysis/jobdetail', get_job_detail),
@@ -155,7 +162,21 @@ urlpatterns = [
     url(r'sots/personalEdit', personalEdit),# 前台获取性别、城市、学历、工作年限的列表信息
     url(r'sots/personalCity', personalCity),# 根据省份查询对应的市集合
     url(r'sots/postPersonalInformation', postPersonalInformation),# 前台用户个人信息提交
-    # TODO personalEdit
+    url(r'sots/post/postportrait', get_postportrait),
+    url(r'sots/post/factorjobnum', get_factorjobnum),
+    url(r'sots/post/topsalaryjobnum', get_topsalaryjobnum),
+    url(r'sots/post/avgsalaryjobnum', get_avgsalaryjobnum),
+    url(r'sots/post/welfaresalaryfactor', get_welfaresalaryfactor),
+    url(r'sots/post/factorsalary', get_factorsalary),
+    url(r'sots/post/industrycitycompnum', get_industrycitycompnum),
+    url(r'sots/corporate/corporateportrait', get_corporateportrait),
+    url(r'sots/corporate/compkind', get_compkind),
+    url(r'sots/corporate/citycompscale', get_citycompscale),
+    url(r'sots/corporate/difcompscalejobnum', get_difcompscalejobnum),
+    url(r'sots/corporate/difcompscaleedu', get_difcompscaleedu),
+    url(r'sots/corporate/difcompscaleexper', get_difcompscaleexper),
+    url(r'sots/corporate/cityindustrycompnum', get_cityindustrycompnum),
+
 
     # 测试0
     url(r'access', access, name='access'),
@@ -163,7 +184,7 @@ urlpatterns = [
     url(r'operation', test_url),
     url(r'postCity', te.postCity),
     url(r'city', te.personalCity, name='city'),
-
+    url(r'test', test),
     # 随机生成求职者的测试数据，存入数据库
 
 
