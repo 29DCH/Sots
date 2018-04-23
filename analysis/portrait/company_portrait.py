@@ -74,7 +74,7 @@ def compkind():
 
 def citycompscale():
     datas = dict()
-    datas['city'] = ['北京', '上海', '深圳', '广州']
+    datas['city'] = ['北京', '上海', '深圳']
     datas['comptype'] = ['中等规模公司', '小规模公司', '大规模公司']
     datas['metaDate'] = [
         [120, 140, 100],

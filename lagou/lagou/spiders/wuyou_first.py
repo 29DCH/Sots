@@ -9,7 +9,7 @@ import redis
 # 51job爬虫第一部分
 class A51jobSpider(scrapy.Spider):
     name = "wuyou_first"
-    allowed_domains = ["51job.com"]
+    # allowed_domains = ["51job.com"]
     url = 'http://search.51job.com/jobsearch/search_result.php?keyword={}&curr_page={}'
 
     def __init__(self, **kwargs):
