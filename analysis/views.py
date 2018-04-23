@@ -1,12 +1,18 @@
+import pickle
+
+import pandas
 import random
 from json import dumps
 import json
 
 import pandas as pd
+import redis
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from analysis.models import Carousel
+
+from administrators.models import User
+from analysis.models import Carousel, Company
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -14,11 +20,11 @@ from django.views.decorators.csrf import csrf_exempt
 from analysis.digitization import get_digitaluser, Analysis, jobmatch, getmaxpoint
 from analysis.models import Job, DigitizedJob, SpiderConf, Keyword, Hotword
 from analysis.portrait import user_portrait, job_portrait, company_portrait
-from analysis.portrait.job_portrait import getonegraph, getallgraph
+from analysis.portrait.job_portrait import getonegraph, getallgraph, jobcity
 from analysis.prediction import predic
 from analysis.scrapyd_api import ScrapydApi
-from analysis.spider_scheduler import scheduler, test
-from analysis.tools.model_tool import get_random_job_id
+from analysis.spider_scheduler import scheduler
+from analysis.tools.model_tool import get_random_job_id, saveas_diuser
 from analysis.tools.persistence_data_handel import persistence_job, persistence_djob, persistence_company
 
 
@@ -60,7 +66,7 @@ def pack_job_result(matchjobs: list):
             j = {
                 "id": job.id,
                 "compName": job.JobName,
-                "compPlace": job.JobPlace,
+                "compPlace": job.releaseTime,
                 "compSalary": job.JobSalary,
                 "compPosition": job.JobPlace,
                 "compPublishTime": '1.1',
@@ -82,14 +88,13 @@ def pack_job_result(matchjobs: list):
     print(result)
     return result
 
-
 def pack_job_list(jobs: list):
     list = []
     for i in jobs:
         j = {
             "id": i.id,
             "compName": i.JobName,
-            "compPlace": i.JobPlace,
+            "compPlace": i.releaseTime,
             "compSalary": i.JobSalary,
             "compPosition": i.JobPlace,
             "compPublishTime": '1.1',
@@ -100,9 +105,27 @@ def pack_job_list(jobs: list):
     return list
 
 
+def pack_job_listwithcompname(jobs: list, compnames):
+    list = []
+    idx = 0
+    for i in jobs:
+        j = {
+            "id": i.id,
+            "compName": compnames[idx][0],
+            "compPlace": i.releaseTime,
+            "compSalary": i.JobSalary,
+            "compPosition": i.JobName,
+            "compPublishTime": '1.1',
+            "recruitmentSources": i.jobLink
+        }
+        idx+=1
+        list.append(j)
+    print(list)
+    return list
+
+
 def test_url(request):
     scheduler()
-    # test()
 
 
 def start_spider(request):
@@ -136,13 +159,13 @@ def job_list(request):
         user = get_digitaluser(skills, experience, education, '', 'java')
         result = predic(user)
 
-        djobs = DigitizedJob.objects.order_by('salary').filter(salary__gt=result)[0:50]
+        djobs = DigitizedJob.objects.order_by('salary').filter(salary__gt=result)[0:100]
         print(djobs[0].salary)
 
         jobs = []
 
         for djob in djobs:
-            job = Job.objects.get(id=djob.Job.id)
+            job = Job.objects.get(jobId=djob.job_id)
             jobs.append(job)
 
         result = jobmatch(jobs, skills, experience, education, place)
@@ -202,31 +225,39 @@ def pack_recommend(jobs):
 # 推荐职位
 def get_recommendInformation(request):
     jobs = []
-    for i in range(5):
+    compids = []
+    for i in range(20):
 
         randid = get_random_job_id()
         print('get job : ', randid)
         try:
             job = Job.objects.get(id=randid)
             jobs.append(job)
+            compids.append(job.company_id)
         except BaseException as e:
             print(e)
             i -= 1
-    recommendjobs = pack_job_list(jobs)
+    compnames = Company.objects.filter(companyId__in=compids).values_list('compName')
+    recommendjobs = pack_job_listwithcompname(jobs, compnames)
     return JsonResponse(recommendjobs, safe=False)
 
 
 # 获取热门职位
 def get_hotJob(request):
-    jobs = Job.objects.order_by('clicktimes')[:5]
-    hotjobs = pack_job_list(jobs)
+    jobs = Job.objects.order_by('clicktimes')[:20]
+    compids = []
+    for i in jobs:
+        compids.append(i.company_id)
+    compnames = Company.objects.filter(companyId__in=compids).values_list('compName')
+
+    hotjobs = pack_job_listwithcompname(jobs, compnames)
     return JsonResponse(hotjobs, safe=False)
 
 
 # 猜你喜欢
 def get_personRecommend(request):
     jobs = []
-    for i in range(5):
+    for i in range(20):
         randid = get_random_job_id()
         print('get job : ', randid)
         job = Job.objects.get(id=randid)
@@ -246,12 +277,38 @@ def get_allrequirementsDiagrams(request):
 
     return JsonResponse(graph)
 
-
+'''
+{
+            statu: 1,
+            errorcode: 101,
+            errormessage: "服务器繁忙",
+            data:{
+                chart:{
+                    <!-- 各年龄阶段所拥有的人数 -->
+                    userage:[
+                            { value: 335, name: '20-25' },
+                            { value: 310, name: '25-30' },
+                            { value: 274, name: '30-35' },
+                            { value: 235, name: '35-40' },
+                            { value: 235, name: '40-45' },
+                            { value: 235, name: '其他' },
+                        ]
+                },
+                table:{
+                    title: string[],
+                    body: string[],
+                },
+                descr:{
+                    <!-- 未定 -->
+                }
+            }
+        }
+'''
 def pack_graph_result(datas: dict, **kwargs):
     if len(datas) == 0:
-        result = {'status': 'no'}
+        result = {'statu': '0'}
     else:
-        result = {'status': 'ok'}
+        result = {'statu': '1'}
 
         kwitems = kwargs.items()
         for item in kwitems:
@@ -262,59 +319,316 @@ def pack_graph_result(datas: dict, **kwargs):
         for item in items:
             sec[item[0]] = item[1]
 
-        result['result'] = sec
+        result['data'] = dict()
+        result['data']['chart'] = sec
+
     return result
 
 
-def get_user_data(request):
-    datas = user_portrait.user_data()
+def get_usersex(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'user_sex')
+    if datas is None:
+        datas = user_portrait.user_sex()
+        r.hset('portraits', 'user_sex', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'user_sex'))
     print(pack_graph_result(datas))
     return JsonResponse(pack_graph_result(datas))
 
 
-def get_user_action(request):
-    datas = user_portrait.user_action()
+def get_user_data(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'user_data')
+    if datas is None:
+        datas = user_portrait.user_data()
+        r.hset('portraits', 'user_data', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'user_data'))
+    print(pack_graph_result(datas))
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_userfavcity(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'userfavcity')
+    if datas is None:
+        datas = user_portrait.userfavcity()
+        r.hset('portraits', 'userfavcity', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'userfavcity'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+def get_userfavjob(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'userfavjob')
+    if datas is None:
+        datas = user_portrait.userfavjob()
+        r.hset('portraits', 'userfavjob', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'userfavjob'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+def get_useragenum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'user_action')
+    if datas is None:
+        datas = user_portrait.user_action()
+        r.hset('portraits', 'user_action', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'user_action'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_user_feature(request):
-    datas = user_portrait.user_feature()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'user_feature')
+    if datas is None:
+        datas = user_portrait.user_feature()
+        r.hset('portraits', 'user_feature', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'user_feature'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_job_need(request):
-    datas = job_portrait.job_need()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'job_need')
+    if datas is None:
+        datas = job_portrait.job_need()
+        r.hset('portraits', 'job_need', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'job_need'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas, num=10))
 
 
 def get_job_detail(request):
-    datas = job_portrait.job_detail()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'job_detail')
+    if datas is None:
+        datas = job_portrait.salary_analysis()
+        r.hset('portraits', 'job_detail', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'salary_analysis'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_salary_analysis(request):
-    datas = job_portrait.salary_analysis()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'salary_analysis')
+    if datas is None:
+        datas = job_portrait.salary_analysis()
+        r.hset('portraits', 'salary_analysis', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'salary_analysis'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_scale(request):
-    datas = company_portrait.comp_scale()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'comp_scale')
+    if datas is None:
+        datas = company_portrait.comp_scale()
+        r.hset('portraits', 'comp_scale', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'comp_scale'))
     print(pack_graph_result(datas))
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_corporateportrait(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'corporateportrait')
+    if datas is None:
+        datas = company_portrait.corporateportrait()
+        r.hset('portraits', 'corporateportrait', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'corporateportrait'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_compkind(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'compkind')
+    if datas is None:
+        datas = company_portrait.compkind()
+        r.hset('portraits', 'compkind', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'compkind'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_citycompscale(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'citycompscale')
+    if datas is None:
+        datas = company_portrait.citycompscale()
+        r.hset('portraits', 'citycompscale', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'citycompscale'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_difcompscaleexper(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'difcompscaleexper')
+    if datas is None:
+        datas = company_portrait.difcompscaleexper()
+        r.hset('portraits', 'difcompscaleexper', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'difcompscaleexper'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_cityindustrycompnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'cityindustrycompnum')
+    if datas is None:
+        datas = company_portrait.cityindustrycompnum()
+        r.hset('portraits', 'cityindustrycompnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'cityindustrycompnum'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_difcompscaleedu(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'difcompscaleedu')
+    if datas is None:
+        datas = company_portrait.difcompscaleedu()
+        r.hset('portraits', 'difcompscaleedu', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'difcompscaleedu'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_difcompscalejobnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'difcompscalejobnum')
+    if datas is None:
+        datas = company_portrait.difcompscalejobnum()
+        r.hset('portraits', 'difcompscalejobnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'difcompscalejobnum'))
+    print(pack_graph_result(datas))
+
     return JsonResponse(pack_graph_result(datas))
 
 
 def get_comp_statu(request):
-    datas = company_portrait.comp_status()
+    r = redis.Redis()
+    datas = r.hget('portraits', 'comp_status')
+    if datas is None:
+        datas = company_portrait.comp_status()
+        r.hset('portraits', 'comp_status', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'comp_status'))
     print(pack_graph_result(datas))
 
     return JsonResponse(pack_graph_result(datas))
+
+
+def get_industrycitycompnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'industrycitycompnum')
+    if datas is None:
+        datas = job_portrait.industrycitycompnum()
+        r.hset('portraits', 'industrycitycompnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'industrycitycompnum'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_factorsalary(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'factorsalary')
+    if datas is None:
+        datas = job_portrait.factorsalary()
+        r.hset('portraits', 'factorsalary', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'factorsalary'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_postportrait(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'postportrait')
+    if datas is None:
+        datas = job_portrait.postportrait()
+        r.hset('portraits', 'postportrait', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'postportrait'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_welfaresalaryfactor(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'welfaresalaryfactor')
+    if datas is None:
+        datas = job_portrait.welfaresalaryfactor()
+        r.hset('portraits', 'welfaresalaryfactor', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'welfaresalaryfactor'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_avgsalaryjobnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'avgsalaryjobnum')
+    if datas is None:
+        datas = job_portrait.avgsalaryjobnum()
+        r.hset('portraits', 'avgsalaryjobnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'avgsalaryjobnum'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+
+def get_topsalaryjobnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'topsalaryjobnum')
+    if datas is None:
+        datas = job_portrait.topsalaryjobnum()
+        r.hset('portraits', 'topsalaryjobnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'topsalaryjobnum'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+
+def get_factorjobnum(request):
+    r = redis.Redis()
+    datas = r.hget('portraits', 'factorjobnum')
+    if datas is None:
+        datas = job_portrait.factorjobnum()
+        r.hset('portraits', 'factorjobnum', pickle.dumps(datas))
+    datas = pickle.loads(r.hget('portraits', 'factorjobnum'))
+    print(pack_graph_result(datas))
+
+    return JsonResponse(pack_graph_result(datas))
+
+# 存储简历
+def jianli(request):
+    from concurrent.futures import ThreadPoolExecutor
+    executor = ThreadPoolExecutor(20)
+
+    all = User.objects.all()
+    for i in all:
+        executor.submit(saveas_diuser, i)
+
+
+def test(request):
+    jobcity()

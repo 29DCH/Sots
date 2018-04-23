@@ -47,7 +47,6 @@ sklearn==0.0
 Twisted==17.9.0
 urldecode==0.1
 urllib3==1.22
-uWSGI==2.0.17
 w3lib==1.19.0
 wcwidth==0.1.7
 zope.interface==4.4.3

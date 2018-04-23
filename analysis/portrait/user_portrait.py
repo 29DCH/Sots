@@ -1,32 +1,66 @@
+from django.db.models import Count, Sum
+
+from administrators.models import User
+from analysis.models import UserExpectJob
 
 
 def user_data():
     datas = dict()
     # {name:value} 教育水平 数量
-    datas['userEdu'] = []
-    datas['userEdu'].append({ 'value': 335, 'name': '本科' })
-    datas['userEdu'].append({ 'value': 310, 'name': '硕士' })
-    datas['userEdu'].append({ 'value': 274, 'name': '博士' })
-    datas['userEdu'].append({ 'value': 235, 'name': '其他' })
+    educount = User.objects.values_list('highestEducation').annotate(num=Count('id')).order_by('-num')[:6]
+
+    datas['userexper'] = []
+    for i in educount:
+        datas['userexper'].append({'value': i[1], 'name':i[0]})
+
+    expcount = User.objects.values_list('workingTime').annotate(num=Count('id')).order_by('-num')[:10]
     # {name:number} 工作经验 数量
-    datas['userExper'] = []
-    datas['userExper'].append({ 'value': 335, 'name': '无' })
-    datas['userExper'].append({ 'value': 310, 'name': '1-3年' })
-    datas['userExper'].append({ 'value': 274, 'name': '4-6年' })
-    datas['userExper'].append({ 'value': 235, 'name': '7-10年' })
-    datas['userExper'].append({ 'value': 235, 'name': '10年以上' })
+    datas['useredu'] = []
+    for i in expcount:
+        datas['useredu'].append({'value': i[1], 'name':i[0]})
     return datas
 
 
+def userfavcity():
+    datas = dict()
+    citycount = User.objects.values_list('expectCity').annotate(num=Count('id')).order_by('-num')[:9]
+    datas['favCity'] = []
+    for i in citycount:
+        datas['favCity'].append({'value': i[1], 'name':i[0]})
+    return datas
+
+
+def user_sex():
+    datas = dict()
+    datas['usersex'] = []
+    sexcount = User.objects.values_list('gender').annotate(num=Count('id')).order_by('-num')[:2]
+    for i in sexcount:
+        datas['usersex'].append({'value': i[1], 'name':i[0]})
+
+    return datas
+
+
+def userfavjob():
+    # TODO 这张表没有定期更新
+    ejobs = UserExpectJob.objects.order_by('-sum')[:10]
+    datas = dict()
+    datas['favJob'] = []
+    for i in ejobs:
+        datas['favJob'].append({ 'value': i.sum, 'name': i.name })
+
+    return datas
+
 def user_action():
     datas = dict()
-    # {name:value} 用户年龄段 数量
     datas['userage'] = []
-    datas['userage'].append({ 'value': 335, 'name': '20-25' })
-    datas['userage'].append({ 'value': 235, 'name': '25-30' })
-    datas['userage'].append({ 'value': 135, 'name': '30-35' })
-    datas['userage'].append({ 'value': 35, 'name': '35-40' })
-    datas['userage'].append({ 'value': 135, 'name': '其他' })
+    x20 = User.objects.filter(age__lt=20).count()
+    datas['userage'].append({ 'value': x20, 'name': '<20' })
+    x2030 = User.objects.filter(age__gte=20, age__lt=30).count()
+    datas['userage'].append({ 'value': x2030, 'name': '20-30' })
+    x3040 = User.objects.filter(age__gte=30, age__lt=40).count()
+    datas['userage'].append({ 'value': x3040, 'name': '30-40' })
+    x40 = User.objects.filter(age__gte=40).count()
+    datas['userage'].append({ 'value': x40, 'name': '>=40' })
 
     return datas
 

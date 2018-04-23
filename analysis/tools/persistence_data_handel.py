@@ -1,167 +1,172 @@
 import time
-from math import nan
 
 import pandas as pd
 
-from analysis.tools import csv_conf
+from analysis.tools import csv_conf, hbase_tool
 from analysis.tools.csv_conf import datapath, didatapath
 from analysis.models import Job, DigitizedJob, Company
 
+# 以防None
+prevent_none = lambda x: x if x is not None else 'nothing'
 
-def batchinsert_company(compset):
-    print('batch insert comp  size :', len(compset))
+
+def batchinsert_company(idlist: list):
     list_to_insert = list()
-    values = compset.values()
-    for val in values:
-        list_to_insert.append(val)
-    Company.objects.bulk_create(list_to_insert)
-    compset.clear()
-
-
-def csv_duplication():
-
-    pass
-
-
-def persistence_company(path: str):
-    print('insert comp start')
-    if path:
-        start_time = time.time()
-        start_index = Job.objects.count()
-
-        oldcompanyidset = set()
-        newcompanyidset = set()
-        oldcomps = Company.objects.values_list('companyId')
-        for comp in oldcomps:
-            oldcompanyidset.add(comp[0])
-        df = pd.read_csv(path, low_memory=False)
-        df = df[csv_conf.data_columnsname]
-        df = df[start_index:]
-        # 以防万一
-        df = df.drop_duplicates('jobId')
-    else:
-        return
-    rows = df.iterrows()
-    compset = {}
-    for index, row in rows:
+    for id in idlist:
+        row = hbase_tool.getcomp_bycompid(id)
         company = Company()
-        company.companyId = row[14]
-        if company.companyId in oldcompanyidset or company.companyId in newcompanyidset:
-            continue
-        company.compName = row[15]
-        company.compSize = row[16]
-        company.compIndustry = row[17]
-        company.companyLabels = row[18]
-        company.compLink = row[19]
-        company.compIntroduce = row[20]
-        company.contactInfo = row[21]
-        tmp = lambda x: 0 if x != nan else x
-        company.longitude = tmp(row[22])
-        company.latitude = tmp(row[23])
-        company.businessZones = row[24]
-        company.compHome = row[25]
-        company.companyLogo = row[26]
-        company.financeStage = row[27]
-        compset[company.companyId] = company
-        newcompanyidset.add(company.companyId)
-        if len(compset) == 1000:
-            batchinsert_company(compset)
+
+        company.companyId = id
+        company.compName = prevent_none(row[1])
+        company.compSize = prevent_none(row[2])
+        company.compIndustry = prevent_none(row[3])
+        company.companyLabels = prevent_none(row[4])
+        company.compLink = prevent_none(row[5])
+        company.compIntroduce = prevent_none(row[6])
+        company.contactInfo = prevent_none(row[7])
+        company.longitude = prevent_none(row[8])
+        company.latitude = prevent_none(row[9])
+        company.businessZones = prevent_none(row[10])
+        company.compHome = prevent_none(row[11])
+        company.companyLogo = prevent_none(row[12])
+        company.financeStage = prevent_none(row[13])
+
+        list_to_insert.append(company)
+    Company.objects.bulk_create(list_to_insert)
+    print("batch insert size = ", len(list_to_insert))
 
 
-    batchinsert_company(compset)
+def batchinsert_djob(idlist: list):
+    list_to_insert = list()
+    for id in idlist:
+        row = hbase_tool.getdjob_byjobid(id)
+        djob = DigitizedJob()
+        #  COMPSIZE, SKILL, EXPERIENCE, EDUCATION, SALARY, JOB_ID, KEYWORD)
+        djob.compSize = row[0]
+        djob.skill = row[1]
+        djob.experience = row[2]
+        djob.education = row[3]
+        djob.salary = row[4]
+        djob.job_id = row[5]
+        djob.keyword = row[6]
+        list_to_insert.append(djob)
+    DigitizedJob.objects.bulk_create(list_to_insert)
+    print("batch insert size = ", len(list_to_insert))
+
+
+def batchinsert_job(idlist: list):
+    list_to_insert = list()
+    for id in idlist:
+        row = hbase_tool.getjob_byjobid(id)
+        job = Job()
+        job.jobId = id
+
+        job.JobName = prevent_none(row[1])
+        job.JobPlace = prevent_none(row[2])
+        job.JobSalary = prevent_none(row[3])
+        job.JobAdvantage = prevent_none(row[4])
+        job.releaseTime = prevent_none(row[5])
+        job.jobNeed = prevent_none(row[6])
+        job.educationRequire = prevent_none(row[7])
+        job.experienceRequire = prevent_none(row[8])
+        job.skillRequire = prevent_none(row[9])
+        job.jobLink = prevent_none(row[10])
+        job.jobInfo = prevent_none(row[11])
+        job.jobNature = prevent_none(row[12])
+        job.jobLabels = prevent_none(row[13])
+        job.company_id = prevent_none(row[14])
+        job.keyword = prevent_none(row[16])
+        list_to_insert.append(job)
+
+    Job.objects.bulk_create(list_to_insert)
+    print("batch insert size = ", len(list_to_insert))
+
+
+def persistence_company():
+    start_time = time.time()
+    print('start insert company')
+
+    # 获取hbase比mysql的差集
+    newidset = hbase_tool.getcompids()
+
+    oldidset = set()
+    oldcomps = Company.objects.values_list('companyId')
+    for comp in oldcomps:
+        oldidset.add(comp[0])
+    print("old size = ", len(oldidset), 'new size = ', len(newidset))
+    # 得到新增
+    newset = newidset - oldidset
+    print("new set ", len(newset))
+    batchidlist = list()
+    for id in newset:
+        print(id)
+        batchidlist.append(id)
+
+        if len(batchidlist) == 1000:
+            batchinsert_company(batchidlist)
+            batchidlist.clear()
+
+    batchinsert_company(batchidlist)
+
     end_time = time.time()
     print('insert comp end costing:', end_time - start_time)
 
 
-def persistence_job(path: str):
+def persistence_job():
     start_time = time.time()
 
     print('start insert job')
-    start_index = Job.objects.count()
-    if path:
-        df = pd.read_csv(path, low_memory=False)
-        df = df[csv_conf.data_columnsname]
-        start_index+=1
-        df = df[start_index:]
-        # 以防万一
-        df = df.drop_duplicates('jobId')
-    else:
-        return
 
-    rows = df.iterrows()
-    list_to_insert = list()
-    cont = 0
-    for index, row in rows:
-        job = Job()
-        job.jobId = row[0]
-        job.JobName = row[1]
-        job.JobPlace = row[2]
-        job.JobSalary = row[3]
-        job.JobAdvantage = row[4]
-        job.releaseTime = row[5]
-        job.jobNeed = row[6]
-        job.educationRequire = row[7]
-        job.experienceRequire = row[8]
-        job.skillRequire = row[9]
-        job.jobLink = row[10]
-        job.jobInfo = row[11]
-        job.jobNature = row[12]
-        job.jobLabels = row[13]
-        job.company_id = row[14]
-        job.keyword = row[28]
-        list_to_insert.append(job)
-        cont += 1
-        if cont == 1000:
-            Job.objects.bulk_create(list_to_insert)
-            print('batch insert job size ', len(list_to_insert))
-            list_to_insert.clear()
-            cont = 0
-    Job.objects.bulk_create(list_to_insert)
-    print('batch insert job size:', len(list_to_insert))
+    newidset = hbase_tool.getjobids()
+
+    oldidset = set()
+    oldcomps = Job.objects.values_list('jobId')
+    for comp in oldcomps:
+        oldidset.add(comp[0])
+    print("old size = ", len(oldidset), 'new size = ', len(newidset))
+
+    # 得到新增
+    newset = newidset - oldidset
+
+    batchidlist = list()
+    for id in newset:
+        batchidlist.append(id)
+
+        if len(batchidlist) == 1000:
+            batchinsert_job(batchidlist)
+            batchidlist.clear()
+
+    batchinsert_job(batchidlist)
+
     endtime = time.time()
     print('耗时：', (endtime - start_time))
 
 
-def persistence_djob(path: str):
+def persistence_djob():
     start_time = time.time()
 
     print('start insert djob')
-    if path:
-        start_index = DigitizedJob.objects.count()
-        start_index+=1
-        df = pd.read_csv(path, low_memory=False)
-        print(df.tail())
 
-        df = df[csv_conf.digital_columnsname]
-        df = df[start_index:]
-        # 以防万一
-        df = df.drop_duplicates('jobId')
-    else:
-        return
-    rows = df.iterrows()
-    print('-----------query over-----------')
+    newidset = hbase_tool.getdjobids()
 
-    list_to_insert = list()
+    oldidset = set()
+    oldcomps = DigitizedJob.objects.values_list('job_id')
+    for comp in oldcomps:
+        oldidset.add(comp[0])
+    print("old size = ", len(oldidset), 'new size = ', len(newidset))
 
-    count = 0
-    for index, row in rows:
-        djob = DigitizedJob()
-        djob.compSize = row[1]
-        djob.job_id = row[0]
-        djob.skill = row[2]
-        djob.experience = row[3]
-        djob.education = row[4]
-        djob.salary = row[5]
-        djob.keyword = row[6]
-        list_to_insert.append(djob)
-        count += 1
-        if count == 1000:
-            DigitizedJob.objects.bulk_create(list_to_insert)
-            print('batch insert djob size ', len(list_to_insert))
-            list_to_insert.clear()
-            count = 0
-    DigitizedJob.objects.bulk_create(list_to_insert)
-    print('batch insert djob size ', len(list_to_insert))
+    # 得到新增
+    newset = newidset - oldidset
+
+    batchidlist = list()
+    for id in newset:
+        batchidlist.append(id)
+
+        if len(batchidlist) == 1000:
+            batchinsert_djob(batchidlist)
+            batchidlist.clear()
+
+    batchinsert_djob(batchidlist)
     endtime = time.time()
 
     print('耗时：', (endtime - start_time))
@@ -170,15 +175,15 @@ def persistence_djob(path: str):
 # TODO 添加各种图表需要的数据
 def persistence_origindata():
     try:
-        persistence_company(datapath)
-        persistence_job(datapath)
+        persistence_company()
+        persistence_job()
     except TimeoutError as e:
         print('database error occurred ', e)
 
 
 def persistence_digitizeddata():
     try:
-        persistence_djob(didatapath)
+        persistence_djob()
     except TimeoutError as e:
         print('database error occurred ', e)
 
